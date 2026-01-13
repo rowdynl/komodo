@@ -112,7 +112,7 @@ services:
       - sabnzbd:/config
       - /mnt/downloads:/downloads
     ports:
-      - 8080:8080
+      - 3389:8080
     restart: unless-stopped
 
   sonarr:
