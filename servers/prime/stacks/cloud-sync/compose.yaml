@@ -1,0 +1,28 @@
+name: cloud-sync
+
+services:
+  icloud: # https://github.com/mandarons/icloud-docker ALTERNATIVE: https://icps.steiler.dev/get-started/
+    image: mandarons/icloud-drive
+    container_name: icloud
+    environment:
+      - PGUID=${PGUID}
+      - PGID=${PGID}
+      - ENV_CONFIG_FILE_PATH=/config/config.yaml
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - icloud:/icloud
+
+    #TODO:
+    # OneDrive: 
+    #   - https://hub.docker.com/r/driveone/onedrive
+    #   - https://forums.unraid.net/topic/132486-guide-set-up-the-onedrive-client-for-linux-abraunegg-as-docker-container/ 
+    # Google Drive:
+    #   - https://github.com/richardregeer/docker-google-drive-sync
+    # DropBox:
+    #   - https://github.com/rbonghi/docker-dropbox-app
+
+volumes:
+  icloud:
+    external: true
