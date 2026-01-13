@@ -18,6 +18,8 @@ services:
       - PASSWORD=${CHROMIUM_PASSWORD}
     volumes:
       - chromium:/config:rw
+    cpus: "0.5"
+    mem_limit: 512m
     restart: on-failure:5
 
   godns:
