@@ -3,7 +3,7 @@ name: tools
 services:
   chromium:
     image: ghcr.io/linuxserver/chromium:latest
-    container_name: Chromium
+    container_name: chromium
     security_opt:
       - no-new-privileges:true
       - seccomp:unconfined
