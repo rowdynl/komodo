@@ -1,0 +1,91 @@
+name: tools
+
+services:
+  chromium:
+    image: ghcr.io/linuxserver/chromium:latest
+    container_name: Chromium
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:unconfined
+    ports:
+      - 3410:3001
+      - 3419:3000
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - CUSTOM_USER=rowdy
+      - PASSWORD=${CHROMIUM_PASSWORD}
+    volumes:
+      - chromium:/config:rw
+    restart: on-failure:5
+
+  godns:
+    container_name: godns
+    image: timothyye/godns:latest
+    environment:
+      - CONFIG=/config/config.json
+    restart: unless-stopped
+    ports:
+      - 9099:9099
+    volumes:
+      - godns:/config/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.godns.rule=Host('godns.${DOMAIN}')"
+      - "traefik.http.routers.godns.entrypoints=websecure"
+      - "traefik.http.routers.godns.tls.certresolver=transip"
+  
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - DEFAULT_WORKSPACE=/config/workspace
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+      - S6_VERBOSITY=1
+      - S6_STAGE2_HOOK=/docker-mods
+      - TZ=${TZ}
+      - PASSWORD=${CODE_SERVER_PASSWORD}
+    volumes:
+      - code-server:/config
+      - /docker/compose:/config/workspace/docker-compose
+      - /docker/komodo:/config/workspace/repos/komodo
+      - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    security_opt:
+      - label=disable
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.code-server-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.code-server-https-redirect.redirectscheme.permanent=true"
+      - "traefik.http.routers.code-server.rule=Host('code-server.${DOMAIN}')"
+      - "traefik.http.routers.code-server.entrypoints=websecure"
+      - "traefik.http.routers.code-server.tls=true"
+      - "traefik.http.routers.code-server.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.code-server-http.rule=Host('code-server.${DOMAIN}')"
+      - "traefik.http.routers.code-server-http.entrypoints=web"
+      - "traefik.http.routers.code-server-http.middlewares=code-server-https-redirect"
+      - "traefik.http.routers.code-server.middlewares=hsts-global"
+      - "traefik.http.services.code-server.loadbalancer.server.port=8443"
+
+  it-tools: # https://github.com/CorentinTh/it-tools
+    container_name: it-tools
+    image: ghcr.io/corentinth/it-tools:latest
+    ports:
+      - 8888:80
+    restart: unless-stopped
+
+volumes:
+  chromium:
+    external: true
+  code-server:
+    external: true
+  godns:
+    external: true
+  

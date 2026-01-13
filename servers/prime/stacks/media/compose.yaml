@@ -1,0 +1,178 @@
+name: media
+
+services:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - bazarr:/config
+      - /mnt/prime-ds/movies:/movies
+      - /mnt/prime-ds/series:/series
+    ports:
+      - 6767:6767
+    restart: unless-stopped  
+
+  overseerr:
+    container_name: overseerr
+    image: sctx/overseerr
+    restart: unless-stopped
+    volumes:
+      - 'overseerr:/app/config'
+    ports:
+      - '5055:5055'
+    environment:
+      - TZ=${TZ}
+
+  plex:
+    image: 'lscr.io/linuxserver/plex:latest'
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - VERSION=latest
+      - TZ=${TZ}
+      - PLEX_HW_ACCEL=true
+      - GIDLIST=44,993
+      - LIBVA_DRIVER_NAME=iHD
+      - LIBVA_MESSAGING_LEVEL=1
+      - LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
+    devices:
+      - '/dev/dri:/dev/dri'    
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
+    volumes:
+      - 'plex:/config'
+      - '/mnt/prime-ds/movies:/volume1/movies'
+      - '/mnt/prime-ds/music:/volume1/music'
+      - '/mnt/prime-ds/series:/volume1/series'
+      - '/mnt/prime-ds/movies:/movies'
+      - '/mnt/prime-ds/music:/music'
+      - '/mnt/prime-ds/series:/series'
+      - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
+    restart: unless-stopped 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.permanent=true"
+      - "traefik.http.routers.plex.rule=Host('plex.${DOMAIN}')"
+      - "traefik.http.routers.plex.entrypoints=websecure"
+      - "traefik.http.routers.plex.tls=true"
+      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.plex-http.rule=Host('plex.${DOMAIN}')"
+      - "traefik.http.routers.plex-http.entrypoints=web"
+      - "traefik.http.routers.plex-http.middlewares=plex-https-redirect"
+      - "traefik.http.routers.plex.middlewares=hsts-global"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+  
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - radarr:/config
+      - /mnt/prime-ds/movies:/movies
+      - /mnt/downloads:/downloads
+      - /mnt/downloads/transmission/completed:/data/completed
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - sabnzbd:/config
+      - /mnt/downloads:/downloads
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - sonarr:/config
+      - /mnt/downloads:/downloads
+      - /mnt/downloads/transmission/completed:/data/completed
+      - /mnt/prime-ds/series:/tv
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  transmission:
+    image: haugene/transmission-openvpn
+    container_name: transmission
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - transmission:/config
+      - /mnt/downloads/transmission:/data
+      - /mnt/downloads/transmission/watch:/watch
+    env_file:
+      - transmission.env
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
+      - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - TRANSMISSION_RPC_PASSWORD=${TRANSMISSION_RPC_PASSWORD}
+      - TRANSMISSION_RPC_USERNAME=${TRANSMISSION_RPC_USERNAME}
+    logging:
+      driver: json-file
+        options:
+          max-size: 10m
+    ports:
+      - '9091:9091' 
+
+volumes:
+  bazarr:
+    external: true
+  overseerr:
+    external: true
+  plex:
+    external: true
+  prowlarr:
+    external: true
+  radarr:
+    external: true
+  sabnzbd:
+    external: true
+  sonarr:
+    external: true
+  transmission:
+    external: true
