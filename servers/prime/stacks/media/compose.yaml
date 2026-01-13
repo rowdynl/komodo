@@ -157,7 +157,7 @@ services:
       options:
         max-size: 11m
     ports:
-      - '9091:9091' 
+      - 9091:9091
 
 volumes:
   bazarr:
