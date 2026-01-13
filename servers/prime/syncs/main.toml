@@ -1,1 +1,175 @@
-## Add resources to get started
+[[server]]
+name = "prime"
+tags = ["infrastructure", "system"]
+[server.config]
+address = "https://komodo-periphery:8120"
+region = "Europe"
+enabled = true
+
+##
+
+[[server]]
+name = "prime-ds"
+tags = ["infrastructure", "system"]
+[server.config]
+address = "https://192.168.178.100:8120"
+region = "Europe"
+enabled = true
+
+##
+
+[[stack]]
+name = "immich"
+tags = ["media"]
+[stack.config]
+server = "prime"
+poll_for_updates = true
+linked_repo = "github.com/rowdynl/komodo"
+run_directory = "servers/prime/stacks/immich"
+
+##
+
+[[stack]]
+name = "komodo"
+tags = ["system", "infrastructure"]
+[stack.config]
+server = "prime"
+linked_repo = "github.com/rowdynl/komodo"
+run_directory = "servers/prime/stacks/komodo"
+environment = """
+COMPOSE_KOMODO_IMAGE_TAG=latest
+COMPOSE_KOMODO_BACKUPS_PATH=/etc/komodo/backups
+KOMODO_DB_USERNAME=komodo
+KOMODO_DB_PASSWORD=[[KOMODO_DB_PASSWORD]]
+KOMODO_PASSKEY=[[KOMODO_PASSKEY]]
+KOMODO_HOST=https://komodo.tcit.nl
+KOMODO_TITLE=Komodo
+KOMODO_FIRST_SERVER=https://komodo-periphery:8120
+KOMODO_FIRST_SERVER_NAME=prime
+KOMODO_DISABLE_CONFIRM_DIALOG=false
+KOMODO_MONITORING_INTERVAL="15-sec"
+KOMODO_RESOURCE_POLL_INTERVAL="1-hr"
+KOMODO_WEBHOOK_SECRET=[[KOMODO_WEBHOOK_SECRET]]
+KOMODO_JWT_SECRET=[[KOMODO_JWT_SECRET]]
+KOMODO_JWT_TTL="1-day"
+KOMODO_LOCAL_AUTH=true
+KOMODO_INIT_ADMIN_USERNAME=[[KOMODO_INIT_ADMIN_USERNAME]]
+KOMODO_INIT_ADMIN_PASSWORD=[[KOMODO_INIT_ADMIN_PASSWORD]]
+KOMODO_DISABLE_USER_REGISTRATION=false
+KOMODO_ENABLE_NEW_USERS=false
+KOMODO_DISABLE_NON_ADMIN_CREATE=false
+KOMODO_TRANSPARENT_MODE=false
+KOMODO_LOGGING_PRETTY=false
+KOMODO_PRETTY_STARTUP_CONFIG=false
+KOMODO_OIDC_ENABLED=false
+KOMODO_GITHUB_OAUTH_ENABLED=false
+KOMODO_GOOGLE_OAUTH_ENABLED=false
+PERIPHERY_ROOT_DIRECTORY=/etc/komodo
+PERIPHERY_PASSKEYS=${KOMODO_PASSKEY}
+PERIPHERY_DISABLE_TERMINALS=false
+PERIPHERY_SSL_ENABLED=true
+PERIPHERY_INCLUDE_DISK_MOUNTS=/etc/hostname
+PERIPHERY_LOGGING_PRETTY=false
+PERIPHERY_PRETTY_STARTUP_CONFIG=false
+"""
+
+##
+
+[[stack]]
+name = "media"
+tags = ["media"]
+[stack.config]
+server = "prime"
+project_name = "media"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github.com/rowdynl/komodo"
+run_directory = "servers/prime/stacks/media"
+environment = """
+PUID=[[GLOBAL_PUID]]
+PGID=[[GLOBAL_PGID]]
+TZ=[[GLOBAL_TZ]]
+NORDVPN_COUNTRY=[[TRANSMISSION_NORDVPN_COUNTRY]]
+OPENVPN_USERNAME=[[TRANSMISSION_OPENVPN_USERNAME]]
+OPENVPN_PASSWORD=[[TRANSMISSION_OPENVPN_PASSWORD]]
+TRANSMISSION_RPC_PASSWORD=[[TRANSMISSION_RPC_PASSWORD]]
+TRANSMISSION_RPC_USERNAME=[[TRANSMISSION_RPC_USERNAME]]
+"""
+
+##
+
+[[stack]]
+name = "tools"
+tags = ["tools"]
+[stack.config]
+server = "prime"
+poll_for_updates = true
+auto_update = true
+linked_repo = "github.com/rowdynl/komodo"
+webhook_secret = "zCvcdS1C6B6s0mbvgE1Uoeo5T5yWczMMTkGT9gKYZIqL00seS4ycIaRzIZWIugEz"
+run_directory = "servers/prime/stacks/tools"
+environment = """
+TZ=[[GLOBAL_TZ]]
+PGID=[[GLOBAL_PGID]]
+PUID=[[GLOBAL_PUID]]
+CODE_SERVER_PASSWORD=[[CODE_SERVER_PASSWORD]]
+CHROMIUM_PASSWORD=[[CHROMIUM_PASSWORD]]
+"""
+
+##
+
+[[repo]]
+name = "github.com/rowdynl/komodo"
+tags = ["system"]
+[repo.config]
+server = "prime"
+builder = "prime"
+git_account = "rowdynl"
+repo = "rowdynl/komodo"
+
+##
+
+[[procedure]]
+name = "Backup Core Database"
+description = "Triggers the Core database backup at the scheduled time."
+tags = ["system"]
+config.schedule = "Every day at 01:00"
+
+[[procedure.config.stage]]
+name = "Stage 1"
+enabled = true
+executions = [
+  { execution.type = "BackupCoreDatabase", execution.params = {}, enabled = true }
+]
+
+##
+
+[[procedure]]
+name = "Global Auto Update"
+description = "Pulls and auto updates Stacks and Deployments using 'poll_for_updates' or 'auto_update'."
+tags = ["system"]
+config.schedule = "Every day at 03:00"
+
+[[procedure.config.stage]]
+name = "Stage 1"
+enabled = true
+executions = [
+  { execution.type = "GlobalAutoUpdate", execution.params = {}, enabled = true }
+]
+
+##
+
+[[alerter]]
+name = "pushover"
+[alerter.config]
+enabled = true
+endpoint.type = "Pushover"
+endpoint.params.url = "https://api.pushover.net/1/messages.json?token=a79oxvfkwydssf29xoyqjnx65juf25&user=uy42b5yrjuttsq4umm47yjr72chgt7"
+
+##
+
+[[builder]]
+name = "prime"
+[builder.config]
+type = "Server"
+params.server_id = "prime"
