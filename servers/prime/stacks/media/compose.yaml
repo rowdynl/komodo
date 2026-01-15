@@ -16,6 +16,21 @@ services:
       - 6767:6767
     restart: unless-stopped  
 
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - lidarr:/config
+      - /mnt/music:/music
+      - /mnt/downloads:/downloads
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+
   overseerr:
     container_name: overseerr
     image: sctx/overseerr
@@ -161,6 +176,8 @@ services:
 
 volumes:
   bazarr:
+    external: true
+  lidarr:
     external: true
   overseerr:
     external: true
