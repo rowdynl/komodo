@@ -1,26 +1,24 @@
 name: tools
 
 services:
-  chromium:
-    image: ghcr.io/linuxserver/chromium:latest
-    container_name: chromium
-    security_opt:
-      - no-new-privileges:true
-      - seccomp:unconfined
-    ports:
-      - 3410:3001
-      - 3419:3000
+  brave:
+    image: ghcr.io/linuxserver/brave:latest
+    container_name: brave
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - CUSTOM_USER=rowdy
-      - PASSWORD=${CHROMIUM_PASSWORD}
+      - LIBVA_DRIVER_NAME=iHD
+    ports:
+      - 3410:3001
+      - 3419:3000
+    group_add:
+      - render
     volumes:
-      - chromium:/config:rw
-    cpus: "0.5"
-    mem_limit: 512m
-    restart: on-failure:5
+      - brave:/config
+    devices:
+      - /dev/dri:/dev/dri
+    restart: unless-stopped
 
   godns:
     container_name: godns
@@ -84,6 +82,8 @@ services:
     restart: unless-stopped
 
 volumes:
+  brave:
+    external: true
   chromium:
     external: true
   code-server:
