@@ -25,25 +25,6 @@ services:
       - "traefik.http.routers.brave.entrypoints=websecure"
       - "traefik.http.routers.brave.tls.certresolver=transip"
 
-  changedetection:
-    image: lscr.io/linuxserver/changedetection.io:latest
-    container_name: changedetection
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - BASE_URL='https://changedetection.${DOMAIN}'
-    volumes:
-      - changedetection:/config
-    ports:
-      - 5000:5000
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.changedetection.rule=Host('changedetection.${DOMAIN}')"
-      - "traefik.http.routers.changedetection.entrypoints=websecure"
-      - "traefik.http.routers.changedetection.tls.certresolver=transip"
-
   godns:
     container_name: godns
     image: timothyye/godns:latest
@@ -107,8 +88,6 @@ services:
 
 volumes:
   brave:
-    external: true
-  changedetection:
     external: true
   code-server:
     external: true
