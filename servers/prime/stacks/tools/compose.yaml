@@ -78,7 +78,27 @@ services:
       - "traefik.http.routers.code-server-http.middlewares=code-server-https-redirect"
       - "traefik.http.routers.code-server.middlewares=hsts-global"
       - "traefik.http.services.code-server.loadbalancer.server.port=8443"
-
+  
+  cura:
+    image: lscr.io/linuxserver/cura:latest
+    container_name: cura
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - LIBVA_DRIVER_NAME=iHD      
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - render
+    volumes:
+      - cura:/config
+    ports:
+      - 3000:3000
+      - 3001:3001
+    shm_size: "1gb"
+    restart: unless-stopped
+    
   it-tools: # https://github.com/CorentinTh/it-tools
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
@@ -90,6 +110,8 @@ volumes:
   brave:
     external: true
   code-server:
+    external: true
+  cura:
     external: true
   godns:
     external: true
