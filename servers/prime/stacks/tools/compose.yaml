@@ -25,22 +25,6 @@ services:
       - "traefik.http.routers.brave.entrypoints=websecure"
       - "traefik.http.routers.brave.tls.certresolver=transip"
 
-  godns:
-    container_name: godns
-    image: timothyye/godns:latest
-    environment:
-      - CONFIG=/config/config.json
-    restart: unless-stopped
-    ports:
-      - 9099:9099
-    volumes:
-      - godns:/config/
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.godns.rule=Host('godns.${DOMAIN}')"
-      - "traefik.http.routers.godns.entrypoints=websecure"
-      - "traefik.http.routers.godns.tls.certresolver=transip"
-  
   code-server:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
@@ -78,26 +62,22 @@ services:
       - "traefik.http.routers.code-server-http.middlewares=code-server-https-redirect"
       - "traefik.http.routers.code-server.middlewares=hsts-global"
       - "traefik.http.services.code-server.loadbalancer.server.port=8443"
-  
-  cura:
-    image: lscr.io/linuxserver/cura:latest
-    container_name: cura
+
+  godns:
+    container_name: godns
+    image: timothyye/godns:latest
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - LIBVA_DRIVER_NAME=iHD      
-    devices:
-      - /dev/dri:/dev/dri
-    group_add:
-      - render
-    volumes:
-      - cura:/config
-    ports:
-      - 3000:3000
-      - 3001:3001
-    shm_size: "1gb"
+      - CONFIG=/config/config.json
     restart: unless-stopped
+    ports:
+      - 9099:9099
+    volumes:
+      - godns:/config/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.godns.rule=Host('godns.${DOMAIN}')"
+      - "traefik.http.routers.godns.entrypoints=websecure"
+      - "traefik.http.routers.godns.tls.certresolver=transip"
     
   it-tools: # https://github.com/CorentinTh/it-tools
     container_name: it-tools
@@ -110,8 +90,6 @@ volumes:
   brave:
     external: true
   code-server:
-    external: true
-  cura:
     external: true
   godns:
     external: true
