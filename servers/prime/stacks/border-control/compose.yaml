@@ -1,0 +1,98 @@
+name: border-control
+
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    networks:
+      - web
+    ports:      
+      - 53:53/tcp    # DNS port
+      - 53:53/udp    # DNS port
+    environment:
+      - TZ=${TZ}
+      - FTLCONF_webserver_api_password: ${PIHOLE_ADMIN_PASSWORD}
+      - FTLCONF_dns_listeningMode: 'all'
+      - DNSMASQ_USER: 'root'
+      - PIHOLE_UID=${PUID}
+      - PIHOLE_GID=${PGID}      
+    volumes:
+      - pihole:/etc/pihole     
+    cap_add:   
+      - NET_ADMIN
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)"
+      - "traefik.http.routers.pihole.entrypoints=websecure"
+      - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pihole.loadbalancer.server.port=80"
+
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik:/etc/traefik   # static & dynamic config live here
+      - traefik:/data          # acme.json will be created/managed here
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=sec-headers@file"
+      
+  wireguard:
+    image: ghcr.io/wg-easy/wg-easy:latest
+    container_name: wireguard
+    environment:
+      - WG_ALLOWED_IPS=${WIREGUARD_ALLOWED_IPS}
+      - WG_HOST=${WIREGUARD_HOST}
+      - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH}
+    volumes:
+      - wireguard:/etc/wireguard
+      - /lib/modules:/lib/modules:ro
+    ports:
+      - 51820:51820/udp
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    networks:
+      - web
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.default.forwarding=1
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
+      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
+
+
+networks:
+  backend:
+    external: true
+  web:
+    external: true
+
+volumes:
+  pihole:
+    external: true
+  traefik:
+    external: true
+  wireguard:
+    external: true
