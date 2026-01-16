@@ -241,7 +241,7 @@ volumes:
     external: true
   overseerr:
     external: true
-  bazarr:
+  plex:
     external: true
   prowlarr:
     external: true
