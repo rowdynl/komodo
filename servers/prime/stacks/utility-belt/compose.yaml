@@ -76,7 +76,7 @@ services:
       - godns:/config/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.godns.rule=Host('godns.${DOMAIN}')"
+      - "traefik.http.routers.godns.rule=Host(`godns.${DOMAIN}`)"
       - "traefik.http.routers.godns.entrypoints=websecure"
       - "traefik.http.routers.godns.tls.certresolver=transip"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
@@ -91,7 +91,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.it-tools.rule=Host('tools.${DOMAIN}')"
+      - "traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)"
       - "traefik.http.routers.it-tools.entrypoints=websecure"
       - "traefik.http.routers.it-tools.tls.certresolver=transip"
       - "traefik.http.services.it-tools.loadbalancer.server.port=9099"
