@@ -4,6 +4,8 @@ services:
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -25,6 +27,8 @@ services:
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -46,6 +50,8 @@ services:
   overseerr:
     container_name: overseerr
     image: sctx/overseerr
+    networks:
+      - web
     restart: unless-stopped
     volumes:
       - 'overseerr:/app/config'
@@ -64,6 +70,8 @@ services:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
     network_mode: host
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -101,6 +109,8 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -120,6 +130,8 @@ services:
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -142,6 +154,8 @@ services:
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -156,6 +170,8 @@ services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -178,6 +194,8 @@ services:
   transmission:
     image: haugene/transmission-openvpn
     container_name: transmission
+    networks:
+      - web
     cap_add:
       - NET_ADMIN
     volumes:
