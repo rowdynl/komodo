@@ -1,4 +1,4 @@
-name: media
+name: new-providence-island
 
 services:
   bazarr:
@@ -14,7 +14,13 @@ services:
       - /mnt/prime-ds/series:/series
     ports:
       - 6767:6767
-    restart: unless-stopped  
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.rule=Host('bazarr.${DOMAIN}')"
+      - "traefik.http.routers.bazarr.entrypoints=websecure"
+      - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
 
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
@@ -30,6 +36,12 @@ services:
     ports:
       - 8686:8686
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lidarr.rule=Host('lidarr.${DOMAIN}')"
+      - "traefik.http.routers.lidarr.entrypoints=websecure"
+      - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
 
   overseerr:
     container_name: overseerr
@@ -41,6 +53,12 @@ services:
       - '5055:5055'
     environment:
       - TZ=${TZ}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.overseerr.rule=Host('overseerr.${DOMAIN}')"
+      - "traefik.http.routers.overseerr.entrypoints=websecure"
+      - "traefik.http.routers.overseerr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=32400"
 
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
@@ -51,7 +69,7 @@ services:
       - PGID=${PGID}
       - VERSION=latest
       - TZ=${TZ}
-      - PLEX_HW_ACCEL=true
+      - plex_HW_ACCEL=true
       - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
       - LIBVA_MESSAGING_LEVEL=1
@@ -92,6 +110,12 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host('prowlarr.${DOMAIN}')"
+      - "traefik.http.routers.prowlarr.entrypoints=websecure"
+      - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -108,6 +132,12 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host('radarr.${DOMAIN}')"
+      - "traefik.http.routers.radarr.entrypoints=websecure"
+      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
   
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
@@ -138,6 +168,12 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host('sonarr.${DOMAIN}')"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
 
   transmission:
     image: haugene/transmission-openvpn
@@ -166,6 +202,12 @@ services:
         max-size: 11m
     ports:
       - 9091:9091
+    restart: unless-stoppedlabels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.rule=Host('transmission.${DOMAIN}')"
+      - "traefik.http.routers.transmission.entrypoints=websecure"
+      - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
+      - "traefik.http.services.transmission.loadbalancer.server.port=32400"
 
 networks:
   web:
@@ -180,7 +222,7 @@ volumes:
     external: true
   overseerr:
     external: true
-  plex:
+  bazarr:
     external: true
   prowlarr:
     external: true
