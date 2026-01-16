@@ -11,9 +11,9 @@ services:
       - 53:53/udp    # DNS port
     environment:
       - TZ=${TZ}
-      - FTLCONF_webserver_api_password: ${PIHOLE_ADMIN_PASSWORD}
-      - FTLCONF_dns_listeningMode: 'all'
-      - DNSMASQ_USER: 'root'
+      - FTLCONF_webserver_api_password=${PIHOLE_ADMIN_PASSWORD}
+      - FTLCONF_dns_listeningMode=all
+      - DNSMASQ_USER=root
       - PIHOLE_UID=${PUID}
       - PIHOLE_GID=${PGID}      
     volumes:
