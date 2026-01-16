@@ -6,9 +6,9 @@ services:
     container_name: pihole
     networks:
       - web
-    ports:      
-      - 53:53/tcp    # DNS port
-      - 53:53/udp    # DNS port
+    #ports:      
+    #  - 53:53/tcp    # DNS port
+    #  - 53:53/udp    # DNS port
     environment:
       - TZ=${TZ}
       - FTLCONF_webserver_api_password=${PIHOLE_ADMIN_PASSWORD}
