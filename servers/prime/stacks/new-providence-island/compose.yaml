@@ -220,7 +220,8 @@ services:
         max-size: 11m
     ports:
       - 9091:9091
-    restart: unless-stoppedlabels:
+    restart: unless-stopped
+    labels:
       - "traefik.enable=true"
       - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN)`)"
       - "traefik.http.routers.transmission.entrypoints=websecure"
