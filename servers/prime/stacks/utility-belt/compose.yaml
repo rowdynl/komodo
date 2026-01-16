@@ -26,7 +26,7 @@ services:
       - "traefik.http.routers.brave.rule=Host(`brave.${DOMAIN}`)"
       - "traefik.http.routers.brave.entrypoints=websecure"
       - "traefik.http.routers.brave.tls.certresolver=letsencrypt"
-      - "traefik.http.services.brave.loadbalancer.server.port=3001" 
+      - "traefik.http.services.brave.loadbalancer.server.port=3000" 
 
   code-server:
     image: lscr.io/linuxserver/code-server:latest
