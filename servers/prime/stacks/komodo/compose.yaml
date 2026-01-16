@@ -4,8 +4,10 @@ services:
   komodo-mongodb:
     image: mongo
     container_name: komodo-mongodb
+    networks:
+      - backend
     labels:
-      komodo.skip:
+      - komodo.skip:
     command: --quiet --wiredTigerCacheSizeGB 0.25
     restart: unless-stopped
     ports:
@@ -20,13 +22,14 @@ services:
   komodo-core:
     image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
     container_name: komodo-core
-    labels:
-      komodo.skip:
     restart: unless-stopped
     depends_on:
       - komodo-mongodb
     ports:
       - 9120:9120
+    networks:
+      - backend
+      - web
     env_file: .env
     environment:
       KOMODO_DATABASE_ADDRESS: komodo-mongodb:27017
@@ -34,25 +37,33 @@ services:
       KOMODO_DATABASE_PASSWORD: ${KOMODO_DB_PASSWORD}
     volumes:
       - komodo-core-backups:/backups
-    ## Allows for systemd Periphery connection at 
-    ## "https://host.docker.internal:8120"
-    # extra_hosts:
-    #   - host.docker.internal:host-gateway
+    labels:
+      - komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      - "traefik.enable=true"
+      - "traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)"
+      - "traefik.http.routers.komodo.entrypoints=websecure"
+      - "traefik.http.routers.komodo.tls.certresolver=letsencrypt"
+      - "traefik.http.services.komodo.loadbalancer.server.port=9120"
 
-  ## Deploy Periphery container using this block,
-  ## or deploy the Periphery binary with systemd using 
-  ## https://github.com/moghtech/komodo/tree/main/scripts
   komodo-periphery:
     image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
     container_name: komodo-periphery
-    labels:
-      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+    networks:
+      - backend    
     restart: unless-stopped
     env_file: .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc
       - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
+    labels:
+      - komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+
+networks:
+  web:
+    external: true
+  backend:
+    external: true
 
 volumes:
   komodo-core-backups:
