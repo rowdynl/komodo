@@ -69,7 +69,6 @@ services:
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
-    network_mode: host
     networks:
       - web
     environment:
