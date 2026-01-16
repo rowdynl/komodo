@@ -4,6 +4,8 @@ services:
   brave:
     image: ghcr.io/linuxserver/brave:latest
     container_name: brave
+    networks:
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
