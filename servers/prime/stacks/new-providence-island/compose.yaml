@@ -64,7 +64,7 @@ services:
       - "traefik.http.routers.overseerr.rule=Host(`overseerr.${DOMAIN}`)"
       - "traefik.http.routers.overseerr.entrypoints=websecure"
       - "traefik.http.routers.overseerr.tls.certresolver=letsencrypt"
-      - "traefik.http.services.overseerr.loadbalancer.server.port=32400"
+      - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
 
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
@@ -169,6 +169,12 @@ services:
     ports:
       - 3389:3389
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)"
+      - "traefik.http.routers.sabnzbd.entrypoints=websecure"
+      - "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt"
+      - "traefik.http.services.sabnzbd.loadbalancer.server.port=3389"
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -229,7 +235,7 @@ services:
       - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
       - "traefik.http.routers.transmission.entrypoints=websecure"
       - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
-      - "traefik.http.services.transmission.loadbalancer.server.port=32400"
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
 
 networks:
   web:
