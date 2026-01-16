@@ -63,6 +63,7 @@ services:
       - /lib/modules:/lib/modules:ro
     ports:
       - 51820:51820/udp
+      - 51821:51821
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
