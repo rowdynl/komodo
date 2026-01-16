@@ -75,16 +75,9 @@ services:
     restart: unless-stopped 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.plex-https-redirect.redirectscheme.permanent=true"
       - "traefik.http.routers.plex.rule=Host('plex.${DOMAIN}')"
       - "traefik.http.routers.plex.entrypoints=websecure"
-      - "traefik.http.routers.plex.tls=true"
       - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.plex-http.rule=Host('plex.${DOMAIN}')"
-      - "traefik.http.routers.plex-http.entrypoints=web"
-      - "traefik.http.routers.plex-http.middlewares=plex-https-redirect"
-      - "traefik.http.routers.plex.middlewares=hsts-global"
       - "traefik.http.services.plex.loadbalancer.server.port=32400"
   
   prowlarr:
