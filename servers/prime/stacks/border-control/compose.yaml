@@ -76,7 +76,7 @@ services:
       - net.ipv6.conf.default.forwarding=1
     restart: unless-stopped
     labels:
-      - komodo.skip:
+      - "komodo.skip=true"
       - "traefik.enable=true"
       - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)"
       - "traefik.http.routers.wireguard.entrypoints=websecure"

@@ -7,7 +7,7 @@ services:
     networks:
       - backend
     labels:
-      - komodo.skip:
+      - "komodo.skip=true"
     command: --quiet --wiredTigerCacheSizeGB 0.25
     restart: unless-stopped
     ports:
@@ -38,7 +38,7 @@ services:
     volumes:
       - komodo-core-backups:/backups
     labels:
-      - komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      - "komodo.skip=true"
       - "traefik.enable=true"
       - "traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)"
       - "traefik.http.routers.komodo.entrypoints=websecure"
@@ -57,7 +57,7 @@ services:
       - /proc:/proc
       - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
     labels:
-      - komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      - "komodo.skip=true"
 
 networks:
   web:
