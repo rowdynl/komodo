@@ -49,7 +49,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=sec-headers@file"
+      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file"
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
