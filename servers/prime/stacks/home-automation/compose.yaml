@@ -1,0 +1,130 @@
+name: home-automation
+
+services:
+  esphome:
+    image: 
+    container_name: esphome
+    environment:
+      - TZ=${TZ}
+      - USERNAME=${ESPHOME_USERNAME}
+      - PASSWORD=${ESPHOME_PASSWORD}
+    networks:
+      - web
+    volumes:
+      - esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wireguard.rule=Host(`esphome.${DOMAIN}`)"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
+      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.wireguard.loadbalancer.server.port=6052"
+
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    environment:
+      - TZ=${TZ}
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
+      - LIBVA_DRIVER_NAME=i965
+    shm_size: 512mb
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/dri/renderD128:/dev/dri/renderD128 
+    networks:
+      - web
+    volumes:
+      - frigate:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/prime-ds/media/frigate:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    privileged: true
+    stop_grace_period: 30s
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wireguard.rule=Host(`frigate.${DOMAIN}`)"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
+      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.wireguard.loadbalancer.server.port=8971"
+
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: home-assistant
+    environment:
+      - TZ=${TZ}
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    networks:
+      - backend
+      - web
+    volumes:
+      - home-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    privileged: true
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wireguard.rule=Host(`has.${DOMAIN}`)"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
+      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.wireguard.loadbalancer.server.port=8123"
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    environment:
+      - TZ=${TZ}
+    networks:
+      - backend
+    volumes:
+      - mosquitto:/mosquitto
+    restart: unless-stopped
+
+  music-assistant:
+    image: music-assistant/server:latest
+    container_name: music-assistant
+    environment:
+      - TZ=${TZ}
+    networks:
+      - backend
+    volumes:
+      - music-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+
+  node-red:
+    image: nodered/node-red
+    container_name: node-red
+    environment:
+      - TZ=${TZ}
+    networks:
+      - backend
+    volumes:
+      - node-red:/data
+    restart: unless-stopped
+
+networks:
+  backend:
+    external: true
+  web:
+    external: true
+
+volumes:
+  esphome:
+    external: true
+  frigate:
+    external: true
+  home-assistant:
+    external: true
+  mosquitto:
+    external: true
+  music-assistant:
+    external: true
+  node-red:
+    external: true
