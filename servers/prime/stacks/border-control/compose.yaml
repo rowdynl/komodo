@@ -19,6 +19,7 @@ services:
     networks:
       - web
     restart: unless-stopped
+
   pihole:
     image: pihole/pihole:latest
     container_name: pihole
@@ -67,7 +68,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file"
+      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file,geo-allow-eu10@file,crowdsec@file"
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
