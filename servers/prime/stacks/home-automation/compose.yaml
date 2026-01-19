@@ -61,6 +61,8 @@ services:
       - /dev/ttyUSB0:/dev/ttyUSB0
     networks:
       - backend
+      - macvlan:
+        ipv4_address: 192.168.178.201
       - web
     volumes:
       - home-assistant:/config
@@ -111,6 +113,8 @@ services:
 
 networks:
   backend:
+    external: true
+  macvlan:
     external: true
   web:
     external: true

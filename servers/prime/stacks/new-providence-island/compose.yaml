@@ -69,12 +69,10 @@ services:
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
-    #networks:
-    #  - web
-    #  - macvlan
-    #ports:
-    #  - 32400:32400
-    network_mode: host
+    networks:
+      - macvlan:
+        ipv4_address: 192.168.178.202
+      - web
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -239,6 +237,8 @@ services:
 
 networks:
   web:
+    external: true
+  macvlan:
     external: true
   backend:
     external: true
