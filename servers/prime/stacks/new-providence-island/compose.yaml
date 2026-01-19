@@ -71,7 +71,7 @@ services:
     container_name: plex
     networks:
       - macvlan:
-        ipv4_address: 192.168.178.202
+          ipv4_address: 192.168.178.202
       - web
     environment:
       - PUID=${PUID}
@@ -100,12 +100,12 @@ services:
       - '/mnt/prime-ds/series:/series'
       - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
     restart: unless-stopped 
-    #labels:
-    #  - "traefik.enable=true"
-    #  - "traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)"
-    #  - "traefik.http.routers.plex.entrypoints=websecure"
-    #  - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
-    #  - "traefik.http.services.plex.loadbalancer.server.port=32400"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)"
+      - "traefik.http.routers.plex.entrypoints=websecure"
+      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
   
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest

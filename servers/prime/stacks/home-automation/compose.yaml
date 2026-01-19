@@ -62,7 +62,7 @@ services:
     networks:
       - backend
       - macvlan:
-        ipv4_address: 192.168.178.201
+          ipv4_address: 192.168.178.201
       - web
     volumes:
       - home-assistant:/config
