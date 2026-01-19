@@ -1,6 +1,24 @@
 name: border-control
 
-services:
+services: 
+  crowdsec:
+    image: crowdsecurity/crowdsec:v1.6.6
+    container_name: crowdsec
+    environment:
+      - GID=${PGID}
+      - UID=${PUID}
+      - TZ=${TZ}
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/http-dos
+    volumes:
+      - traefik:/var/log/traefik:ro
+      - crowdsec:/etc/crowdsec/
+    tmpfs:
+      - /var/lib/crowdsec/data:rw,size=512m
+    depends_on:
+      - traefik
+    networks:
+      - web
+    restart: unless-stopped
   pihole:
     image: pihole/pihole:latest
     container_name: pihole
@@ -92,6 +110,8 @@ networks:
     external: true
 
 volumes:
+  crowdsec:
+    external: true
   pihole:
     external: true
   traefik:
