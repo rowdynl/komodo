@@ -60,10 +60,10 @@ services:
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
     networks:
-      - backend
-      - macvlan:
-          ipv4_address: 192.168.178.201
-      - web
+      backend:
+      macvlan:
+        ipv4_address: 192.168.178.201
+      web:
     volumes:
       - home-assistant:/config
       - /etc/localtime:/etc/localtime:ro
