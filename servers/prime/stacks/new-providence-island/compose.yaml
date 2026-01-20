@@ -71,7 +71,7 @@ services:
     container_name: plex
     networks:
       macvlan:
-        ipv4_address: 192.168.178.202
+        ipv4_address: ${MACVLAN_STATIC_IP_PLEX}
       web:
     environment:
       - PUID=${PUID}
