@@ -44,8 +44,7 @@ services:
       - PASSWORD=${CODE_SERVER_PASSWORD}
     volumes:
       - code-server:/config
-      - /docker/compose:/config/workspace/docker-compose
-      - /docker/komodo:/config/workspace/repos/komodo
+      - /repos/komodo:/config/workspace/repos/komodo
       - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant
     ports:
       - 8443:8443
