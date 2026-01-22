@@ -1,6 +1,25 @@
 name: border-control
 
-services:
+services: 
+  crowdsec:
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    environment:
+      - GID=${PGID}
+      - UID=${PUID}
+      - TZ=${TZ}
+      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/http-dos
+    volumes:
+      - traefik:/var/log/traefik:ro
+      - crowdsec:/etc/crowdsec/
+    tmpfs:
+      - /var/lib/crowdsec/data:rw,size=512m
+    depends_on:
+      - traefik
+    networks:
+      - web
+    restart: unless-stopped
+
   pihole:
     image: pihole/pihole:latest
     container_name: pihole
@@ -49,7 +68,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file"
+      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file,geo-allow-eu10@file,crowdsec@file"
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
@@ -63,6 +82,7 @@ services:
       - /lib/modules:/lib/modules:ro
     ports:
       - 51820:51820/udp
+      - 51821:51821
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -76,6 +96,7 @@ services:
       - net.ipv6.conf.default.forwarding=1
     restart: unless-stopped
     labels:
+      - "komodo.skip=true"
       - "traefik.enable=true"
       - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)"
       - "traefik.http.routers.wireguard.entrypoints=websecure"
@@ -90,6 +111,8 @@ networks:
     external: true
 
 volumes:
+  crowdsec:
+    external: true
   pihole:
     external: true
   traefik:
