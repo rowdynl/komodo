@@ -45,6 +45,7 @@ services:
       - S6_STAGE2_HOOK=/docker-mods
       - TZ=${TZ}
       - PASSWORD=${CODE_SERVER_PASSWORD}
+      - EXTENSIONS_GALLERY={"serviceUrl":"https://marketplace.visualstudio.com/_apis/public/gallery","cacheUrl":"https://vscode.blob.core.windows.net/gallery/index","itemUrl":"https://marketplace.visualstudio.com/items"}
     volumes:
       - code-server:/config
       - /repos/komodo:/config/workspace/repos/komodo
