@@ -70,6 +70,7 @@ services:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
     networks:
+      dirty-water:
       macvlan:
         ipv4_address: ${MACVLAN_STATIC_IP_PLEX}
       web:
@@ -112,6 +113,8 @@ services:
     container_name: plex-auto-languages
     environment:
       - TZ=${TZ}
+    networks:
+      dirty-water:
     volumes:      
       - plexautolanguages:/config
     restart: unless-stopped
@@ -245,6 +248,8 @@ services:
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
 
 networks:
+  dirty-water:
+    external: true
   web:
     external: true
   macvlan:
