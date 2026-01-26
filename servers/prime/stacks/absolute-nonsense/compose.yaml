@@ -10,7 +10,6 @@ services:
       - ENABLE_MAP=true
       - ENABLE_CHAT=true
       - PORT=3000
-    command: '# say hello again'
     ports:
       - 3000:3000
     networks:
