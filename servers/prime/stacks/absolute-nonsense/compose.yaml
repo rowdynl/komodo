@@ -1,0 +1,26 @@
+# A stack full of services that either don’t talk to each other or talk way too much. Guaranteed to consume CPU doing nothing useful.
+name: absolute-nonsense
+
+services:
+  hypermind:    
+    image: 'ghcr.io/lklynet/hypermind:1.0.0'
+    container_name: hypermind
+    environment:
+      - ENABLE_THEMES=true
+      - ENABLE_MAP=true
+      - ENABLE_CHAT=true
+      - PORT=3000
+    command: '# say hello again'
+    networks:
+      web:
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)"
+      - "traefik.http.routers.hypermind.entrypoints=websecure"
+      - "traefik.http.routers.hypermind.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hypermind.loadbalancer.server.port=3000"
+
+networks:
+  web:
+    external: true    
