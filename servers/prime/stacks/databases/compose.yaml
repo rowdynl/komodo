@@ -5,7 +5,7 @@ services:
   influxdb:
     image: docker.io/influxdb:latest
     container_name: influxdb
-    network:
+    networks:
       backend:
       web:      
     volumes:
