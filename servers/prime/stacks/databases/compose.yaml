@@ -4,22 +4,40 @@ services:
   influxdb:
     image: docker.io/influxdb:latest
     container_name: influxdb
-  mariadb:
-    image: docker.io/mariadb:latest
-    container_name: mariadb
-  mongodb:
-    image: mongo
-    container_name: mongodb
-  postgresql:
-    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
-    container_name: postgresql  
+    network:
+      backend:
+      web:      
+    volumes:
+      - influxdb-config:/etc/influxdb2
+      - influxdb-data:/var/lib/influxdb2
+    environment:
+      - TZ=${TZ}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 11s
+      timeout: 11s
+      retries: 22
+#  mariadb:
+#    image: docker.io/mariadb:latest
+#    container_name: mariadb
+#  mongodb:
+#    image: mongo
+#    container_name: mongodb
+#  postgresql:
+#    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
+#    container_name: postgresql  
 
 network:
   backend:
     external: true
+  web:
+    external: true
 
 volumes:
-  influxdb:
+  influxdb-config:
+    external: true
+  influxdb-data:
     external: true
   mariadb:
     external: true
