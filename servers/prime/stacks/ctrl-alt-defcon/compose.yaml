@@ -58,7 +58,7 @@ services:
     environment:
       COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.scrutiny:8080'
       COLLECTOR_HOST_ID: 'prime'
-      COLLECTOR_RUN_STARTUP: false
+      COLLECTOR_RUN_STARTUP: true
     restart: unless-stopped    
     devices:
       - "/dev/nvme0"
