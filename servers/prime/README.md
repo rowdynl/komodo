@@ -10,10 +10,11 @@ For most services, I use Docker containers with named volumes for the persistant
 
 ### Docker networks
 We have three docker networks:
-- **dirty-water** - extra network to let some of the services in the new-providence-stack talk to each other without giving them access to databases or expose them to traefik.
-- **web** - everything that needs to be access from the big, scary internet uses this network. A reverse proxy connects to this network and routed traffic to the containers.
 - **backend** - everything that does not need to communicate with the outside world. In here you's find containers like databases and such.
+- **dirty-water** - extra network to let some of the services in the new-providence-stack talk to each other without giving them access to databases or expose them to traefik.
+- **scrutiny** - extra network to let scrutiny collector talk to scrutiny and nothing else
 - **mcvlan** - everything that needs to have an IP on the local network, see below.
+- **web** - everything that needs to be access from the big, scary internet uses this network. A reverse proxy connects to this network and routed traffic to the containers.
 
 #### Docker network macvlan
 Some containers like Plex or Home-Assistant need to be 'on' the local network to work properly, i.e. for DLNA discovery, mDNS, SSDP. Instead of using network_mode 'host', we use a special network where we will give them a fixed IP. How that's configured in the docker compose files, see the compose files in the different stacks, i.e. the plex service in the [new-providence](https://github.com/rowdynl/komodo/blob/main/servers/prime/stacks/new-providence-island/compose.yaml) stack. 
