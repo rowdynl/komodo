@@ -1,0 +1,113 @@
+# Monitors everything and escalates threats immediately… even if it’s just a slightly warm HDD.
+name: ctrl-alt-defcon
+
+services:
+  godns:
+    container_name: godns
+    image: timothyye/godns:latest
+    networks:
+      - web
+    environment:
+      - CONFIG=/config/config.json
+    restart: unless-stopped
+    ports:
+      - 9099:9099
+    volumes:
+      - godns:/config/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.godns.rule=Host(`godns.${DOMAIN}`)"
+      - "traefik.http.routers.godns.entrypoints=websecure"
+      - "traefik.http.routers.godns.tls.certresolver=letsencrypt"
+      - "traefik.http.services.godns.loadbalancer.server.port=9099"
+
+  scrutiny-web:
+    image: 'ghcr.io/analogj/scrutiny:master-web'
+    container_name: scrutiny-web
+    ports:
+      - '8582:8080'
+    volumes:
+      - scrutiny:/opt/scrutiny/config
+    networks:
+      backend:
+      scrutiny:
+      web:
+    environment:
+      SCRUTINY_WEB_INFLUXDB_HOST: 'influxdb'
+    restart: unless-stopped    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.scrutiny.rule=Host(`scrutiny.${DOMAIN}`)"
+      - "traefik.http.routers.scrutiny.entrypoints=websecure"
+      - "traefik.http.routers.scrutiny.tls.certresolver=letsencrypt"
+      - "traefik.http.services.scrutiny.loadbalancer.server.port=8080"
+
+  scrutiny-collector:
+    image: 'ghcr.io/analogj/scrutiny:master-collector'
+    container_name: scrutiny-web
+    cap_add:
+      - SYS_RAWIO
+    volumes:
+      - '/run/udev:/run/udev:ro'
+    networks:
+      scrutiny:
+    environment:
+      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web:8080'
+      COLLECTOR_HOST_ID: 'prime'
+      COLLECTOR_RUN_STARTUP: false
+    restart: unless-stopped    
+    devices:
+      - "/dev/nvme0"
+
+  speedtest-tracker:
+    image: ghcr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    networks:
+      - backend
+      - web
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APP_TIMEZONE=${TZ}
+      - APP_KEY=${SPEEDTEST_TRACKER_APP_KEY}
+      - DB_HOST=${SPEEDTEST_TRACKER_DB_HOST}
+      - DB_USERNAME=${SPEEDTEST_TRACKER_DB_USERNAME}
+      - DB_PASSWORD=${SPEEDTEST_TRACKER_DB_PASSWORD}
+      - DB_CONNECTION=mariadb
+      - DB_DATABASE=speedtest_tracker
+      - DB_PORT=3306
+      - SPEEDTEST_SCHEDULE=*/30 * * * *
+    restart: unless-stopped
+    ports:
+      - 8033:80
+    volumes:
+      - speedtest-tracker:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.${DOMAIN}`)"
+      - "traefik.http.routers.speedtest-tracker.entrypoints=websecure"
+      - "traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt"
+      - "traefik.http.services.speedtest-tracker.loadbalancer.server.port=80"
+
+networks:
+  backend:
+    external: true
+  scrutiny:
+    external: true
+  web:
+    external: true
+
+volumes:
+  godns:
+    external: true
+  scrutiny:
+    external: true
+  speedtest-tracker:
+    external: true
