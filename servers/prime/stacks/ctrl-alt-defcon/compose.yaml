@@ -32,8 +32,8 @@ services:
       backend:
       scrutiny:
       web:
-    environment:
-      SCRUTINY_WEB_INFLUXDB_HOST: 'influxdb-tmp'
+    #environment:
+    #  SCRUTINY_WEB_INFLUXDB_HOST: 'influxdb-tmp'
     restart: unless-stopped    
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
