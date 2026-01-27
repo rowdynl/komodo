@@ -54,6 +54,7 @@ services:
       - SYS_ADMIN
     volumes:
       - '/run/udev:/run/udev:ro'
+      - scrutiny:/opt/scrutiny/config      
     networks:
       scrutiny:
     environment:
