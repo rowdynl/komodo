@@ -1,3 +1,4 @@
+# A safe space for databases with commitment issues. Whether it’s time‑series drama, relational overthinking, document‑storage chaos, or PostgreSQL’s “I’m smarter than everyone else” attitude — this stack collects, stores, and protects every bit you throw at it. Perfect for when you absolutely, definitely, totally need that metric from 8 months ago at 03:12… someday.
 name: databases
 
 services:

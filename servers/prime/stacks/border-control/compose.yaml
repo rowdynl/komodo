@@ -1,3 +1,7 @@
+#Your digital border checkpoint, complete with grumpy guards and deep suspicion of anything passing
+# through. Traefik directs traffic like an overly caffeinated air‑traffic controller, Authentik checks 
+# IDs with military precision, Pi‑hole blocks shady tourists, CrowdSec cracks down on hooligans, 
+# and WireGuard handles diplomatic transport. Welcome to the fortress — passport, please.
 name: border-control
 
 services: 
