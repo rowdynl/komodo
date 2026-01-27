@@ -51,6 +51,7 @@ services:
     container_name: scrutiny-collector
     cap_add:
       - SYS_RAWIO
+      - SYS_ADMIN
     volumes:
       - '/run/udev:/run/udev:ro'
     networks:
