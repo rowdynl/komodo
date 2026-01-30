@@ -30,6 +30,7 @@ services:
       - "traefik.http.routers.brave.rule=Host(`brave.${DOMAIN}`)"
       - "traefik.http.routers.brave.entrypoints=websecure"
       - "traefik.http.routers.brave.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.brave.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.brave.loadbalancer.server.port=3000" 
 
   code-server:
@@ -64,6 +65,7 @@ services:
       - "traefik.http.routers.code-server.rule=Host(`code-server.${DOMAIN}`)"
       - "traefik.http.routers.code-server.entrypoints=websecure"
       - "traefik.http.routers.code-server.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.code-server.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.code-server.loadbalancer.server.port=8443"
     
   it-tools: # https://github.com/CorentinTh/it-tools
@@ -79,6 +81,7 @@ services:
       - "traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)"
       - "traefik.http.routers.it-tools.entrypoints=websecure"
       - "traefik.http.routers.it-tools.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.it-tools.loadbalancer.server.port=9099"
 
   

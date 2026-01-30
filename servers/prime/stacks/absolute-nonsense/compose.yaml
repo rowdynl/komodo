@@ -22,6 +22,7 @@ services:
       - "traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)"
       - "traefik.http.routers.hypermind.entrypoints=websecure"
       - "traefik.http.routers.hypermind.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.hypermind.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.hypermind.loadbalancer.server.port=3000"
 
 networks:

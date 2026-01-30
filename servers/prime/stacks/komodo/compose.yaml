@@ -43,6 +43,7 @@ services:
       - "traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)"
       - "traefik.http.routers.komodo.entrypoints=websecure"
       - "traefik.http.routers.komodo.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.komodo.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.komodo.loadbalancer.server.port=9120"
 
   komodo-periphery:

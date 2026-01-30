@@ -19,6 +19,7 @@ services:
       - "traefik.http.routers.godns.rule=Host(`godns.${DOMAIN}`)"
       - "traefik.http.routers.godns.entrypoints=websecure"
       - "traefik.http.routers.godns.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
 
   scrutiny-web:
@@ -44,6 +45,7 @@ services:
       - "traefik.http.routers.scrutiny.rule=Host(`scrutiny.${DOMAIN}`)"
       - "traefik.http.routers.scrutiny.entrypoints=websecure"
       - "traefik.http.routers.scrutiny.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.scrutiny.loadbalancer.server.port=8080"
 
   scrutiny-collector:
@@ -94,6 +96,7 @@ services:
       - "traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.${DOMAIN}`)"
       - "traefik.http.routers.speedtest-tracker.entrypoints=websecure"
       - "traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.speedtest.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.speedtest-tracker.loadbalancer.server.port=80"
 
 networks:

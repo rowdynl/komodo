@@ -47,6 +47,7 @@ services:
       - "traefik.http.routers.lidarr.rule=Host(`lidarr.${DOMAIN}`)"
       - "traefik.http.routers.lidarr.entrypoints=websecure"
       - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.lidarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
 
   overseerr:
@@ -66,6 +67,7 @@ services:
       - "traefik.http.routers.overseerr.rule=Host(`overseerr.${DOMAIN}`)"
       - "traefik.http.routers.overseerr.entrypoints=websecure"
       - "traefik.http.routers.overseerr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.overseerr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.overseerr.loadbalancer.server.port=5055"
 
   plex:
@@ -108,6 +110,7 @@ services:
       - "traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)"
       - "traefik.http.routers.plex.entrypoints=websecure"
       - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.plex.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.plex.loadbalancer.server.port=32400"
 
   plex-auto-languages:
@@ -140,6 +143,7 @@ services:
       - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)"
       - "traefik.http.routers.prowlarr.entrypoints=websecure"
       - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
   radarr:
@@ -164,6 +168,7 @@ services:
       - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)"
       - "traefik.http.routers.radarr.entrypoints=websecure"
       - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.radarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
   
   sabnzbd:
@@ -186,6 +191,7 @@ services:
       - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)"
       - "traefik.http.routers.sabnzbd.entrypoints=websecure"
       - "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.sabnzbd.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.sabnzbd.loadbalancer.server.port=3389"
 
   sonarr:
@@ -210,6 +216,7 @@ services:
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
       - "traefik.http.routers.sonarr.entrypoints=websecure"
       - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.sonarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
 
   transmission:
@@ -247,6 +254,7 @@ services:
       - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
       - "traefik.http.routers.transmission.entrypoints=websecure"
       - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
 
 networks:

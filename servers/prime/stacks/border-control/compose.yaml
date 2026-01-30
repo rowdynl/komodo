@@ -24,6 +24,33 @@ services:
       - web
     restart: unless-stopped
 
+  krawl:
+    image: ghcr.io/blessedrebus/krawl:latest
+    container_name: krawl
+    environment:
+      - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH}
+      - TZ=${TZ}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - krawl:/app/data
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+
+      # Normal explicit route
+      - "traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)"
+      - "traefik.http.routers.krawl.entrypoints=websecure"
+      - "traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.krawl.tls=true"
+
+      # Catch-all honeypot route
+      - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{any:.*}`)"
+      - "traefik.http.routers.krawl-fallback.entrypoints=web,websecure"
+      - "traefik.http.routers.krawl-fallback.priority=1"
+
+      # Service port
+      - "traefik.http.services.krawl.loadbalancer.server.port=5000"
+
   pihole:
     image: pihole/pihole:latest
     container_name: pihole
@@ -49,8 +76,9 @@ services:
       - "traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)"
       - "traefik.http.routers.pihole.entrypoints=websecure"
       - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
-
+      
   traefik:
     image: traefik:latest
     container_name: traefik
@@ -71,6 +99,7 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file,geo-allow-eu10@file,crowdsec@file"
       
@@ -105,6 +134,7 @@ services:
       - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)"
       - "traefik.http.routers.wireguard.entrypoints=websecure"
       - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
 
 
@@ -116,6 +146,8 @@ networks:
 
 volumes:
   crowdsec:
+    external: true
+  krawl:
     external: true
   pihole:
     external: true
