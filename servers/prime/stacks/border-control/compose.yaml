@@ -31,7 +31,6 @@ services:
       - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH}
       - TZ=${TZ}
     volumes:
-      - ./config.yaml:/app/config.yaml:ro
       - krawl:/app/data
     restart: unless-stopped
     labels:
