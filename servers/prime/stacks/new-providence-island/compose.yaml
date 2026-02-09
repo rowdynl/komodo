@@ -26,6 +26,29 @@ services:
       - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
 
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: cleanuparr
+    networks:
+      - web
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - cleanuparr:/config
+      - /mnt/downloads:/downloads
+    ports:
+      - 11011:11011
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${DOMAIN}`)"
+      - "traefik.http.routers.cleanuparr.entrypoints=websecure"
+      - "traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.services.cleanuparr.loadbalancer.server.port=11011"
+
   huntarr:
     image: huntarr/huntarr:latest
     container_name: huntarr
@@ -312,6 +335,8 @@ networks:
 
 volumes:
   bazarr:
+    external: true
+  cleanuparr:
     external: true
   huntarr:
     external: true
