@@ -1,0 +1,32 @@
+# The Page Factory™ - A sitcom of questionable logic, unexpected errors, and NGINX keeping the whole cast from burning the place down.
+name: the-page-factory
+
+services:
+  web-tcit-nl-wiki:
+    image: mediawiki:1.34
+    container_name: web-tcit-nl-wiki
+    environment:
+      TZ=${TZ}
+    volumes:
+      - web-tcit.nl-wiki:/var/www/html
+    networks:
+      - backend
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-tcit-nl-wiki.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.web-tcit-nl-wiki.rule=Host(`wiki.${DOMAIN}`)"
+      - "traefik.http.routers.web-tcit-nl-wiki.entrypoints=websecure"
+      - "traefik.http.routers.web-tcit-nl-wiki.tls.certresolver=letsencrypt"      
+      - "traefik.http.services.web-tcit-nl-wiki.loadbalancer.server.port=443"      
+
+
+networks:
+  backend:
+    external: true
+  web:
+    external: true
+
+volumes:
+  web-tcit.nl-wiki:
+    external: true
