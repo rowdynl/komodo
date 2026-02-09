@@ -26,6 +26,25 @@ services:
       - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
 
+  huntarr:
+    image: huntarr/huntarr:latest
+    container_name: huntarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - huntarr:/config
+    ports:
+      - 9705:9705
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.huntarr.rule=Host(`huntarr.${DOMAIN}`)"
+      - "traefik.http.routers.huntarr.entrypoints=websecure"
+      - "traefik.http.routers.huntarr.tls.certresolver=letsencrypt"
+      - "traefik.http.services.huntarr.loadbalancer.server.port=9705"
+
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
@@ -269,6 +288,8 @@ networks:
 
 volumes:
   bazarr:
+    external: true
+  huntarr:
     external: true
   lidarr:
     external: true
