@@ -41,6 +41,12 @@ services:
     ports:
       - 11011:11011
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://cleanuparr:11011/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${DOMAIN}`)"
