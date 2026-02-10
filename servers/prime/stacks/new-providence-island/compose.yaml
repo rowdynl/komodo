@@ -222,6 +222,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - RESTART_CONTAINER=yes
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -326,44 +327,6 @@ services:
       - "traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
 
-  transmission:
-    image: haugene/transmission-openvpn
-    container_name: transmission
-    networks:
-      - web
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - transmission:/config
-      - /mnt/downloads/transmission:/data
-      - /mnt/downloads/transmission/watch:/watch
-    env_file:
-      - transmission.env
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
-      - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
-      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
-      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
-      - TRANSMISSION_RPC_PASSWORD=${TRANSMISSION_RPC_PASSWORD}
-      - TRANSMISSION_RPC_USERNAME=${TRANSMISSION_RPC_USERNAME}
-    logging:
-      driver: json-file
-      options:
-        max-size: 11m
-    ports:
-      - 9091:9091
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
-      - "traefik.http.routers.transmission.entrypoints=websecure"
-      - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
-
 networks:
   dirty-water:
     external: true
@@ -400,6 +363,4 @@ volumes:
   sonarr:
     external: true
   tautulli:
-    external: true
-  transmission:
     external: true
