@@ -200,6 +200,8 @@ services:
   qbittorrent:
     image: kronflux/qbittorrentvpn:latest
     container_name: qbittorrent
+    networks:
+      - web
     cap_add:
       - NET_ADMIN
     ports:
