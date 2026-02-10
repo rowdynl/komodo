@@ -196,6 +196,37 @@ services:
       - "traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
+
+  qbittorrent:
+    image: kronflux/qbittorrentvpn:latest
+    container_name: qbittorrent
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8885:8080      # Web UI
+      - 8999:8999      # Torrent TCP
+      - 8999:8999/udp  # Torrent UDP
+    volumes:
+      - qbittorrent:/config
+      - /mnt/downloads:/downloads
+    environment:
+      - VPN_ENABLED=yes
+      - VPN_TYPE=openvpn
+      - LAN_NETWORK=192.168.178.0/24
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - VPN_USERNAME=${OPENVPN_USERNAME}
+      - VPN_PASSWORD=${OPENVPN_PASSWORD}
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${DOMAIN}`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.qbittorrent.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8885"
+
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -355,6 +386,8 @@ volumes:
   plexautolanguages:
     external: true
   prowlarr:
+    external: true
+  qbittorrent:
     external: true
   radarr:
     external: true
