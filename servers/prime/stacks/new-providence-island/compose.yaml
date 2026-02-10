@@ -213,17 +213,14 @@ services:
       - /mnt/downloads:/downloads
     devices:
       - /dev/net/tun:/dev/net/tun
-    security_opt:
-      - apparmor:unconfined
+    #security_opt:
+    #  - apparmor:unconfined
     environment:
       - VPN_ENABLED=yes
       - VPN_TYPE=openvpn
-      - LAN_NETWORK=192.168.178.0/24
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - VPN_USERNAME=${OPENVPN_USERNAME}
-      - VPN_PASSWORD=${OPENVPN_PASSWORD}
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
