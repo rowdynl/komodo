@@ -218,7 +218,7 @@ services:
     environment:
       - VPN_ENABLED=yes
       - VPN_TYPE=openvpn
-      - LAN_NETWORK=192.168.178.0/24
+      - LAN_NETWORK=${QBITTORRENT_LAN_NETWORKS}
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
