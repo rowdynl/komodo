@@ -211,6 +211,10 @@ services:
     volumes:
       - qbittorrent:/config
       - /mnt/downloads:/downloads
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    security_opt:
+      - apparmor:unconfined
     environment:
       - VPN_ENABLED=yes
       - VPN_TYPE=openvpn
