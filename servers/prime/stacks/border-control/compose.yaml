@@ -30,6 +30,8 @@ services:
     environment:
       - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH}
       - TZ=${TZ}
+    networks:
+      - web
     volumes:
       - krawl:/app/data
     restart: unless-stopped
