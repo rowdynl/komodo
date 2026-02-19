@@ -181,17 +181,24 @@ services:
       - TZ=${TZ}
       - TERM=xterm
       - RUN_TIME=disabled
-    restart: "unless-stopped"
+    restart: unless-stopped
     user: ${PUID}:${PGID}
     ports:
       - 8000:8000
     networks:
-      - "proxy"
+      - web
     volumes:
       - posterizarr-config:/config:rw
       - posterizarr-assets:/assets:rw
       - posterizarr-assetsbackup:/assetsbackup:rw
       - posterizarr-manualassets:/manualassets:rw
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.posterizarr.rule=Host(`posterizarr.${DOMAIN}`)"
+      - "traefik.http.routers.posterizarr.entrypoints=websecure"
+      - "traefik.http.routers.posterizarr.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.posterizarr.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.services.posterizarr.loadbalancer.server.port=8000"
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
