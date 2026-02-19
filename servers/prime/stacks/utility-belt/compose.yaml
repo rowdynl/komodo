@@ -55,6 +55,7 @@ services:
       - code-server:/config
       - /repos/komodo:/config/workspace/repos/komodo
       - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant
+      - /mnt/docker/volumes/traefik:/config/workspace/traefik
     ports:
       - 8443:8443
     restart: unless-stopped
