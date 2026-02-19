@@ -47,7 +47,7 @@ services:
       # Catch-all honeypot route
       - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{any:.*}`)"
       - "traefik.http.routers.krawl-fallback.entrypoints=web,websecure"
-      - "traefik.http.routers.krawl-fallback.priority=1"
+      - "traefik.http.routers.krawl-fallback.priority=-11"
 
       # Service port
       - "traefik.http.services.krawl.loadbalancer.server.port=5000"
@@ -97,12 +97,6 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.traefik.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=dashboard-auth@file,sec-headers@file,geo-allow-eu10@file,crowdsec@file"
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
