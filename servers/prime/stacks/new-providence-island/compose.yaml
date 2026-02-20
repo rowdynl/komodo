@@ -16,8 +16,6 @@ services:
       - bazarr:/config
       - /mnt/prime-ds/movies:/movies
       - /mnt/prime-ds/series:/series
-    ports:
-      - 6767:6767
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -38,8 +36,6 @@ services:
     volumes:
       - cleanuparr:/config
       - /mnt/downloads:/downloads
-    ports:
-      - 11011:11011
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://cleanuparr:11011/health"]
@@ -66,8 +62,6 @@ services:
       - TZ=${TZ}
     volumes:
       - huntarr:/config
-    ports:
-      - 9705:9705
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -89,8 +83,6 @@ services:
       - lidarr:/config
       - /mnt/prime-ds/music:/music
       - /mnt/downloads:/downloads
-    ports:
-      - 8686:8686
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -163,8 +155,6 @@ services:
       - RUN_TIME=disabled
     restart: unless-stopped
     user: ${PUID}:${PGID}
-    ports:
-      - 8000:8000
     networks:
       - web
     volumes:
@@ -188,8 +178,6 @@ services:
       - TZ=${TZ}
     volumes:
       - prowlarr:/config
-    ports:
-      - 9696:9696
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -207,17 +195,11 @@ services:
       - web
     cap_add:
       - NET_ADMIN
-    ports:
-      - 8885:8080      # Web UI
-      - 8999:8999      # Torrent TCP
-      - 8999:8999/udp  # Torrent UDP
     volumes:
       - qbittorrent:/config
       - /mnt/downloads:/downloads
     devices:
       - /dev/net/tun:/dev/net/tun
-    #security_opt:
-    #  - apparmor:unconfined
     environment:
       - VPN_ENABLED=yes
       - VPN_TYPE=openvpn
@@ -233,7 +215,7 @@ services:
       - "traefik.http.routers.qbittorrent.entrypoints=websecure"
       - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
       - "traefik.http.routers.qbittorrent.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8885"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -249,8 +231,6 @@ services:
       - /mnt/prime-ds/movies:/movies
       - /mnt/downloads:/downloads
       - /mnt/downloads/transmission/completed:/data/completed
-    ports:
-      - 7878:7878
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -272,8 +252,6 @@ services:
     volumes:
       - sabnzbd:/config
       - /mnt/downloads:/downloads
-    ports:
-      - 3389:3389
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -285,7 +263,6 @@ services:
   seerr:
     container_name: seerr
     image: ghcr.io/seerr-team/seerr:latest
-    init: true
     networks:
       - web
     restart: unless-stopped
@@ -321,8 +298,6 @@ services:
       - /mnt/downloads:/downloads
       - /mnt/downloads/transmission/completed:/data/completed
       - /mnt/prime-ds/series:/tv
-    ports:
-      - 8989:8989
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -343,8 +318,6 @@ services:
       - TZ=${TZ}
     volumes:
       - tautulli:/config
-    ports:
-      - 8181:8181
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
