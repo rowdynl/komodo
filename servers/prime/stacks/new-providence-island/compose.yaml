@@ -170,7 +170,7 @@ services:
     networks:
       - web
     volumes:
-      - posterizarr:/config
+      - posterizarr:/config:rw
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.posterizarr.rule=Host(`posterizarr.${DOMAIN}`)"
