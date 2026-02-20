@@ -188,10 +188,7 @@ services:
     networks:
       - web
     volumes:
-      - posterizarr-config:/config:rw
-      - posterizarr-assets:/assets:rw
-      - posterizarr-assetsbackup:/assetsbackup:rw
-      - posterizarr-manualassets:/manualassets:rw
+      - posterizarr:/config
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.posterizarr.rule=Host(`posterizarr.${DOMAIN}`)"
