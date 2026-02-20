@@ -1,40 +1,10 @@
 # Batman has gadgets. You have this. A collection of tools you didn’t know you needed until 
-# exactly five seconds before reaching for them. Brave handles your browsing heroics, code‑server 
+# exactly five seconds before reaching for them. Firefox handles your browsing heroics, code‑server 
 # turns any machine into your personal bat‑cave IDE, and IT‑Tools supplies every random 
 # utility that saves your day at 3 AM. It’s not a stack — it’s your “because I can” toolkit.
 name: utility-belt
 
 services:
-  brave:
-    image: ghcr.io/linuxserver/brave:latest
-    container_name: brave
-    networks:
-      - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - LIBVA_DRIVER_NAME=iHD
-    #ports:
-    #  - 3410:3001
-    #  - 3419:3000
-    group_add:
-      - render
-    volumes:
-      - brave:/config
-    devices:
-      - /dev/dri:/dev/dri
-    mem_limit: 768m    
-    cpus: 0.22
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.brave.rule=Host(`brave.${DOMAIN}`)"
-      - "traefik.http.routers.brave.entrypoints=websecure"
-      - "traefik.http.routers.brave.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.brave.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.brave.loadbalancer.server.port=3000" 
-
   code-server:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
@@ -113,8 +83,6 @@ networks:
     external: true
 
 volumes:
-  brave:
-    external: true
   code-server:
     external: true
   firefox:
