@@ -70,6 +70,17 @@ services:
       - "traefik.http.routers.huntarr.tls.certresolver=letsencrypt"
       - "traefik.http.services.huntarr.loadbalancer.server.port=9705"
 
+  kometa:
+    image: kometateam/kometa:latest
+    container_name: kometa
+    networks:
+      - dirty-water
+    environment:
+      - KOMETA_RUN=true
+    volumes:
+      - kometa:/config
+    restart: unless-stopped
+
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
@@ -126,6 +137,7 @@ services:
       - '/mnt/prime-ds/music:/music'
       - '/mnt/prime-ds/series:/series'
       - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
+      - '/tmp/plex-test-libraries:/tmp/plex-test-libraries' # temporary to test kometa
     restart: unless-stopped 
     labels:
       - "traefik.enable=true"
@@ -346,6 +358,8 @@ volumes:
   cleanuparr:
     external: true
   huntarr:
+    external: true
+  kometa:
     external: true
   lidarr:
     external: true
