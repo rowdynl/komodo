@@ -198,6 +198,9 @@ services:
     volumes:
       - qbittorrent:/config
       - /mnt/downloads:/downloads
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
