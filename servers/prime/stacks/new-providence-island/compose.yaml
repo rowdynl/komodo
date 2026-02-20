@@ -375,13 +375,7 @@ volumes:
     external: true
   plexautolanguages:
     external: true
-  posterizarr-assets:
-    external: true
-  posterizarr-assetsbackup:
-    external: true
-  posterizarr-config:
-    external: true
-  posterizarr-manualassets:
+  posterizarr:
     external: true
   prowlarr:
     external: true
