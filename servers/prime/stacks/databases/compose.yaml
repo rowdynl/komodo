@@ -23,9 +23,20 @@ services:
       interval: 11s
       timeout: 11s
       retries: 22
-#  mariadb:
-#    image: docker.io/mariadb:latest
-#    container_name: mariadb
+      
+  mariadb:
+    image: docker.io/mariadb:latest
+    container_name: mariadb
+    networks:
+      backend:
+    ports:
+      - 3306:3306 # Temporary, until Home Assistant is moved to this docker host
+    environment:
+      - MARIADB_AUTO_UPGRADE=true
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: unless-stopped
+
 #  mongodb:
 #    image: mongo
 #    container_name: mongodb
