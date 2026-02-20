@@ -15,16 +15,16 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - LIBVA_DRIVER_NAME=iHD
-    ports:
-      - 3410:3001
-      - 3419:3000
+    #ports:
+    #  - 3410:3001
+    #  - 3419:3000
     group_add:
       - render
     volumes:
       - brave:/config
     devices:
       - /dev/dri:/dev/dri
-    mem_limit: 550m    
+    mem_limit: 768m    
     cpus: 0.22
     restart: unless-stopped
     labels:
@@ -58,8 +58,8 @@ services:
       - /repos/komodo:/config/workspace/repos/komodo
       - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant
       - /mnt/docker/volumes/traefik:/config/workspace/traefik
-    ports:
-      - 8443:8443
+    #ports:
+    #  - 8443:8443
     restart: unless-stopped
     mem_limit: 1024m    
     cpus: 0.88
@@ -78,8 +78,8 @@ services:
     image: ghcr.io/corentinth/it-tools:latest
     networks:
       - web
-    ports:
-      - 8888:80
+    #ports:
+    #  - 8888:80
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -87,7 +87,7 @@ services:
       - "traefik.http.routers.it-tools.entrypoints=websecure"
       - "traefik.http.routers.it-tools.tls.certresolver=letsencrypt"
       - "traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.it-tools.loadbalancer.server.port=9099"
+      - "traefik.http.services.it-tools.loadbalancer.server.port=80"
 
   
 networks:
