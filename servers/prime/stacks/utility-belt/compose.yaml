@@ -79,7 +79,7 @@ services:
     image: redis:7-alpine
     container_name: redis
     networks:
-      - backend
+      - cache
     command: >
       redis-server
       --save ""
@@ -93,6 +93,8 @@ services:
 
   
 networks:
+  cache:
+    external: true
   web:
     external: true
   backend:

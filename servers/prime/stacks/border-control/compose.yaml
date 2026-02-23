@@ -10,6 +10,7 @@ services:
     container_name: authentik-server
     command: server
     networks:
+      - cache
       - backend
       - web
     environment:
@@ -39,6 +40,7 @@ services:
     container_name: authentik-worker
     command: worker
     networks:
+      - cache
       - backend
     environment:
       AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_HOST}

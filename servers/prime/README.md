@@ -11,6 +11,7 @@ For most services, I use Docker containers with named volumes for the persistant
 ### Docker networks
 We have three docker networks:
 - **backend** - everything that does not need to communicate with the outside world. In here you's find containers like databases and such.
+- **cache** - everything that need caching services like redis
 - **dirty-water** - extra network to let some of the services in the new-providence-stack talk to each other without giving them access to databases or expose them to traefik.
 - **scrutiny** - extra network to let scrutiny collector talk to scrutiny and nothing else
 - **mcvlan** - everything that needs to have an IP on the local network, see below.
