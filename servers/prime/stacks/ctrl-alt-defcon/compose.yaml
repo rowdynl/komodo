@@ -46,6 +46,7 @@ services:
       - "traefik.http.routers.scrutiny.entrypoints=websecure"
       - "traefik.http.routers.scrutiny.tls.certresolver=letsencrypt"
       - "traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.scrutiny.middlewares=authentik"
       - "traefik.http.services.scrutiny.loadbalancer.server.port=8080"
 
   scrutiny-collector:
