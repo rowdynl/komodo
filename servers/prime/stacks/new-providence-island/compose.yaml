@@ -49,26 +49,8 @@ services:
       - "traefik.http.routers.cleanuparr.entrypoints=websecure"
       - "traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt"
       - "traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.cleanuparr.middlewares=authetik"
       - "traefik.http.services.cleanuparr.loadbalancer.server.port=11011"
-
-  huntarr:
-    image: huntarr/huntarr:latest
-    container_name: huntarr
-    networks:
-      - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - huntarr:/config
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.huntarr.rule=Host(`huntarr.${DOMAIN}`)"
-      - "traefik.http.routers.huntarr.entrypoints=websecure"
-      - "traefik.http.routers.huntarr.tls.certresolver=letsencrypt"
-      - "traefik.http.services.huntarr.loadbalancer.server.port=9705"
 
   kometa:
     image: kometateam/kometa:latest
