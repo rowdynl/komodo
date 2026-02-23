@@ -7,7 +7,7 @@ name: border-control
 services:
   authentik-server:
     image: ghcr.io/goauthentik/server
-    container_name: authentik-worker
+    container_name: authentik-server
     command: server
     networks:
       - backend
