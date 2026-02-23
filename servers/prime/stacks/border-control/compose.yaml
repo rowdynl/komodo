@@ -4,7 +4,55 @@
 # and WireGuard handles diplomatic transport. Welcome to the fortress — passport, please.
 name: border-control
 
-services: 
+services:
+  authentik-server:
+    image: ghcr.io/goauthentik/server
+    container_name: authentik-worker
+    command: server
+    networks:
+      - backend
+      - web
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_DB_HOST}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}    
+    volumes:
+      - authentik-data:/data
+      - authentik-custom-templates:/templates 
+    restart: unless-stopped    
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.authentik.rule=Host(`auth.${DOMAIN}`)"
+    - "traefik.http.routers.authentik.entrypoints=websecure"
+    - "traefik.http.routers.authentik.tls=true"
+    - "traefik.http.routers.authentik.tls.certresolver=letsencrypt"
+    - "traefik.http.routers.authentik.priority=${TRAEFIK_PRIORITY}"
+    - "traefik.http.services.authentik.loadbalancer.server.port=9000"
+    - "traefik.http.services.authentik.loadbalancer.passhostheader=true"
+
+
+  authentik-worker:
+    image: ghcr.io/goauthentik/server
+    container_name: authentik-worker
+    command: worker
+    networks:
+      - backend
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_DB_HOST}
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}    
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - authentik-data:/data
+      - authentik-certs:/certs
+      - authentik-custom-templates:/templates 
+    restart: unless-stopped
+    
   crowdsec:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
@@ -140,6 +188,12 @@ networks:
     external: true
 
 volumes:
+  authentik-certs:
+    external: true
+  authentik-custom-templates:
+    external: true
+  authentik-data:
+    external: true
   crowdsec:
     external: true
   krawl:
