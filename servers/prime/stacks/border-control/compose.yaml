@@ -186,6 +186,8 @@ services:
 
 
 networks:
+  cache:
+    external: true
   backend:
     external: true
   web:
