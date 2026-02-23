@@ -6,7 +6,7 @@ name: border-control
 
 services:
   authentik-server:
-    image: ghcr.io/goauthentik/server
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
     container_name: authentik-server
     command: server
     networks:
@@ -23,6 +23,7 @@ services:
       AUTHENTIK_EMAIL__TIMEOUT: 10
       AUTHENTIK_EMAIL__FROM: ${AUTHENTIK_EMAIL_FROM}
       AUTHENTIK_EMAIL__REPLY_TO: ${AUTHENTIK_EMAIL_FROM}
+      AUTHENTIK_DISABLE_UPDATE_CHECK: true
       AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_HOST}
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
@@ -45,13 +46,14 @@ services:
 
 
   authentik-worker:
-    image: ghcr.io/goauthentik/server
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
     container_name: authentik-worker
     command: worker
     networks:
       - cache
       - backend
     environment:
+      AUTHENTIK_DISABLE_UPDATE_CHECK: true
       AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_HOST}
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
