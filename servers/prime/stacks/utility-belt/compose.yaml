@@ -57,6 +57,7 @@ services:
       - "traefik.http.routers.firefox.entrypoints=websecure"
       - "traefik.http.routers.firefox.tls.certresolver=letsencrypt"
       - "traefik.http.routers.firefox.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.firefox.middlewares=authentik"
       - "traefik.http.services.firefox.loadbalancer.server.port=5800"
 
   it-tools: # https://github.com/CorentinTh/it-tools
