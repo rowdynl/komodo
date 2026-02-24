@@ -34,13 +34,12 @@ services:
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
     #  - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
-    user: ${PUID}:${PGID}
     shm_size: 512mb
     devices:
       - /dev/bus/usb:/dev/bus/usb
       - /dev/dri/renderD128:/dev/dri/renderD128 
-    #device_cgroup_rules:
-    #  - 'c 226:* rmw'    
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
     #group_add:
     #  - 'video'  # "44"
     #  - 'render' # "993"
@@ -59,7 +58,7 @@ services:
         target: /tmp/cache
         tmpfs:
           size: 1000000000
-    privileged: true
+    #privileged: true
     stop_grace_period: 22s
     restart: unless-stopped
     labels:
