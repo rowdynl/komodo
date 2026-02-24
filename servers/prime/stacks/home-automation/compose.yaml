@@ -120,6 +120,8 @@ services:
     volumes:
       - music-assistant:/config
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8095:8095
     restart: unless-stopped
 
   node-red:
