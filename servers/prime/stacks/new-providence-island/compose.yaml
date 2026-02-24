@@ -101,7 +101,6 @@ services:
       - plex_HW_ACCEL=true
       - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
-      - LIBVA_MESSAGING_LEVEL=1
       - LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
     devices:
       - '/dev/dri:/dev/dri'    
@@ -119,7 +118,6 @@ services:
       - '/mnt/prime-ds/music:/music'
       - '/mnt/prime-ds/series:/series'
       - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
-      - '/tmp/plex-test-libraries:/tmp/plex-test-libraries' # temporary to test kometa
     restart: unless-stopped 
     labels:
       - "traefik.enable=true"
