@@ -32,7 +32,6 @@ services:
     environment:
       - TZ=${TZ}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
-    #  - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
     shm_size: 512mb
     devices:
@@ -40,13 +39,10 @@ services:
       - /dev/dri/renderD128:/dev/dri/renderD128 
     device_cgroup_rules:
       - 'c 226:* rmw'    
-    #group_add:
-    #  - 'video'  # "44"
-    #  - 'render' # "993"
     ports:
-      - "8554:8554" # RTSP feeds
-      - "8555:8555/tcp" # WebRTC over tcp
-      - "8555:8555/udp" # WebRTC over udp
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
     networks:
       - backend
       - web
@@ -58,12 +54,11 @@ services:
         target: /tmp/cache
         tmpfs:
           size: 1000000000
-    #privileged: true
     stop_grace_period: 22s
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frigate-rc.rule=Host(`frigate-rc.${DOMAIN}`)"
+      - "traefik.http.routers.frigate-rc.rule=Host(`frigate.${DOMAIN}`)"
       - "traefik.http.routers.frigate-rc.entrypoints=websecure"
       - "traefik.http.routers.frigate-rc.tls.certresolver=letsencrypt"
       - "traefik.http.services.frigate-rc.loadbalancer.server.port=8971"
