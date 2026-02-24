@@ -131,6 +131,7 @@ services:
       - TZ=${TZ}
     networks:
       - backend
+      - web
     volumes:
       - node-red:/data
     restart: unless-stopped
