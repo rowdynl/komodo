@@ -1,3 +1,5 @@
+# A distributed system designed to solve critical problems like “why is the hallway light still on?”
+# Overengineered? Absolutely. Regret? Minimal.
 name: home-automation
 
 services:
