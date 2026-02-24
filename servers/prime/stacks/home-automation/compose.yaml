@@ -31,6 +31,7 @@ services:
       - TZ=${TZ}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
       - LIBVA_DRIVER_NAME=iHD
+    user: ${PUID}:${PGID}
     shm_size: 512mb
     devices:
       - /dev/bus/usb:/dev/bus/usb
@@ -69,14 +70,17 @@ services:
     container_name: home-assistant
     environment:
       - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
     devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
+      - /dev/bus/usb:/dev/bus/usb      
     networks:
       backend:
       macvlan:
         ipv4_address: ${MACVLAN_STATIC_IP_HOME_ASSISTANT}
       web:
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - home-assistant:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
@@ -84,14 +88,15 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wireguard.rule=Host(`has.${DOMAIN}`)"
-      - "traefik.http.routers.wireguard.entrypoints=websecure"
-      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.wireguard.loadbalancer.server.port=8123"
+      - "traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)"
+      - "traefik.http.routers.home-assistant.entrypoints=websecure"
+      - "traefik.http.routers.home-assistant.tls.certresolver=letsencrypt"
+      - "traefik.http.services.home-assistant.loadbalancer.server.port=8123"
 
   mosquitto:
     image: eclipse-mosquitto:latest
     container_name: mosquitto
+    user: ${PUID}:${PGID}
     environment:
       - TZ=${TZ}
     networks:
@@ -103,18 +108,22 @@ services:
   music-assistant:
     image: music-assistant/server:latest
     container_name: music-assistant
+    user: ${PUID}:${PGID}
     environment:
       - TZ=${TZ}
     networks:
-      - backend
+      backend:
+      macvlan:
+        ipv4_address: ${MACVLAN_STATIC_IP_MUSIC_ASSISTANT}
     volumes:
       - music-assistant:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
 
   node-red:
-    image: nodered/node-red
+    image: docker.io/node-red-node-red:latest
     container_name: node-red
+    user: ${PUID}:${PGID}
     environment:
       - TZ=${TZ}
     networks:
