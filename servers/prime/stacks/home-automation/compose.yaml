@@ -2,12 +2,12 @@ name: home-automation
 
 services:
   esphome:
-    image: 
+    image: ghcr.io/esphome/esphome:latest
     container_name: esphome
     environment:
       - TZ=${TZ}
-      - USERNAME=${ESPHOME_USERNAME}
-      - PASSWORD=${ESPHOME_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
     networks:
       - web
     volumes:
@@ -16,10 +16,11 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wireguard.rule=Host(`esphome.${DOMAIN}`)"
-      - "traefik.http.routers.wireguard.entrypoints=websecure"
-      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.wireguard.loadbalancer.server.port=6052"
+      - "traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)"
+      - "traefik.http.routers.esphome.entrypoints=websecure"
+      - "traefik.http.routers.esphome.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.esphome.middlewares=authentik"
+      - "traefik.http.services.esphome.loadbalancer.server.port=6052"
 
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable
