@@ -71,7 +71,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
     devices:
-      - /dev/bus/usb:/dev/bus/usb      
+      - /dev/ttyUSB0:/dev/ttyUSB0     
     networks:
       backend:
       macvlan:
