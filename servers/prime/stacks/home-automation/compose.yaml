@@ -32,6 +32,7 @@ services:
     environment:
       - TZ=${TZ}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
+      - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
     user: ${PUID}:${PGID}
     shm_size: 512mb
