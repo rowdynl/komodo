@@ -131,6 +131,13 @@ services:
     volumes:
       - node-red:/data
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)"
+      - "traefik.http.routers.node-red.entrypoints=websecure"
+      - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.node-red.middlewares=authentik"
+      - "traefik.http.services.node-red.loadbalancer.server.port=1880"
 
 networks:
   backend:
