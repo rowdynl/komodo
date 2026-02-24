@@ -106,7 +106,7 @@ services:
     restart: unless-stopped
 
   music-assistant:
-    image: music-assistant/server:latest
+    image: ghcr.io/music-assistant/server:latest
     container_name: music-assistant
     user: ${PUID}:${PGID}
     environment:
