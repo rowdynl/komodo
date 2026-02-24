@@ -26,7 +26,9 @@ services:
     volumes:
       - code-server:/config
       - /repos/komodo:/config/workspace/repos/komodo
-      - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant
+      - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant-prime-ds
+      - /mnt/docker/volumes/esphome:/config/workspace/repos/esphome
+      - /mnt/docker/volumes/home-assistant:/config/workspace/home-assistant
       - /mnt/docker/volumes/traefik:/config/workspace/traefik
     #ports:
     #  - 8443:8443
