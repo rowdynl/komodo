@@ -121,7 +121,7 @@ services:
     restart: unless-stopped
 
   node-red:
-    image: docker.io/node-red-node-red:latest
+    image: nodered/node-red:latest
     container_name: node-red
     user: ${PUID}:${PGID}
     environment:
