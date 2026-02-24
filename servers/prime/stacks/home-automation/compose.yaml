@@ -25,35 +25,44 @@ services:
       - "traefik.http.services.esphome.loadbalancer.server.port=6052"
 
   frigate:
-    image: ghcr.io/blakeblackshear/frigate:stable
+    image: ghcr.io/blakeblackshear/frigate:v0.17.0-rc3
     container_name: frigate
     environment:
       - TZ=${TZ}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
-      - LIBVA_DRIVER_NAME=i965
+      - LIBVA_DRIVER_NAME=iHD
     shm_size: 512mb
     devices:
       - /dev/bus/usb:/dev/bus/usb
       - /dev/dri/renderD128:/dev/dri/renderD128 
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
+    ports:
+      - "8554:8554" # RTSP feeds
+      - "8555:8555/tcp" # WebRTC over tcp
+      - "8555:8555/udp" # WebRTC over udp
     networks:
+      - backend
       - web
     volumes:
       - frigate:/config
       - /etc/localtime:/etc/localtime:ro
       - /mnt/prime-ds/media/frigate:/media/frigate
-      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+      - type: tmpfs
         target: /tmp/cache
         tmpfs:
           size: 1000000000
-    privileged: true
-    stop_grace_period: 30s
+    stop_grace_period: 22s
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.wireguard.rule=Host(`frigate.${DOMAIN}`)"
-      - "traefik.http.routers.wireguard.entrypoints=websecure"
-      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.wireguard.loadbalancer.server.port=8971"
+      - "traefik.http.routers.frigate-rc.rule=Host(`frigate-rc.${DOMAIN}`)"
+      - "traefik.http.routers.frigate-rc.entrypoints=websecure"
+      - "traefik.http.routers.frigate-rc.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frigate-rc.loadbalancer.server.port=8971"
 
   home-assistant:
     image: ghcr.io/home-assistant/home-assistant:stable
