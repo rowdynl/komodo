@@ -30,8 +30,6 @@ services:
       - /mnt/docker/volumes/esphome:/config/workspace/repos/esphome
       - /mnt/docker/volumes/home-assistant:/config/workspace/home-assistant
       - /mnt/docker/volumes/traefik:/config/workspace/traefik
-    #ports:
-    #  - 8443:8443
     restart: unless-stopped
     mem_limit: 1024m    
     cpus: 0.88
@@ -67,8 +65,6 @@ services:
     image: ghcr.io/corentinth/it-tools:latest
     networks:
       - web
-    #ports:
-    #  - 8888:80
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
