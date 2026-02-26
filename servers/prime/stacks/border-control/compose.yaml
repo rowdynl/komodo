@@ -99,24 +99,25 @@ services:
       - krawl:/app/data
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
+      labels:
+        - "traefik.enable=true"
 
-      # Normal explicit route
-      - "traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)"
-      - "traefik.http.routers.krawl.entrypoints=websecure"
-      - "traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.krawl.tls=true"
-      - "traefik.http.routers.krawl.tls.certresolver=letsencrypt"
+        # Explicit host (normal Krawl dashboard)
+        - "traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)"
+        - "traefik.http.routers.krawl.entrypoints=websecure"
+        - "traefik.http.routers.krawl.tls=true"
+        - "traefik.http.routers.krawl.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}"
 
-      # Catch-all honeypot route      
-      - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tcit.nl`)"
-      - "traefik.http.routers.krawl-fallback.entrypoints=websecure"
-      - "traefik.http.routers.krawl-fallback.tls=true"
-      - "traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.krawl-fallback.priority=1"
+        # SILENT catch‑all for unknown subdomains
+        - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{subdomain:.+}.tcit.nl`)"
+        - "traefik.http.routers.krawl-fallback.entrypoints=websecure"
+        - "traefik.http.routers.krawl-fallback.tls=true"
+        - "traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.krawl-fallback.priority=1"
 
-      # Service port
-      - "traefik.http.services.krawl.loadbalancer.server.port=5000"
+        # Service port
+        - "traefik.http.services.krawl.loadbalancer.server.port=5000"
 
   pihole:
     image: pihole/pihole:latest
