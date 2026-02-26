@@ -106,10 +106,13 @@ services:
       - "traefik.http.routers.krawl.entrypoints=websecure"
       - "traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.krawl.tls=true"
+      - "traefik.http.routers.krawl.tls.certresolver=letsencrypt"
 
-      # Catch-all honeypot route
-      - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{any:.*}`)"
-      - "traefik.http.routers.krawl-fallback.entrypoints=web,websecure"
+      # Catch-all honeypot route      
+      - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.tcit.nl`)"
+      - "traefik.http.routers.krawl-fallback.entrypoints=websecure"
+      - "traefik.http.routers.krawl-fallback.tls=true"
+      - "traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt"
       - "traefik.http.routers.krawl-fallback.priority=-11"
 
       # Service port
