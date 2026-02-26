@@ -49,7 +49,7 @@ services:
       - "traefik.http.routers.cleanuparr.entrypoints=websecure"
       - "traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt"
       - "traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.cleanuparr.middlewares=authentik"
+      - "traefik.http.routers.cleanuparr.middlewares=authentik@file"
       - "traefik.http.services.cleanuparr.loadbalancer.server.port=11011"
 
   kometa:

@@ -23,7 +23,7 @@ services:
       - "traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)"
       - "traefik.http.routers.esphome.entrypoints=websecure"
       - "traefik.http.routers.esphome.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.esphome.middlewares=authentik"
+      - "traefik.http.routers.esphome.middlewares=authentik@file"
       - "traefik.http.services.esphome.loadbalancer.server.port=6052"
 
   frigate:
@@ -136,7 +136,7 @@ services:
       - "traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)"
       - "traefik.http.routers.node-red.entrypoints=websecure"
       - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.node-red.middlewares=authentik"
+      - "traefik.http.routers.node-red.middlewares=authentik@file"
       - "traefik.http.services.node-red.loadbalancer.server.port=1880"
 
 networks:
