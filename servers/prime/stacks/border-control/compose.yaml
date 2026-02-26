@@ -117,6 +117,7 @@ services:
 
       # Service port
       - "traefik.http.services.krawl.loadbalancer.server.port=5000"
+      - "traefik.http.services.krawl-fallback.loadbalancer.server.port=5000"
 
   pihole:
     image: pihole/pihole:latest
