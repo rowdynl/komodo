@@ -113,7 +113,7 @@ services:
       - "traefik.http.routers.krawl-fallback.entrypoints=websecure"
       - "traefik.http.routers.krawl-fallback.tls=true"
       - "traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.krawl-fallback.priority=-11"
+      - "traefik.http.routers.krawl-fallback.priority=1"
 
       # Service port
       - "traefik.http.services.krawl.loadbalancer.server.port=5000"
