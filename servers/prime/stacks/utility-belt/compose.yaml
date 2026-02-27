@@ -81,6 +81,7 @@ services:
       - backend
       - web
     volumes:
+      - pgadmin:/pgadmin4
       - pgadmin:/var/lib/pgadmin
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
