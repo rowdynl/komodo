@@ -31,8 +31,8 @@ services:
       - /mnt/docker/volumes/home-assistant:/config/workspace/home-assistant
       - /mnt/docker/volumes/traefik:/config/workspace/traefik
     restart: unless-stopped
-    mem_limit: 1024m    
-    cpus: 0.88
+    mem_limit: 1152m    
+    cpus: 1
     security_opt:
       - label=disable
     labels:
@@ -52,13 +52,13 @@ services:
     volumes:
       - dbgate:/root/.dbgate
     environment:
-      - OAUTH_AUTH="https://auth.${DOMAIN}/application/o/authorize/"
-      - OAUTH_TOKEN="https://auth.${DOMAIN}/application/o/token/"
-      - OAUTH_LOGOUT="https://auth.${DOMAIN}/application/o/dbgate/end-session/"
-      - OAUTH_CLIENT_ID="${DBGATE_OAUTH_CLIENT_ID}"
-      - OAUTH_CLIENT_SECRET="${DBGATE_OAUTH_CLIENT_SECRET}"
-      - OAUTH_LOGIN_FIELD="email"
-      - OAUTH_SCOPE="openid email profile"
+      - OAUTH_AUTH=https://auth.${DOMAIN}/application/o/authorize/
+      - OAUTH_TOKEN=https://auth.${DOMAIN}/application/o/token/
+      - OAUTH_LOGOUT=https://auth.${DOMAIN}/application/o/dbgate/end-session/
+      - OAUTH_CLIENT_ID=${DBGATE_OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${DBGATE_OAUTH_CLIENT_SECRET}
+      - OAUTH_LOGIN_FIELD=email
+      - OAUTH_SCOPE=openid email profile
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
