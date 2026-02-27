@@ -78,6 +78,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4:latest
     networks:
+      - backend
       - web
     volumes:
       - pgadmin:/var/lib/pgadmin
