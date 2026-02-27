@@ -9,8 +9,8 @@ services:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
     networks:
-      - web
       - backend
+      - web
     environment:
       - DEFAULT_WORKSPACE=/config/workspace
       - LANGUAGE=en_US.UTF-8
@@ -48,6 +48,7 @@ services:
     image: dbgate/dbgate
     networks:
       - backend
+      - cache
       - web
     volumes:
       - dbgate:/root/.dbgate
