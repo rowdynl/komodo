@@ -1,5 +1,5 @@
-# Monitors everything and escalates threats immediately… even if it’s just a slightly warm HDD.
-name: ctrl-alt-defcon
+# Monitors everything on the antique box you refuse to retire. Alerts you before the HDDs start auditioning for a maraca band.
+name: ctrl-alt-decrepit
 
 services:
   komodo-periphery:
