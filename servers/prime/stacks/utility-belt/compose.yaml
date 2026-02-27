@@ -106,7 +106,7 @@ services:
       PMA_HOST: mariadb
       PMA_PORT: 3306
     volumes:
-      - phpmyadmin:/etc/phpmyadmin:ro
+      - phpmyadmin:/etc/phpmyadmin
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
