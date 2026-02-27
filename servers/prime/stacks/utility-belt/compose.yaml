@@ -167,5 +167,7 @@ volumes:
     external: true
   pgadmin:
     external: true
+  phpmyadmin:
+    external: true
   termix:
     external: true
