@@ -114,6 +114,7 @@ services:
       - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
       - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt"
       - "traefik.http.routers.phpmyadmin.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.phpmyadmin.middlewares=authentik@file"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
     
 
