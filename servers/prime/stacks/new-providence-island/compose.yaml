@@ -53,12 +53,14 @@ services:
       - "traefik.http.services.cleanuparr.loadbalancer.server.port=11011"
 
   kometa:
-    image: kometateam/kometa:latest
+    image: lscr.io/linuxserver/kometa:latest
     container_name: kometa
     networks:
       - dirty-water
     environment:
-      - KOMETA_RUN=true
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}    
     volumes:
       - kometa:/config
     restart: unless-stopped
