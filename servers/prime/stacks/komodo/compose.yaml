@@ -10,8 +10,6 @@ services:
       - "komodo.skip=true"
     command: --quiet --wiredTigerCacheSizeGB 0.25
     restart: unless-stopped
-    ports:
-      - 27017:27017
     volumes:
       - komodo-mongodb-config:/data/configdb
       - komodo-mongodb-data:/data/db
@@ -25,16 +23,18 @@ services:
     restart: unless-stopped
     depends_on:
       - komodo-mongodb
-    ports:
-      - 9120:9120
     networks:
       - backend
       - web
     env_file: .env
     environment:
-      KOMODO_DATABASE_ADDRESS: komodo-mongodb:27017
-      KOMODO_DATABASE_USERNAME: ${KOMODO_DB_USERNAME}
-      KOMODO_DATABASE_PASSWORD: ${KOMODO_DB_PASSWORD}
+      - KOMODO_DATABASE_ADDRESS=komodo-mongodb:27017
+      - KOMODO_DATABASE_USERNAME=${KOMODO_DB_USERNAME}
+      - KOMODO_DATABASE_PASSWORD=${KOMODO_DB_PASSWORD}
+      - KOMODO_OIDC_ENABLED=true
+      - KOMODO_OIDC_PROVIDER=${KOMODO_OIDC_PROVIDER}
+      - KOMODO_OIDC_CLIENT_ID=${KOMODO_OIDC_CLIENT_ID}
+      - KOMODO_OIDC_CLIENT_SECRET=${KOMODO_OIDC_CLIENT_SECRET}
     volumes:
       - komodo-core-backups:/backups
     labels:
