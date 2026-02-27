@@ -96,7 +96,6 @@ services:
     volumes:
       - termix:/app/data
     environment:
-      - PORT=8080
       - PUID=${PUID}
       - PGID=${PGID}
     networks:
