@@ -1,0 +1,36 @@
+# Monitors everything and escalates threats immediately… even if it’s just a slightly warm HDD.
+name: ctrl-alt-defcon
+
+services:
+  komodo-periphery:
+    image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    container_name: komodo-periphery
+    labels:
+      komodo.skip:
+    restart: unless-stopped
+    ports:
+      - 8120:8120
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
+      - ${KOMOD_PERIPHERY_ROOT_DIRECTORY}:${KOMOD_PERIPHERY_ROOT_DIRECTORY}
+
+  scrutiny-collector:
+    image: 'ghcr.io/analogj/scrutiny:master-collector'
+    container_name: scrutiny-collector
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    volumes:
+      - '/run/udev:/run/udev:ro'
+      - /volume1/docker/scrutiny-collector:/opt/scrutiny/config
+    environment:
+      - SCRUTINY_COLLECTOR_API_ENDPOINT=${SCRUTINY_COLLECTOR_API_ENDPOINT}
+      - SCRUTINY_COLLECTOR_HOST_ID=${SCRUTINY_COLLECTOR_HOST_ID}
+      - SCRUTINY_COLLECTOR_RUN_STARTUP=true
+    restart: unless-stopped
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"
+      - "/dev/sde"
+      - "/dev/sdf"
