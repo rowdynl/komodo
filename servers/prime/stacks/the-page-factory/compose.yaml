@@ -7,7 +7,7 @@ services:
     image: trafex/php-nginx:latest
     container_name: web-festinalentebock-nl
     volumes:
-      - web-festinalentebock-nl:/var/www/html
+      - web-festinalentebock.nl:/var/www/html
     networks:
       - backend
       - web
@@ -39,7 +39,7 @@ services:
     image: trafex/php-nginx:latest
     container_name: web-venlosevrind-nl
     volumes:
-      - web-venlosevrind-nl:/var/www/html
+      - web-venlosevrind.nl:/var/www/html
     networks:
       - web
     labels:
@@ -57,9 +57,9 @@ networks:
     external: true
 
 volumes:
-  web-festinalentebock-nl:
+  web-festinalentebock.nl:
     external: true
   web-tcit.nl-wiki:
     external: true
-  web-venlosevrind-nl:
+  web-venlosevrind.nl:
     external: true
