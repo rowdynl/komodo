@@ -43,7 +43,6 @@ services:
     volumes:
       - web-venlosevrind-nl:/var/www/html
     networks:
-      - backend
       - web
     labels:
       - "traefik.enable=true"
