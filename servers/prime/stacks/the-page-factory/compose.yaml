@@ -38,8 +38,6 @@ services:
   web-venlosevrind-nl:
     image: trafex/php-nginx:latest
     container_name: web-venlosevrind-nl
-    environment:
-      TZ=${TZ}
     volumes:
       - web-venlosevrind-nl:/var/www/html
     networks:
