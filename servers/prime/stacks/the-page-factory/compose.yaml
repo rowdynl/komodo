@@ -2,11 +2,26 @@
 name: the-page-factory
 
 services:
+
+  web-festinalentebock-nl:
+    image: trafex/php-nginx:latest
+    container_name: web-festinalentebock-nl
+    volumes:
+      - web-festinalentebock-nl:/var/www/html
+    networks:
+      - backend
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-festinalentebock-nl.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`) || Host(`www.festinalentebock.nl`)"
+      - "traefik.http.routers.web-festinalentebock-nl.entrypoints=websecure"
+      - "traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt"      
+      - "traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080"
+
   web-tcit-nl-wiki:
     image: mediawiki:1.34
     container_name: web-tcit-nl-wiki
-    environment:
-      TZ=${TZ}
     volumes:
       - web-tcit.nl-wiki:/var/www/html
     networks:
@@ -19,7 +34,24 @@ services:
       - "traefik.http.routers.web-tcit-nl-wiki.entrypoints=websecure"
       - "traefik.http.routers.web-tcit-nl-wiki.tls.certresolver=letsencrypt"      
       - "traefik.http.services.web-tcit-nl-wiki.loadbalancer.server.port=443"      
-
+  
+  web-venlosevrind-nl:
+    image: trafex/php-nginx:latest
+    container_name: web-venlosevrind-nl
+    environment:
+      TZ=${TZ}
+    volumes:
+      - web-venlosevrind-nl:/var/www/html
+    networks:
+      - backend
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`) || Host(`www.venlosevrind.nl`)"
+      - "traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure"
+      - "traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt"      
+      - "traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080"
 
 networks:
   backend:
@@ -29,4 +61,6 @@ networks:
 
 volumes:
   web-tcit.nl-wiki:
+    external: true
+  web-venlosevrind-nl:
     external: true
