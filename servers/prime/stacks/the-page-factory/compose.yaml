@@ -59,6 +59,8 @@ networks:
     external: true
 
 volumes:
+  web-festinalentebock-nl:
+    external: true
   web-tcit.nl-wiki:
     external: true
   web-venlosevrind-nl:
