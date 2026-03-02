@@ -16,7 +16,7 @@ services:
       - "traefik.http.routers.web-festinalentebock-nl.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`) || Host(`www.festinalentebock.nl`)"
       - "traefik.http.routers.web-festinalentebock-nl.entrypoints=websecure"
-      - "traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt"      
+      - "traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http"      
       - "traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080"
 
   web-tcit-nl-wiki:
@@ -47,7 +47,7 @@ services:
       - "traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`) || Host(`www.venlosevrind.nl`)"
       - "traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure"
-      - "traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt"      
+      - "traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http"      
       - "traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080"
 
 networks:
