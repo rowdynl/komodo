@@ -41,8 +41,8 @@ services:
     device_cgroup_rules:
       - 'c 226:* rmw'    
     group_add:
-      - 'video'  # "44"
-      - 'render' # "993"
+      - '44'  # "44"
+      - '993' # "993"
     ports:
       - "8554:8554"
       - "8555:8555/tcp"
