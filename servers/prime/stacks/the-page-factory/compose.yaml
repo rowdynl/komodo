@@ -104,6 +104,12 @@ networks:
 volumes:
   web-festinalentebock.nl:
     external: true
+  web-tcit.nl-dump:
+    external: true
+  web-tcit.nl-photo:
+    external: true
+  web-tcit.nl-tesla:
+    external: true
   web-tcit.nl-wiki:
     external: true
   web-venlosevrind.nl:
