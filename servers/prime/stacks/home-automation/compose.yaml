@@ -32,6 +32,7 @@ services:
     environment:
       - TZ=${TZ}
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD}
+      - GIDLIST=44,993
       - LIBVA_DRIVER_NAME=iHD
     shm_size: 512mb
     devices:
@@ -39,6 +40,9 @@ services:
       - /dev/dri/renderD128:/dev/dri/renderD128 
     device_cgroup_rules:
       - 'c 226:* rmw'    
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
     ports:
       - "8554:8554"
       - "8555:8555/tcp"
