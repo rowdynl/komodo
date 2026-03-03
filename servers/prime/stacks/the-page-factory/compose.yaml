@@ -46,7 +46,7 @@ services:
       - "traefik.http.routers.web-tcit-nl-photo.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.web-tcit-nl-photo.rule=Host(`photo.${DOMAIN}`)"
       - "traefik.http.routers.web-tcit-nl-photo.entrypoints=websecure"
-      - "traefik.http.routers.web-tcit-nl-photo.tls.certresolver=letsencrypt_http"      
+      - "traefik.http.routers.web-tcit-nl-photo.tls.certresolver=letsencrypt"      
       - "traefik.http.services.web-tcit-nl-photo.loadbalancer.server.port=8080"
 
   web-tcit-nl-tesla:
@@ -62,7 +62,7 @@ services:
       - "traefik.http.routers.web-tcit-nl-tesla.rule=Host(`tesla.${DOMAIN}`)"
       - "traefik.http.routers.web-tcit-nl-tesla.entrypoints=websecure"
       - "traefik.http.routers.web-tcit-nl-tesla.tls.certresolver=letsencrypt"      
-      - "traefik.http.services.web-tcit-nl-tesla.loadbalancer.server.port=443"      
+      - "traefik.http.services.web-tcit-nl-tesla.loadbalancer.server.port=80"      
   
   web-tcit-nl-wiki:
     image: mediawiki:1.34
