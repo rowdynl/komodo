@@ -38,8 +38,8 @@ services:
     image: trafex/php-nginx:latest
     container_name: web-tcit-nl-photo
     volumes:
-      - web-tcit.nl-photo:/etc/nginx:ro
-      - web-tcit.nl-photo:/var/www
+      - ./nginx-server-web-tcit-nl-photo.conf:/etc/nginx/conf.d/server.conf:ro
+      - web-tcit.nl-photo:/var/www/html
     networks:
       - web
     labels:
