@@ -19,6 +19,21 @@ services:
       - "traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http"      
       - "traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080"
 
+  web-tcit-nl-tesla:
+    image: nginx:alpine
+    container_name: web-tcit-nl-tesla
+    volumes:
+      - web-tcit.nl-tesla:/usr/share/nginx/html:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-tcit-nl-tesla.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.web-tcit-nl-tesla.rule=Host(`tesla.${DOMAIN}`)"
+      - "traefik.http.routers.web-tcit-nl-tesla.entrypoints=websecure"
+      - "traefik.http.routers.web-tcit-nl-tesla.tls.certresolver=letsencrypt"      
+      - "traefik.http.services.web-tcit-nl-tesla.loadbalancer.server.port=443"      
+  
   web-tcit-nl-wiki:
     image: mediawiki:1.34
     container_name: web-tcit-nl-wiki
