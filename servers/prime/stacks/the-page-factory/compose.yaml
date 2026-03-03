@@ -23,7 +23,7 @@ services:
     image: trafex/php-nginx:latest
     container_name: web-tcit-nl-dump
     volumes:
-      - web-tcit.nl-dump:/var/www/html
+      - web-tcit.nl-dump:/var/www/
     networks:
       - web
     labels:
