@@ -19,6 +19,21 @@ services:
       - "traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http"      
       - "traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080"
 
+  web-tcit-nl-photo:
+    image: trafex/php-nginx:latest
+    container_name: web-tcit-nl-photo
+    volumes:
+      - web-tcit.nl-photo:/var/www/html
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-tcit-nl-photo.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.web-tcit-nl-photo.rule=Host(`photo.${DOMAIN}`)"
+      - "traefik.http.routers.web-tcit-nl-photo.entrypoints=websecure"
+      - "traefik.http.routers.web-tcit-nl-photo.tls.certresolver=letsencrypt_http"      
+      - "traefik.http.services.web-tcit-nl-photo.loadbalancer.server.port=8080"
+
   web-tcit-nl-tesla:
     image: nginx:alpine
     container_name: web-tcit-nl-tesla
