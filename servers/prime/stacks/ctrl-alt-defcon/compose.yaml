@@ -77,6 +77,25 @@ services:
       - "traefik.http.routers.prometheus.middlewares=authentik@file"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
+  scrutiny-collector:
+    image: 'ghcr.io/analogj/scrutiny:master-collector'
+    container_name: scrutiny-collector
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    volumes:
+      - '/run/udev:/run/udev:ro'
+      - scrutiny:/opt/scrutiny/config      
+    networks:
+      - monitoring
+    environment:
+      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.scrutiny:8080'
+      COLLECTOR_HOST_ID: 'prime'
+      COLLECTOR_RUN_STARTUP: true
+    restart: unless-stopped    
+    devices:
+      - "/dev/nvme0"
+
   scrutiny-web:
     image: 'ghcr.io/analogj/scrutiny:master-web'
     container_name: scrutiny-web
@@ -101,25 +120,6 @@ services:
       - "traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.scrutiny.middlewares=authentik@file"
       - "traefik.http.services.scrutiny.loadbalancer.server.port=8080"
-
-  scrutiny-collector:
-    image: 'ghcr.io/analogj/scrutiny:master-collector'
-    container_name: scrutiny-collector
-    cap_add:
-      - SYS_RAWIO
-      - SYS_ADMIN
-    volumes:
-      - '/run/udev:/run/udev:ro'
-      - scrutiny:/opt/scrutiny/config      
-    networks:
-      - monitoring
-    environment:
-      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.scrutiny:8080'
-      COLLECTOR_HOST_ID: 'prime'
-      COLLECTOR_RUN_STARTUP: true
-    restart: unless-stopped    
-    devices:
-      - "/dev/nvme0"
 
   speedtest-tracker:
     image: ghcr.io/linuxserver/speedtest-tracker:latest
