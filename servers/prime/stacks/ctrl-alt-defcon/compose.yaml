@@ -43,9 +43,12 @@ services:
     container_name: mysqld-exporter
     restart: unless-stopped
     expose:
-      - 9104
+      - 9104 
     environment:
-      - DATA_SOURCE_NAME="${PROMETHEUS_MARIADB_USER}:${PROMETHEUS_MARIADB_PASSWORD}@(mariadb.backend:3306)/"
+      - MYSQLD_EXPORTER_PASSWORD=${PROMETHEUS_MARIADB_PASSWORD}
+    command:
+      - "--mysqld.address=mariadb.backend:3306"
+      - "--mysqld.username=${PROMETHEUS_MARIADB_USER}"
     networks:
       - backend
       - monitoring
