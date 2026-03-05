@@ -45,7 +45,7 @@ services:
     expose:
       - 9234
     command:
-      - "--endpoint=tcp://influxdb.backend:1883"
+      - "--endpoint=tcp://mosquitto.backend:1883"
     networks:
       - monitoring
       - backend
