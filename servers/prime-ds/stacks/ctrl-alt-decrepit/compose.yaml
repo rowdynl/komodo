@@ -20,6 +20,14 @@ services:
     ports:
       - 8080:8080
   
+  ipmi-exporter:
+    image: prometheuscommunity/ipmi-exporter:latest
+    container_name: ipmi-exporter
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - 9290:9290
+
   komodo-periphery:
     image: ghcr.io/moghtech/komodo-periphery:latest
     container_name: komodo-periphery
