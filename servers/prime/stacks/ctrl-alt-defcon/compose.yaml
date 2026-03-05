@@ -51,6 +51,7 @@ services:
       - "--path.rootfs=/rootfs"
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+      - "--collector.zfs"
     expose:
       - "9100"
     networks:
@@ -95,6 +96,19 @@ services:
     restart: unless-stopped    
     devices:
       - "/dev/nvme0"
+  
+  scrutiny-exporter:
+    image: jianyun8023/scrutiny-exporter:latest
+    container_name: scrutiny-exporter
+    restart: unless-stopped
+    environment:
+      - SCRUTINY_API_URL=http://scrutiny-web.monitoring:8080
+      - EXPORTER_PORT=9900
+      - CACHE_DURATION=60
+    networks:
+      - monitoring
+    expose:
+      - 9900
 
   scrutiny-web:
     image: 'ghcr.io/analogj/scrutiny:master-web'
