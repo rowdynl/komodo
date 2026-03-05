@@ -17,8 +17,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /sys:/sys:ro
       - /volume1/@docker:/var/lib/docker:ro
-    expose:
-      - 8080
+    ports:
+      - 8080:8080
   
   komodo-periphery:
     image: ghcr.io/moghtech/komodo-periphery:latest
@@ -46,8 +46,8 @@ services:
       - "--path.rootfs=/rootfs"
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
-    expose:
-      - 9100
+    ports:
+      - 9100:9100
 
   scrutiny-collector:
     image: 'ghcr.io/analogj/scrutiny:master-collector'
