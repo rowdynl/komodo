@@ -104,7 +104,6 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     networks:
-      - monitoring
       - web
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
