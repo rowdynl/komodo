@@ -13,7 +13,7 @@ services:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
+      - /volume1/@docker:/var/lib/docker:ro
     expose:
       - 8080
   
