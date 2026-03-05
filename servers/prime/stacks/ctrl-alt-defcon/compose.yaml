@@ -37,6 +37,18 @@ services:
       - "traefik.http.routers.godns.tls.certresolver=letsencrypt"
       - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
+ 
+  mosquitto-exporter:
+    image: sapcc/mosquitto-exporter
+    container_name: mosquitto-exporter
+    restart: unless-stopped
+    expose:
+      - 9234
+    command:
+      - "--endpoint=tcp://influxdb.backend:1883"
+    networks:
+      - monitoring
+      - backend
 
   node-exporter:
     image: prom/node-exporter:latest
