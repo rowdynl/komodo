@@ -78,7 +78,7 @@ services:
       - "traefik.http.routers.web-tcit-nl-tuning.rule=Host(`tuning.${DOMAIN}`)"
       - "traefik.http.routers.web-tcit-nl-tuning.entrypoints=websecure"
       - "traefik.http.routers.web-tcit-nl-tuning.tls.certresolver=letsencrypt"      
-      - "traefik.http.services.web-tcit-nl-tuning.loadbalancer.server.port=80"      
+      - "traefik.http.services.web-tcit-nl-tuning.loadbalancer.server.port=8080"      
   
   web-tcit-nl-wiki:
     image: mediawiki:1.34
