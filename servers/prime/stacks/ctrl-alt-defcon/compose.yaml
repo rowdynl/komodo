@@ -38,6 +38,14 @@ services:
       - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
 
+  ipmi-exporter:
+    image: prometheuscommunity/ipmi-exporter:latest
+    container_name: ipmi-exporter
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - 9290:9290
+
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
