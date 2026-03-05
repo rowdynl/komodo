@@ -51,7 +51,6 @@ services:
       - "--path.rootfs=/rootfs"
       - "--path.sysfs=/host/sys"
       - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
-      - "--collector.zfs"
     expose:
       - "9100"
     networks:
@@ -166,6 +165,16 @@ services:
       - "traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt"
       - "traefik.http.routers.speedtest.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.speedtest-tracker.loadbalancer.server.port=80"
+  
+  zfs-exporter:
+    image: matusnovak/prometheus-zfs:latest
+    container_name: zfs-exporter
+    restart: unless-stopped
+    privileged: true
+    expose:
+      - 9901
+    networks:
+      - monitoring
 
 networks:
   backend:
