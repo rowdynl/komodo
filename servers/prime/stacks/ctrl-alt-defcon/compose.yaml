@@ -7,7 +7,9 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     restart: unless-stopped
-    privileged: true
+    privileged: true        
+    command:
+      - "--disable_metrics=perf_event,disk,diskIO,fs"
     devices:
       - /dev/kmsg:/dev/kmsg
     volumes:
