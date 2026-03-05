@@ -2,6 +2,22 @@
 name: ctrl-alt-defcon
 
 services:
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+    networks:
+      - monitoring
+
   godns:
     container_name: godns
     image: timothyye/godns:latest
@@ -10,8 +26,6 @@ services:
     environment:
       - CONFIG=/config/config.json
     restart: unless-stopped
-    ports:
-      - 9099:9099
     volumes:
       - godns:/config/
     labels:
@@ -22,17 +36,55 @@ services:
       - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
 
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    expose:
+      - "9100"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - "--storage.tsdb.retention.time=30d"
+    networks:
+      - backend
+      - monitoring
+      - web
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - prometheus:/prometheus
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.prometheus.middlewares=authentik@file"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+
   scrutiny-web:
     image: 'ghcr.io/analogj/scrutiny:master-web'
     container_name: scrutiny-web
-    ports:
-      - '8582:8080'
     volumes:
       - scrutiny:/opt/scrutiny/config
     networks:
-      backend:
-      scrutiny:
-      web:
+      - backend
+      - monitoring
+      - web
     restart: unless-stopped    
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
@@ -59,7 +111,7 @@ services:
       - '/run/udev:/run/udev:ro'
       - scrutiny:/opt/scrutiny/config      
     networks:
-      scrutiny:
+      - monitoring
     environment:
       COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.scrutiny:8080'
       COLLECTOR_HOST_ID: 'prime'
@@ -103,13 +155,15 @@ services:
 networks:
   backend:
     external: true
-  scrutiny:
+  monitoring:
     external: true
   web:
     external: true
 
 volumes:
   godns:
+    external: true
+  prometheus:
     external: true
   scrutiny:
     external: true
