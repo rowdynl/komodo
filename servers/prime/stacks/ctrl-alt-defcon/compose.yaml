@@ -45,7 +45,10 @@ services:
     expose:
       - 9104
     environment:
-      DATA_SOURCE_NAME: "${PROMETHEUS_MARIADB_USER}:${PROMETHEUS_MARIADB_PASSWORD}@(mariadb.backend:3306)/"
+      - DATA_SOURCE_NAME="${PROMETHEUS_MARIADB_USER}:${PROMETHEUS_MARIADB_PASSWORD}@(mariadb.backend:3306)/"
+    networks:
+      - backend
+      - monitoring
 
   node-exporter:
     image: prom/node-exporter:latest
