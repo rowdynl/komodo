@@ -38,6 +38,15 @@ services:
       - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
 
+  mysqld-exporter:
+    image: prom/mysqld-exporter:latest
+    container_name: mysqld-exporter
+    restart: unless-stopped
+    expose:
+      - 9104
+    environment:
+      DATA_SOURCE_NAME: "${PROMETHEUS_MARIADB_USER}:${PROMETHEUS_MARIADB_PASSWORD}@(mariadb.backend:3306)/"
+
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
