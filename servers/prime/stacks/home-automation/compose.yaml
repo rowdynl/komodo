@@ -38,6 +38,9 @@ services:
     devices:
       - /dev/bus/usb:/dev/bus/usb
       - /dev/dri:/dev/dri
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
     ports:
       - "8554:8554"
       - "8555:8555/tcp"
