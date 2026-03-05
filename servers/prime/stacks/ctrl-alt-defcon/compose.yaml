@@ -37,18 +37,6 @@ services:
       - "traefik.http.routers.godns.tls.certresolver=letsencrypt"
       - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.godns.loadbalancer.server.port=9099"
- 
-  redis-exporter:
-    image: oliver006/redis_exporter:latest
-    container_name: redis-exporter
-    restart: unless-stopped
-    expose:
-      - 9121
-    environment:
-      - REDIS_ADDR="redis://redis.cache:6379"
-    networks:
-      - cache
-      - monitoring
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -88,6 +76,18 @@ services:
       - "traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.prometheus.middlewares=authentik@file"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
+    restart: unless-stopped
+    expose:
+      - 9121
+    environment:
+      - REDIS_ADDR="redis://redis.cache:6379"
+    networks:
+      - cache
+      - monitoring
 
   scrutiny-collector:
     image: 'ghcr.io/analogj/scrutiny:master-collector'
