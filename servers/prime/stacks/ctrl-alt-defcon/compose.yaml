@@ -64,7 +64,6 @@ services:
       - monitoring
       - web
     volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
       - prometheus:/prometheus
     restart: unless-stopped
     labels:
