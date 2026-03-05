@@ -37,12 +37,7 @@ services:
     shm_size: 512mb
     devices:
       - /dev/bus/usb:/dev/bus/usb
-      - /dev/dri/renderD128:/dev/dri/renderD128 
-    device_cgroup_rules:
-      - 'c 226:* rmw'    
-    group_add:
-      - '44'  # "44"
-      - '993' # "993"
+      - /dev/dri:/dev/dri
     ports:
       - "8554:8554"
       - "8555:8555/tcp"
