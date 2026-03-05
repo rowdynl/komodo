@@ -39,8 +39,8 @@ services:
       - /dev/bus/usb:/dev/bus/usb
       - /dev/dri:/dev/dri
     group_add:
-      - 'video'  # "44"
-      - 'render' # "993"
+      - '44'   # 'video'
+      - '993'  # 'render'
     ports:
       - "8554:8554"
       - "8555:8555/tcp"
