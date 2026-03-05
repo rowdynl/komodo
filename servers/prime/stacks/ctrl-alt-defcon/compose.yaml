@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     privileged: true        
     command:
-      - "--disable_metrics=perf_event,disk,diskIO,fs"
+      - "--disable_metrics=perf_event,disk,diskIO"
     devices:
       - /dev/kmsg:/dev/kmsg
     volumes:
