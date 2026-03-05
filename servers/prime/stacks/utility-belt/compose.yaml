@@ -111,7 +111,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_ROOT_URL=https://grafana.${DOMAIN}
     volumes:
-      - /grafana:/var/lib/grafana
+      - grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
     restart: unless-stopped
     labels:
