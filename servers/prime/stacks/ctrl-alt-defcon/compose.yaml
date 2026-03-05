@@ -40,6 +40,7 @@ services:
  
   redis-exporter:
     image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
     restart: unless-stopped
     expose:
       - 9121
