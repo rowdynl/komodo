@@ -42,9 +42,10 @@ services:
       - '44'   # 'video'
       - '993'  # 'render'
     ports:
-      - "8554:8554"
-      - "8555:8555/tcp"
-      - "8555:8555/udp"
+      - 1984:1984
+      - 8554:8554
+      - 8555:8555/tcp
+      - 8555:8555/udp
     cap_add:
       - CAP_PERFMON
     networks:
