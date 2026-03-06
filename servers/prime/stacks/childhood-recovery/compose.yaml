@@ -28,7 +28,26 @@ services:
       - REDIS_HOST=redis.cache
       # TODO: Authentik integration. Check https://docs.romm.app/latest/OIDC-Guides/OIDC-Setup-With-Authentik/ for more details.
     volumes:
-      - romm:/romm
+      - type: volume
+        source: romm
+        target: /romm/assets
+        volume:
+          subpath: assets
+      - type: volume
+        source: romm
+        target: /romm/config
+        volume:
+          subpath: config
+      - type: volume
+        source: romm
+        target: /romm/library
+        volume:
+          subpath: library
+      - type: volume
+        source: romm
+        target: /romm/resources
+        volume:
+          subpath: resources
     networks:
       - backend
       - cache
