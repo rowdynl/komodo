@@ -1,9 +1,0 @@
-name: games
-
-services:
-  dosbox:
-    image: lscr.io/linuxserver/dosbox-staging:latest
-    container_name: dosbox
-  mame:
-    image: lscr.io/linuxserver/mame:latest
-    container_name: mame

@@ -1,0 +1,54 @@
+# Because therapy is expensive but replaying childhood games in an emulator is basically free.
+name: childhood-recovery
+
+services:
+#  dosbox:
+#    image: lscr.io/linuxserver/dosbox-staging:latest
+#    container_name: dosbox
+#  mame:
+#    image: lscr.io/linuxserver/mame:latest
+#    container_name: mame
+
+  romm:
+    image: rommapp/romm:latest
+    container_name: romm
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      - DB_HOST=mariadb.backend
+      - DB_NAME=romm
+      - DB_USER=romm
+      - DB_PASSWD=${ROMM_DB_PASSWORD}
+      - ROMM_AUTH_SECRET_KEY=${ROMM_AUTH_SECRET_KEY}
+      - SCREENSCRAPER_USER=${ROMM_SCREENSCRAPER_USER}
+      - SCREENSCRAPER_PASSWORD=${ROMM_SCREENSCRAPER_PASSWORD}
+      - RETROACHIEVEMENTS_API_KEY=${ROMM_RETROACHIEVEMENTS_API_KEY}
+      - STEAMGRIDDB_API_KEY=${ROMM_STEAMGRIDDB_API_KEY}
+      - HASHEOUS_API_ENABLED=true
+      - REDIS_HOST=redis.cache
+      # TODO: Authentik integration. Check https://docs.romm.app/latest/OIDC-Guides/OIDC-Setup-With-Authentik/ for more details.
+    volumes:
+      - romm:/romm
+    networks:
+      - backend
+      - cache
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.romm.rule=Host(`romm.${DOMAIN}`)"
+      - "traefik.http.routers.romm.entrypoints=websecure"
+      - "traefik.http.routers.romm.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.romm.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.services.romm.loadbalancer.server.port=8080"
+
+networks:
+  backend:
+    external: true
+  cache:
+    external: true
+  web:
+    external: true
+
+volumes:
+  romm:
+    external: true
