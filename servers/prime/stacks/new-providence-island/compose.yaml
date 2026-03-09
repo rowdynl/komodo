@@ -133,6 +133,8 @@ services:
       - TZ=${TZ}
     restart: unless-stopped
     user: ${PUID}:${PGID}
+    ports:
+      - 51820:51820
     networks:
       - web
     volumes:
