@@ -129,8 +129,8 @@ services:
   posterizarr:
     image: ghcr.io/fscorrupt/posterizarr:latest
     container_name: posterizarr
-    env_file:
-      - ../../../global.env
+    environment:
+      - TZ=${TZ}
     restart: unless-stopped
     user: ${PUID}:${PGID}
     networks:
