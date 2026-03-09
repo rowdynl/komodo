@@ -304,14 +304,6 @@ services:
       - /mnt/downloads/transmission/watch:/watch
     env_file:
       - transmission.env
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
-      - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
-      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
-      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
     logging:
       driver: json-file
       options:
