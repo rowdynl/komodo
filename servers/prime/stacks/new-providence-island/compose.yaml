@@ -174,8 +174,6 @@ services:
       - radarr:/config
       - /mnt/prime-ds/movies:/movies
       - /mnt/downloads:/downloads
-      #- /mnt/downloads:/downloads
-      #- /mnt/downloads/transmission/completed:/data/completed
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -237,8 +235,6 @@ services:
     volumes:
       - sonarr:/config
       - /mnt/downloads:/downloads
-      #- /mnt/downloads:/downloads
-      #- /mnt/downloads/transmission/completed:/data/completed
       - /mnt/prime-ds/series:/tv
     restart: unless-stopped
     labels:
