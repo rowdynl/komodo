@@ -133,8 +133,6 @@ services:
       - TZ=${TZ}
     restart: unless-stopped
     user: ${PUID}:${PGID}
-    ports:
-      - 51820:51820
     networks:
       - web
     volumes:
@@ -280,6 +278,8 @@ services:
     env_file:
       - ../../../global.env
       - transmission.env
+    ports:
+      - 51820:51820
     logging:
       driver: json-file
       options:
