@@ -327,7 +327,6 @@ services:
       - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
       - "traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.routers.transmission.middlewares=authentik@file"
-      - "traefik.http.services.transmission.loadbalancer.healthcheck.disable=true"
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
 
 networks:
