@@ -306,7 +306,6 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - TRANSMISSION_HOME=/config
       - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
       - OPENVPN_PROVIDER=NORDVPN
       - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
