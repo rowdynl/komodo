@@ -316,7 +316,9 @@ services:
       driver: json-file
       options:
         max-size: 11m
-    restart: unless-stopped
+    restart: unless-stopped    
+    healthcheck:
+        disable: true
     labels:
       - "traefik.docker.network=web"
       - "traefik.enable=true"
