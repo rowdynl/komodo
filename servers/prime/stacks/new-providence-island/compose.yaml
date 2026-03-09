@@ -8,10 +8,8 @@ services:
     container_name: bazarr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - bazarr:/config
       - /mnt/prime-ds/movies:/movies
@@ -29,10 +27,8 @@ services:
     container_name: cleanuparr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - cleanuparr:/config
       - /mnt/downloads:/downloads
@@ -57,10 +53,8 @@ services:
     container_name: kometa
     networks:
       - dirty-water
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}    
+    env_file:
+      - ../../../global.env
     volumes:
       - kometa:/config
     restart: unless-stopped
@@ -70,10 +64,8 @@ services:
     container_name: lidarr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - lidarr:/config
       - /mnt/prime-ds/music:/music
@@ -95,15 +87,9 @@ services:
       macvlan:
         ipv4_address: ${MACVLAN_STATIC_IP_PLEX}
       web:
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - VERSION=latest
-      - TZ=${TZ}
-      - plex_HW_ACCEL=true
-      - GIDLIST=44,993
-      - LIBVA_DRIVER_NAME=iHD
-      - LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
+    env_file:
+      - ../../../global.env
+      - plex.env
     devices:
       - '/dev/dri:/dev/dri'    
     device_cgroup_rules:
@@ -143,10 +129,8 @@ services:
   posterizarr:
     image: ghcr.io/fscorrupt/posterizarr:latest
     container_name: posterizarr
-    environment:
-      - TZ=${TZ}
-      - TERM=xterm
-      - RUN_TIME=disabled
+    env_file:
+      - ../../../global.env
     restart: unless-stopped
     user: ${PUID}:${PGID}
     networks:
@@ -166,10 +150,8 @@ services:
     container_name: prowlarr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - prowlarr:/config
     restart: unless-stopped
@@ -186,10 +168,8 @@ services:
     container_name: radarr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - radarr:/config
       - /mnt/prime-ds/movies:/movies
@@ -209,10 +189,8 @@ services:
     container_name: sabnzbd
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - sabnzbd:/config
       - /mnt/downloads:/downloads
@@ -232,8 +210,8 @@ services:
     restart: unless-stopped
     volumes:
       - seerr:/app/config
-    environment:
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
@@ -253,10 +231,8 @@ services:
     container_name: sonarr
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - sonarr:/config
       - /mnt/downloads:/downloads
@@ -276,10 +252,8 @@ services:
     container_name: tautulli
     networks:
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ../../../global.env
     volumes:
       - tautulli:/config
     restart: unless-stopped
@@ -300,9 +274,9 @@ services:
       - NET_ADMIN
     volumes:
       - transmission:/config
-      - /mnt/downloads/transmission:/data
-      - /mnt/downloads/transmission/watch:/watch
+      - /mnt/downloads/transmission:/mnt/downloads/transmission
     env_file:
+      - ../../../global.env
       - transmission.env
     logging:
       driver: json-file
