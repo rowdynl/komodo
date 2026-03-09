@@ -2,36 +2,13 @@
 name: childhood-recovery
 
 services:
-#  dosbox:
-#    image: lscr.io/linuxserver/dosbox-staging:latest
-#    container_name: dosbox
-#  mame:
-#    image: lscr.io/linuxserver/mame:latest
-#    container_name: mame
-
   romm:
     image: rommapp/romm:latest
     container_name: romm
     restart: unless-stopped
-    environment:
-      - TZ=${TZ}
-      - DB_HOST=mariadb.backend
-      - DB_NAME=romm
-      - DB_USER=romm
-      - DB_PASSWD=${ROMM_DB_PASSWORD}
-      - ROMM_AUTH_SECRET_KEY=${ROMM_AUTH_SECRET_KEY}
-      - SCREENSCRAPER_USER=${ROMM_SCREENSCRAPER_USER}
-      - SCREENSCRAPER_PASSWORD=${ROMM_SCREENSCRAPER_PASSWORD}
-      - RETROACHIEVEMENTS_API_KEY=${ROMM_RETROACHIEVEMENTS_API_KEY}
-      - STEAMGRIDDB_API_KEY=${ROMM_STEAMGRIDDB_API_KEY}
-      - HASHEOUS_API_ENABLED=true
-      - REDIS_HOST=redis.cache
-      - OIDC_ENABLED=true
-      - OIDC_PROVIDER=authentik
-      - OIDC_CLIENT_ID=${ROMM_OIDC_CLIENT_ID}
-      - OIDC_CLIENT_SECRET=${ROMM_OIDC_CLIENT_SECRET}
-      - OIDC_REDIRECT_URI=https://romm.${DOMAIN}/api/oauth/openid
-      - OIDC_SERVER_APPLICATION_URL=https://auth.${DOMAIN}/application/o/romm
+    env_file:
+      - ../../../global.env
+      - romm.env
     volumes:
       - type: volume
         source: romm
