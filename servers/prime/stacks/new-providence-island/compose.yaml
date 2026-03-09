@@ -181,39 +181,6 @@ services:
       - "traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
-
-  qbittorrent:
-    image: kronflux/qbittorrentvpn:latest
-    container_name: qbittorrent
-    networks:
-      - web
-    cap_add:
-      - NET_ADMIN
-    volumes:
-      - qbittorrent:/config
-      - /mnt/downloads:/downloads
-    ports:
-      - 6881:6881
-      - 6881:6881/udp
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      - VPN_ENABLED=yes
-      - VPN_TYPE=openvpn
-      - LAN_NETWORK=${QBITTORRENT_LAN_NETWORKS}
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - RESTART_CONTAINER=yes
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${DOMAIN}`)"
-      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
-      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.qbittorrent.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -324,6 +291,39 @@ services:
       - "traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}"
       - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
 
+  transmission:
+    image: haugene/transmission-openvpn
+    container_name: transmission
+    networks:
+      - web
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - transmission:/config
+      - /mnt/downloads/transmission:/data
+      - /mnt/downloads/transmission/watch:/watch
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
+      - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+    logging:
+      driver: json-file
+      options:
+        max-size: 11m
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
+      - "traefik.http.routers.transmission.entrypoints=websecure"
+      - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.transmission.middlewares=authentik@file"
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+
 networks:
   dirty-water:
     external: true
@@ -355,8 +355,6 @@ volumes:
     external: true
   prowlarr:
     external: true
-  qbittorrent:
-    external: true
   radarr:
     external: true
   sabnzbd:
@@ -364,4 +362,6 @@ volumes:
   sonarr:
     external: true
   tautulli:
+    external: true
+  transmission:
     external: true
