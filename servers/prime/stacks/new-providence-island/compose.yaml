@@ -173,6 +173,7 @@ services:
     volumes:
       - radarr:/config
       - /mnt/prime-ds/movies:/movies
+      - /mnt/downloads:/mnt/downloads
       - /mnt/downloads:/downloads
       - /mnt/downloads/transmission/completed:/data/completed
     restart: unless-stopped
