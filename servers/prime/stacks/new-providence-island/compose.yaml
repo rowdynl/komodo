@@ -173,7 +173,7 @@ services:
     volumes:
       - radarr:/config
       - /mnt/prime-ds/movies:/movies
-      - /mnt/downloads:/mnt/downloads
+      - /mnt/downloads:/downloads
       #- /mnt/downloads:/downloads
       #- /mnt/downloads/transmission/completed:/data/completed
     restart: unless-stopped
@@ -236,7 +236,7 @@ services:
       - ../../../global.env
     volumes:
       - sonarr:/config
-      - /mnt/downloads:/mnt/downloads
+      - /mnt/downloads:/downloads
       #- /mnt/downloads:/downloads
       #- /mnt/downloads/transmission/completed:/data/completed
       - /mnt/prime-ds/series:/tv
@@ -276,7 +276,7 @@ services:
       - NET_ADMIN
     volumes:
       - transmission:/config
-      - /mnt/downloads/transmission:/mnt/downloads/transmission
+      - /mnt/downloads/transmission:/downloads/transmission
     env_file:
       - ../../../global.env
       - transmission.env
