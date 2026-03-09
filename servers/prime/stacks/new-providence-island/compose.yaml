@@ -302,12 +302,13 @@ services:
       - transmission:/config
       - /mnt/downloads/transmission:/data
       - /mnt/downloads/transmission/watch:/watch
+    env_file:
+      - transmission.env
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
       - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
-      - OPENVPN_PROVIDER=NORDVPN
       - OPENVPN_CONFIG=${NORDVPN_COUNTRY}
       - OPENVPN_USERNAME=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
