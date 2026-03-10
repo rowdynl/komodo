@@ -55,6 +55,8 @@ services:
       - dirty-water
     env_file:
       - ../../../global.env
+    environment:
+      - KOMETA_RUN=True
     volumes:
       - kometa:/config
     restart: unless-stopped
