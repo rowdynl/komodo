@@ -127,5 +127,7 @@ volumes:
     external: true
   postgresql-authentik:
     external: true
+  postgresql-immich:
+    external: true
   postgresql-scanopy:
     external: true
