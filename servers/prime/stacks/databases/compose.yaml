@@ -2,28 +2,6 @@
 name: databases
 
 services:
-  authentik-postgresql:
-    image: docker.io/library/postgres:16-alpine
-    container_name: authentik-postgresql
-    environment:
-      POSTGRES_DB: ${AUTHENTIK_PG_DB}
-      POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASSWORD}
-      POSTGRES_USER: ${AUTHENTIK_PG_USER}
-    user: ${PUID}:${PGID}
-    networks:
-      backend:
-    volumes:
-    - authentik-postgresql:/var/lib/postgresql/data
-    restart: unless-stopped
-    healthcheck:
-      interval: 30s
-      retries: 5
-      start_period: 20s
-      test:
-      - CMD-SHELL
-      - pg_isready -d $${AUTHENTIK_PG_DB} -U $${AUTHENTIK_PG_USER}
-      timeout: 5s
-
   influxdb:
     image: docker.io/influxdb:latest
     container_name: influxdb
@@ -35,10 +13,8 @@ services:
       - influxdb-data:/var/lib/influxdb2
     ports:
       - 8086:8086
-    environment:
-      - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
+    env_file:
+      - ../../../global.env    
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
@@ -51,8 +27,8 @@ services:
     container_name: mariadb
     networks:
       backend:
-    environment:
-      - MARIADB_AUTO_UPGRADE=true
+    env_file:
+      - ./env/mariadb.env
     volumes:
       - mariadb:/var/lib/mysql
     restart: unless-stopped
@@ -63,6 +39,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  postgresql-authentik:
+    image: docker.io/library/postgres:16-alpine
+    container_name: postgresql-authentik
+    env_file:
+      - ./env/postgresql-authentik.env
+    user: ${PUID}:${PGID}
+    networks:
+      backend:
+    volumes:
+    - postgresql-authentik:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d $${AUTHENTIK_PG_DB} -U $${AUTHENTIK_PG_USER}
+      timeout: 5s
 
 #  mongodb:
 #    image: mongo
@@ -78,7 +74,7 @@ networks:
     external: true
 
 volumes:
-  authentik-postgresql:
+  postgresql-authentik:
     external: true
   influxdb-config:
     external: true
