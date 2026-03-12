@@ -96,6 +96,8 @@ services:
     volumes:
       - heimdall:/config
     restart: unless-stopped
+    networks:
+      - web
     labels:
     - "traefik.enable=true"
     - "traefik.http.routers.heimdall.rule=Host(`${DOMAIN}`)"
