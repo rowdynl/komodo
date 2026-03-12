@@ -174,9 +174,6 @@ services:
           subpath: data      
     extra_hosts:
       - host.docker.internal:host-gateway
-    depends_on:
-      scanopy-daemon:
-        condition: service_started
     restart: unless-stopped
     networks:
       - backend
