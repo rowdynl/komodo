@@ -1,4 +1,4 @@
-#Your digital border checkpoint, complete with grumpy guards and deep suspicion of anything passing
+# Your digital border checkpoint, complete with grumpy guards and deep suspicion of anything passing
 # through. Traefik directs traffic like an overly caffeinated air‑traffic controller, Authentik checks 
 # IDs with military precision, Pi‑hole blocks shady tourists, CrowdSec cracks down on hooligans, 
 # and WireGuard handles diplomatic transport. Welcome to the fortress — passport, please.
@@ -13,26 +13,24 @@ services:
       - cache
       - backend
       - web
-    environment:
-      AUTHENTIK_EMAIL__HOST: ${AUTHENTIK_EMAIL_HOST}
-      AUTHENTIK_EMAIL__PORT: ${AUTHENTIK_EMAIL_PORT}
-      AUTHENTIK_EMAIL__USERNAME: ${AUTHENTIK_EMAIL_USERNAME}
-      AUTHENTIK_EMAIL__PASSWORD: ${AUTHENTIK_EMAIL_PASSWORD}
-      AUTHENTIK_EMAIL__USE_TLS: true
-      AUTHENTIK_EMAIL__USE_SSL: false
-      AUTHENTIK_EMAIL__TIMEOUT: 10
-      AUTHENTIK_EMAIL__FROM: ${AUTHENTIK_EMAIL_FROM}
-      AUTHENTIK_EMAIL__REPLY_TO: ${AUTHENTIK_EMAIL_FROM}
-      AUTHENTIK_DISABLE_UPDATE_CHECK: true
-      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_HOST}
-      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
-      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER}
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}    
+    env_file:
+      - ./env/authentik.env      
     volumes:
-      - authentik-data:/data
-      - authentik-custom-templates:/templates 
+      - type: volume
+        source: authentik
+        target: /certs
+        volume:
+          subpath: certs
+      - type: volume
+        source: authentik
+        target: /data
+        volume:
+          subpath: data
+      - type: volume
+        source: authentik
+        target: /templates
+        volume:
+          subpath: custom-templates      
     restart: unless-stopped    
     labels:
     - "traefik.enable=true"
@@ -52,30 +50,33 @@ services:
     networks:
       - cache
       - backend
-    environment:
-      AUTHENTIK_DISABLE_UPDATE_CHECK: true
-      AUTHENTIK_POSTGRESQL__HOST: ${AUTHENTIK_PG_HOST}
-      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB}
-      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASSWORD}
-      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER}
-      AUTHENTIK_REDIS__HOST: redis
-      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}    
+    env_file:
+      - ./env/authentik.env
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - authentik-data:/data
-      - authentik-certs:/certs
-      - authentik-custom-templates:/templates 
+      - type: volume
+        source: authentik
+        target: /certs
+        volume:
+          subpath: certs
+      - type: volume
+        source: authentik
+        target: /data
+        volume:
+          subpath: data
+      - type: volume
+        source: authentik
+        target: /templates
+        volume:
+          subpath: custom-templates      
     restart: unless-stopped
     
   crowdsec:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
-    environment:
-      - GID=${PGID}
-      - UID=${PUID}
-      - TZ=${TZ}
-      - COLLECTIONS=crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/http-dos
+    env_file:
+      - ./env/crowdsec.env
     volumes:
       - traefik:/var/log/traefik:ro
       - crowdsec:/etc/crowdsec/
@@ -90,9 +91,8 @@ services:
   krawl:
     image: ghcr.io/blessedrebus/krawl:latest
     container_name: krawl
-    environment:
-      - KRAWL_DASHBOARD_SECRET_PATH=${KRAWL_DASHBOARD_SECRET_PATH}
-      - TZ=${TZ}
+    env_file:
+      - ./env/krawl.env
     networks:
       - web
     volumes:
@@ -124,16 +124,8 @@ services:
     container_name: pihole
     networks:
       - web
-    #ports:      
-    #  - 53:53/tcp    # DNS port
-    #  - 53:53/udp    # DNS port
-    environment:
-      - TZ=${TZ}
-      - FTLCONF_webserver_api_password=${PIHOLE_ADMIN_PASSWORD}
-      - FTLCONF_dns_listeningMode=all
-      - DNSMASQ_USER=root
-      - PIHOLE_UID=${PUID}
-      - PIHOLE_GID=${PGID}      
+    env_file:
+      - ./env/pihole.env      
     volumes:
       - pihole:/etc/pihole     
     cap_add:   
@@ -157,9 +149,8 @@ services:
     ports:
       - 80:80
       - 443:443    
-    environment:
-      - TRANSIP_ACCOUNT_NAME=${TRANSIP_ACCOUNT_NAME}
-      - TRANSIP_PRIVATE_KEY_PATH=${TRANSIP_PRIVATE_KEY_PATH}
+    env_file:
+      - ./env/traefik.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik:/etc/traefik   # static & dynamic config live here
@@ -169,10 +160,8 @@ services:
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
     container_name: wireguard
-    environment:
-      - WG_ALLOWED_IPS=${WIREGUARD_ALLOWED_IPS}
-      - WG_HOST=${WIREGUARD_HOST}
-      - PASSWORD_HASH=${WIREGUARD_PASSWORD_HASH}
+    env_file:
+      - ./env/wireguard.env
     volumes:
       - wireguard:/etc/wireguard
       - /lib/modules:/lib/modules:ro
@@ -211,6 +200,8 @@ networks:
     external: true
 
 volumes:
+  authentik:
+    external: true
   authentik-certs:
     external: true
   authentik-custom-templates:
