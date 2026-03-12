@@ -29,6 +29,14 @@ services:
       interval: 11s
       timeout: 11s
       retries: 22
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.influxdb.rule=Host(`influxdb.${DOMAIN}`)"
+      - "traefik.http.routers.influxdb.entrypoints=websecure"
+      - "traefik.http.routers.influxdb.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.influxdb.priority=${TRAEFIK_PRIORITY}"
+      - "traefik.http.routers.influxdb.middlewares=authentik@file"
+      - "traefik.http.services.influxdb.loadbalancer.server.port=8086"
       
   mariadb:
     image: docker.io/mariadb:latest
