@@ -101,7 +101,7 @@ services:
       - web
     labels:
     - "traefik.enable=true"
-    - "traefik.http.routers.flame.rule=Host(`flame.${DOMAIN}`)"
+    - "traefik.http.routers.flame.rule=Host(`${DOMAIN}`)"
     - "traefik.http.routers.flame.entrypoints=websecure"
     - "traefik.http.routers.flame.tls=true"
     - "traefik.http.routers.flame.tls.certresolver=letsencrypt"
