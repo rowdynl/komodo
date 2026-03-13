@@ -88,25 +88,26 @@ services:
       - web
     restart: unless-stopped
 
-  heimdall:
-    image: lscr.io/linuxserver/heimdall:latest
-    container_name: heimdall
-    env_file:
-      - ../../../global.env
+  flame:
+    image: pawelmalak/flame:latest
+    container_name: flame
     volumes:
-      - heimdall:/config
+      - flame:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 5005:5005
     restart: unless-stopped
     networks:
       - web
     labels:
     - "traefik.enable=true"
-    - "traefik.http.routers.heimdall.rule=Host(`${DOMAIN}`)"
-    - "traefik.http.routers.heimdall.entrypoints=websecure"
-    - "traefik.http.routers.heimdall.tls=true"
-    - "traefik.http.routers.heimdall.tls.certresolver=letsencrypt"
-    - "traefik.http.routers.heimdall.priority=${TRAEFIK_PRIORITY}"
-    - "traefik.http.routers.heimdall.middlewares=authentik@file"
-    - "traefik.http.services.heimdall.loadbalancer.server.port=80"
+    - "traefik.http.routers.flame.rule=Host(`flame.${DOMAIN}`)"
+    - "traefik.http.routers.flame.entrypoints=websecure"
+    - "traefik.http.routers.flame.tls=true"
+    - "traefik.http.routers.flame.tls.certresolver=letsencrypt"
+    - "traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}"
+    - "traefik.http.routers.flame.middlewares=authentik@file"
+    - "traefik.http.services.flame.loadbalancer.server.port=5005"
 
   krawl:
     image: ghcr.io/blessedrebus/krawl:latest
@@ -225,7 +226,7 @@ volumes:
     external: true
   crowdsec:
     external: true
-  heimdall:
+  flame:
     external: true
   krawl:
     external: true
