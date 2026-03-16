@@ -31,12 +31,17 @@ services:
     volumes:
       - godns:/config/
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.godns.rule=Host(`godns.${DOMAIN}`)"
-      - "traefik.http.routers.godns.entrypoints=websecure"
-      - "traefik.http.routers.godns.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.godns.loadbalancer.server.port=9099"
+      - flame.type=application
+      - flame.name=GoDNS
+      - flame.url=https://godns.${DOMAIN}
+      - flame.icon=dns-outline
+      - traefik.enable=true
+      - traefik.http.routers.godns.rule=Host(`godns.${DOMAIN}`)
+      - traefik.http.routers.godns.entrypoints=websecure
+      - traefik.http.routers.godns.tls.certresolver=letsencrypt
+      - traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.godns.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.godns.loadbalancer.server.port=9099
 
   mysqld-exporter:
     image: prom/mysqld-exporter:latest
@@ -84,13 +89,17 @@ services:
       - prometheus:/prometheus
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)"
-      - "traefik.http.routers.prometheus.entrypoints=websecure"
-      - "traefik.http.routers.prometheus.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.prometheus.middlewares=authentik@file"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - flame.type=application
+      - flame.name=Prometheus
+      - flame.url=https://prometheus.${DOMAIN}
+      - flame.icon=chart-line
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
+      - traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.prometheus.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
 
   redis-exporter:
     image: oliver006/redis_exporter:latest
@@ -153,13 +162,17 @@ services:
       retries: 20
       start_period: 10s
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.scrutiny.rule=Host(`scrutiny.${DOMAIN}`)"
-      - "traefik.http.routers.scrutiny.entrypoints=websecure"
-      - "traefik.http.routers.scrutiny.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.scrutiny.middlewares=authentik@file"
-      - "traefik.http.services.scrutiny.loadbalancer.server.port=8080"
+      - flame.type=application
+      - flame.name=Scrutiny
+      - flame.url=https://scrutiny.${DOMAIN}
+      - flame.icon=hard-drive
+      - traefik.enable=true
+      - traefik.http.routers.scrutiny.rule=Host(`scrutiny.${DOMAIN}`)
+      - traefik.http.routers.scrutiny.entrypoints=websecure
+      - traefik.http.routers.scrutiny.tls.certresolver=letsencrypt
+      - traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.scrutiny.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.scrutiny.loadbalancer.server.port=8080
 
   speedtest-tracker:
     image: ghcr.io/linuxserver/speedtest-tracker:latest
@@ -167,31 +180,26 @@ services:
     networks:
       - backend
       - web
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - APP_TIMEZONE=${TZ}
-      - APP_KEY=${SPEEDTEST_TRACKER_APP_KEY}
-      - DB_HOST=${SPEEDTEST_TRACKER_DB_HOST}
-      - DB_USERNAME=${SPEEDTEST_TRACKER_DB_USERNAME}
-      - DB_PASSWORD=${SPEEDTEST_TRACKER_DB_PASSWORD}
-      - DB_CONNECTION=mariadb
-      - DB_DATABASE=speedtest_tracker
-      - DB_PORT=3306
-      - SPEEDTEST_SCHEDULE=*/30 * * * *
+    env_file:
+      - ../../../global.env
+      - ./env/speedtest-tracker.env
     restart: unless-stopped
     ports:
       - 8033:80
     volumes:
       - speedtest-tracker:/config
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.${DOMAIN}`)"
-      - "traefik.http.routers.speedtest-tracker.entrypoints=websecure"
-      - "traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.speedtest.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.speedtest-tracker.loadbalancer.server.port=80"
+      - flame.type=application
+      - flame.name=Speedtest Tracker
+      - flame.url=https://speedtest.${DOMAIN}
+      - flame.icon=speedometer
+      - traefik.enable=true
+      - traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.${DOMAIN}`)
+      - traefik.http.routers.speedtest-tracker.entrypoints=websecure
+      - traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt
+      - traefik.http.routers.speedtest.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.speedtest-tracker.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.speedtest-tracker.loadbalancer.server.port=80
   
   zfs-exporter:
     image: matusnovak/prometheus-zfs:latest

@@ -14,16 +14,21 @@ services:
       - 3000:3000
     networks:
       web:
-    mem_limit: 220m    
-    cpus: 0.11
+    mem_limit: 330m    
+    cpus: 0.33
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)"
-      - "traefik.http.routers.hypermind.entrypoints=websecure"
-      - "traefik.http.routers.hypermind.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.hypermind.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.hypermind.loadbalancer.server.port=3000"
+      - flame.type=application
+      - flame.name=Hypermind
+      - flame.url=https://hypermind.${DOMAIN}
+      - flame.icon=brain
+      - traefik.enable=true
+      - traefik.http.routers.hypermind.rule=Host(`hypermind.${DOMAIN}`)
+      - traefik.http.routers.hypermind.entrypoints=websecure
+      - traefik.http.routers.hypermind.tls.certresolver=letsencrypt
+      - traefik.http.routers.hypermind.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.hypermind.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.hypermind.loadbalancer.server.port=3000
 
 networks:
   web:

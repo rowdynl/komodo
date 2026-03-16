@@ -35,12 +35,17 @@ services:
       - cache
       - web
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.romm.rule=Host(`romm.${DOMAIN}`)"
-      - "traefik.http.routers.romm.entrypoints=websecure"
-      - "traefik.http.routers.romm.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.romm.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.romm.loadbalancer.server.port=8080"
+      - flame.type=application
+      - flame.name=ROMM
+      - flame.url=https://romm.${DOMAIN}
+      - flame.icon=gamepad
+      - traefik.enable=true
+      - traefik.http.routers.romm.rule=Host(`romm.${DOMAIN}`)
+      - traefik.http.routers.romm.entrypoints=websecure
+      - traefik.http.routers.romm.tls.certresolver=letsencrypt
+      - traefik.http.routers.romm.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.romm.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.romm.loadbalancer.server.port=8080
 
 networks:
   backend:
