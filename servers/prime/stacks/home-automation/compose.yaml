@@ -19,12 +19,16 @@ services:
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)"
-      - "traefik.http.routers.esphome.entrypoints=websecure"
-      - "traefik.http.routers.esphome.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.esphome.middlewares=authentik@file"
-      - "traefik.http.services.esphome.loadbalancer.server.port=6052"
+      - flame.type=application
+      - flame.name=ESPHome
+      - flame.url=https://esphome.${DOMAIN}
+      - flame.icon=chip
+      - traefik.enable=true
+      - traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)
+      - traefik.http.routers.esphome.entrypoints=websecure
+      - traefik.http.routers.esphome.tls.certresolver=letsencrypt
+      - traefik.http.routers.esphome.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.esphome.loadbalancer.server.port=6052
 
   frigate:
     image: ghcr.io/blakeblackshear/frigate:0.17.0
@@ -62,19 +66,21 @@ services:
     stop_grace_period: 22s
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frigate-rc.rule=Host(`frigate.${DOMAIN}`)"
-      - "traefik.http.routers.frigate-rc.entrypoints=websecure"
-      - "traefik.http.routers.frigate-rc.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frigate-rc.loadbalancer.server.port=8971"
+      - flame.type=application
+      - flame.name=Frigate
+      - flame.url=https://frigate.${DOMAIN}
+      - flame.icon=cctv
+      - traefik.enable=true
+      - traefik.http.routers.frigate-rc.rule=Host(`frigate.${DOMAIN}`)
+      - traefik.http.routers.frigate-rc.entrypoints=websecure
+      - traefik.http.routers.frigate-rc.tls.certresolver=letsencrypt
+      - traefik.http.routers.frigate-rc.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.frigate-rc.loadbalancer.server.port=8971
 
   home-assistant:
     image: ghcr.io/home-assistant/home-assistant:stable
     container_name: home-assistant
-    environment:
-      - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
+    env_file: ../../../global.env
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0     
     networks:
@@ -90,11 +96,16 @@ services:
     privileged: true
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)"
-      - "traefik.http.routers.home-assistant.entrypoints=websecure"
-      - "traefik.http.routers.home-assistant.tls.certresolver=letsencrypt"
-      - "traefik.http.services.home-assistant.loadbalancer.server.port=8123"
+      - flame.type=application
+      - flame.name=Home Assistant
+      - flame.url=https://has.${DOMAIN}
+      - flame.icon=home
+      - traefik.enable=true
+      - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
+      - traefik.http.routers.home-assistant.entrypoints=websecure
+      - traefik.http.routers.home-assistant.tls.certresolver=letsencrypt
+      - traefik.http.routers.home-assistant.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.home-assistant.loadbalancer.server.port=8123
 
   mosquitto:
     image: eclipse-mosquitto:latest
@@ -111,8 +122,7 @@ services:
   music-assistant:
     image: ghcr.io/music-assistant/server:latest
     container_name: music-assistant
-    environment:
-      - TZ=${TZ}
+    env_file: ../../../global.env
     networks:
       backend:
       macvlan:
@@ -137,12 +147,16 @@ services:
       - node-red:/data
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)"
-      - "traefik.http.routers.node-red.entrypoints=websecure"
-      - "traefik.http.routers.node-red.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.node-red.middlewares=authentik@file"
-      - "traefik.http.services.node-red.loadbalancer.server.port=1880"
+      - flame.type=application
+      - flame.name=Node-RED
+      - flame.url=https://nodered.${DOMAIN}
+      - flame.icon=state-machine
+      - traefik.enable=true
+      - traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)
+      - traefik.http.routers.node-red.entrypoints=websecure
+      - traefik.http.routers.node-red.tls.certresolver=letsencrypt
+      - traefik.http.routers.node-red.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.node-red.loadbalancer.server.port=1880
 
 networks:
   backend:

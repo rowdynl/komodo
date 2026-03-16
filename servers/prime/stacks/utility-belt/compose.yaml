@@ -35,13 +35,17 @@ services:
     security_opt:
       - label=disable
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.code-server.rule=Host(`code-server.${DOMAIN}`)"
-      - "traefik.http.routers.code-server.entrypoints=websecure"
-      - "traefik.http.routers.code-server.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.code-server.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.code-server.middlewares=authentik@file"
-      - "traefik.http.services.code-server.loadbalancer.server.port=8443"
+      - flame.type=application
+      - flame.name=code-server
+      - flame.url=https://code-server.${DOMAIN}
+      - flame.icon=code-block-braces
+      - traefik.enable=true
+      - traefik.http.routers.code-server.rule=Host(`code-server.${DOMAIN}`)
+      - traefik.http.routers.code-server.entrypoints=websecure
+      - traefik.http.routers.code-server.tls.certresolver=letsencrypt
+      - traefik.http.routers.code-server.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.code-server.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.code-server.loadbalancer.server.port=8443
   
   dbgate:
     container_name: dbgate
@@ -62,12 +66,17 @@ services:
       - OAUTH_SCOPE=openid email profile
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dbgate.rule=Host(`dbgate.${DOMAIN}`)"
-      - "traefik.http.routers.dbgate.entrypoints=websecure"
-      - "traefik.http.routers.dbgate.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.dbgate.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.dbgate.loadbalancer.server.port=3000"
+      - flame.type=application
+      - flame.name=DBGate
+      - flame.url=https://dbgate.${DOMAIN}
+      - flame.icon=database
+      - traefik.enable=true
+      - traefik.http.routers.dbgate.rule=Host(`dbgate.${DOMAIN}`)
+      - traefik.http.routers.dbgate.entrypoints=websecure
+      - traefik.http.routers.dbgate.tls.certresolver=letsencrypt
+      - traefik.http.routers.dbgate.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.dbgate.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.dbgate.loadbalancer.server.port=3000
 
   firefox:
     container_name: firefox
@@ -78,13 +87,17 @@ services:
       - web
     restart: unless-stopped
     labels:
-      - "traefik.enable=true" 
-      - "traefik.http.routers.firefox.rule=Host(`firefox.${DOMAIN}`)"
-      - "traefik.http.routers.firefox.entrypoints=websecure"
-      - "traefik.http.routers.firefox.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.firefox.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.firefox.middlewares=authentik@file"
-      - "traefik.http.services.firefox.loadbalancer.server.port=5800"
+      - flame.type=application
+      - flame.name=Firefox
+      - flame.url=https://firefox.${DOMAIN}
+      - flame.icon=firefox
+      - traefik.enable=true
+      - traefik.http.routers.firefox.rule=Host(`firefox.${DOMAIN}`)
+      - traefik.http.routers.firefox.entrypoints=websecure
+      - traefik.http.routers.firefox.tls.certresolver=letsencrypt
+      - traefik.http.routers.firefox.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.firefox.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.firefox.loadbalancer.server.port=5800
 
   it-tools: # https://github.com/CorentinTh/it-tools
     container_name: it-tools
@@ -93,12 +106,17 @@ services:
       - web
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)"
-      - "traefik.http.routers.it-tools.entrypoints=websecure"
-      - "traefik.http.routers.it-tools.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.it-tools.loadbalancer.server.port=80" 
+      - flame.type=application
+      - flame.name=IT Tools
+      - flame.url=https://tools.${DOMAIN}
+      - flame.icon=tools
+      - traefik.enable=true
+      - traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)
+      - traefik.http.routers.it-tools.entrypoints=websecure
+      - traefik.http.routers.it-tools.tls.certresolver=letsencrypt
+      - traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.it-tools.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
   grafana:
     image: grafana/grafana:latest
@@ -115,13 +133,17 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN}`)"
-      - "traefik.http.routers.grafana.entrypoints=websecure"
-      - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.grafana.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.grafana.middlewares=authentik@file"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - flame.type=application
+      - flame.name=Grafana
+      - flame.url=https://grafana.${DOMAIN}
+      - flame.icon=chart-line
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.tls.certresolver=letsencrypt
+      - traefik.http.routers.grafana.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.grafana.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
 
   redis:
     image: redis:7-alpine
@@ -179,13 +201,17 @@ services:
       - backend
       - web
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.scanopy.rule=Host(`scanopy.${DOMAIN}`)"
-      - "traefik.http.routers.scanopy.entrypoints=websecure"
-      - "traefik.http.routers.scanopy.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.scanopy.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.scanopy.middlewares=authentik@file"
-      - "traefik.http.services.scanopy.loadbalancer.server.port=60072"
+      - flame.type=application
+      - flame.name=Scanopy
+      - flame.url=https://scanopy.${DOMAIN}
+      - flame.icon=server
+      - traefik.enable=true
+      - traefik.http.routers.scanopy.rule=Host(`scanopy.${DOMAIN}`)
+      - traefik.http.routers.scanopy.entrypoints=websecure
+      - traefik.http.routers.scanopy.tls.certresolver=letsencrypt
+      - traefik.http.routers.scanopy.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.scanopy.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.scanopy.loadbalancer.server.port=60072
 
   termix:
     image: ghcr.io/lukegus/termix:latest
@@ -199,12 +225,17 @@ services:
       - web
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.termix.rule=Host(`termix.${DOMAIN}`)"
-      - "traefik.http.routers.termix.entrypoints=websecure"
-      - "traefik.http.routers.termix.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.termix.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.termix.loadbalancer.server.port=8080"
+      - flame.type=application
+      - flame.name=Termix
+      - flame.url=https://termix.${DOMAIN}
+      - flame.icon=console
+      - traefik.enable=true
+      - traefik.http.routers.termix.rule=Host(`termix.${DOMAIN}`)
+      - traefik.http.routers.termix.entrypoints=websecure
+      - traefik.http.routers.termix.tls.certresolver=letsencrypt
+      - traefik.http.routers.termix.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.termix.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.termix.loadbalancer.server.port=8080
 
 networks:
   cache:
