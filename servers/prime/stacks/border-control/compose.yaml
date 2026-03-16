@@ -42,6 +42,7 @@ services:
       - traefik.http.routers.authentik.tls=true
       - traefik.http.routers.authentik.tls.certresolver=letsencrypt
       - traefik.http.routers.authentik.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.authentik.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.authentik.loadbalancer.server.port=9000
       - traefik.http.services.authentik.loadbalancer.passhostheader=true
 
@@ -54,6 +55,11 @@ services:
       - cache
       - backend
     env_file: ./env/authentik.env
+    labels:
+      - flame.type=application
+      - flame.name=Authentik Worker
+      - flame.url=https://worker.${DOMAIN}
+      - flame.icon=mdi-account-cog
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -102,14 +108,14 @@ services:
     networks:
       - web
     labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.flame.rule=Host(`${DOMAIN}`)"
-    - "traefik.http.routers.flame.entrypoints=websecure"
-    - "traefik.http.routers.flame.tls=true"
-    - "traefik.http.routers.flame.tls.certresolver=letsencrypt"
-    - "traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}"
-    - "traefik.http.routers.flame.middlewares=authentik@file"
-    - "traefik.http.services.flame.loadbalancer.server.port=5005"
+    - traefik.enable=true
+    - traefik.http.routers.flame.rule=Host(`${DOMAIN}`)
+    - traefik.http.routers.flame.entrypoints=websecure
+    - traefik.http.routers.flame.tls=true
+    - traefik.http.routers.flame.tls.certresolver=letsencrypt
+    - traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}
+    - traefik.http.routers.flame.middlewares=crowdsec@file,geoblock@file,authentik@file
+    - traefik.http.services.flame.loadbalancer.server.port=5005
 
   krawl:
     image: ghcr.io/blessedrebus/krawl:latest
@@ -121,25 +127,24 @@ services:
       - krawl:/app/data
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
+      - flame.type=application
+      - flame.name=Krawl
+      - flame.url=https://krawl.${DOMAIN}${KRAWL_DASHBOARD_SECRET_PATH}
+      - flame.icon=mdi-spider
+      - traefik.enable=true
+      - traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)
+      - traefik.http.routers.krawl.entrypoints=websecure
+      - traefik.http.routers.krawl.tls=true
+      - traefik.http.routers.krawl.tls.certresolver=letsencrypt
+      - traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.krawl.loadbalancer.server.port=5000
+      - traefik.http.routers.krawl-fallback.rule=HostRegexp(`{subdomain:.+}.tcit.nl`)
+      - traefik.http.routers.krawl-fallback.entrypoints=websecure
+      - traefik.http.routers.krawl-fallback.tls=true
+      - traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt
+      - traefik.http.routers.krawl-fallback.priority=1
+      - traefik.http.routers.krawl-fallback.service=krawl
 
-      # Explicit host (normal Krawl dashboard)
-      - "traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)"
-      - "traefik.http.routers.krawl.entrypoints=websecure"
-      - "traefik.http.routers.krawl.tls=true"
-      - "traefik.http.routers.krawl.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.krawl.priority=${TRAEFIK_PRIORITY}"
-
-      # SILENT catch‑all for unknown subdomains
-      - "traefik.http.routers.krawl-fallback.rule=HostRegexp(`{subdomain:.+}.tcit.nl`)"
-      - "traefik.http.routers.krawl-fallback.entrypoints=websecure"
-      - "traefik.http.routers.krawl-fallback.tls=true"
-      - "traefik.http.routers.krawl-fallback.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.krawl-fallback.priority=1"
-      - "traefik.http.routers.krawl-fallback.service=krawl"
-
-      # Service port
-      - "traefik.http.services.krawl.loadbalancer.server.port=5000"
 
   pihole:
     image: pihole/pihole:latest
@@ -148,18 +153,22 @@ services:
       - web
     env_file: ./env/pihole.env
     volumes:
-      - pihole:/etc/pihole     
-    cap_add:   
+      - pihole:/etc/pihole
+    cap_add:
       - NET_ADMIN
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)"
-      - "traefik.http.routers.pihole.entrypoints=websecure"
-      - "traefik.http.routers.pihole.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.pihole.middlewares=authentik@file"
-      - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      - flame.type=application
+      - flame.name=Pi-hole
+      - flame.url=https://pihole.${DOMAIN}
+      - flame.icon=mdi-security
+      - traefik.enable=true
+      - traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)
+      - traefik.http.routers.pihole.entrypoints=websecure
+      - traefik.http.routers.pihole.tls.certresolver=letsencrypt
+      - traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.pihole.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.pihole.loadbalancer.server.port=80
       
   traefik:
     image: traefik:latest
@@ -177,6 +186,12 @@ services:
       - traefik:/etc/traefik   # static & dynamic config live here
       - traefik:/data          # acme.json will be created/managed here
     restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.name=Traefik
+      - flame.url=https://traefik.${DOMAIN}
+      - flame.icon=routes
+      
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
@@ -201,14 +216,18 @@ services:
       - net.ipv6.conf.default.forwarding=1
     restart: unless-stopped
     labels:
-      - "komodo.skip=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)"
-      - "traefik.http.routers.wireguard.entrypoints=websecure"
-      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.wireguard.middlewares=authentik@file"
-      - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
+      - komodo.skip=true
+      - flame.type=application
+      - flame.name=WireGuard
+      - flame.url=https://wireguard.${DOMAIN}
+      - flame.icon=mdi-vpn
+      - traefik.enable=true
+      - traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)
+      - traefik.http.routers.wireguard.entrypoints=websecure
+      - traefik.http.routers.wireguard.tls.certresolver=letsencrypt
+      - traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.wireguard.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
 
 networks:
