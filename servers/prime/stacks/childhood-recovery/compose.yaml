@@ -38,7 +38,7 @@ services:
       - flame.type=application
       - flame.name=ROMM
       - flame.url=https://romm.${DOMAIN}
-      - flame.icon=gamepad
+      - flame.icon=gamepad-variant-outline
       - traefik.enable=true
       - traefik.http.routers.romm.rule=Host(`romm.${DOMAIN}`)
       - traefik.http.routers.romm.entrypoints=websecure
