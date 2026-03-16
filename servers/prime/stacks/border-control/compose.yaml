@@ -55,11 +55,6 @@ services:
       - cache
       - backend
     env_file: ./env/authentik.env
-    labels:
-      - flame.type=application
-      - flame.name=Authentik Worker
-      - flame.url=https://worker.${DOMAIN}
-      - flame.icon=mdi-account-cog
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -130,7 +125,7 @@ services:
       - flame.type=application
       - flame.name=Krawl
       - flame.url=https://krawl.${DOMAIN}${KRAWL_DASHBOARD_SECRET_PATH}
-      - flame.icon=mdi-spider
+      - flame.icon=spider
       - traefik.enable=true
       - traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)
       - traefik.http.routers.krawl.entrypoints=websecure
@@ -220,7 +215,7 @@ services:
       - flame.type=application
       - flame.name=WireGuard
       - flame.url=https://wireguard.${DOMAIN}
-      - flame.icon=mdi-vpn
+      - flame.icon=vpn
       - traefik.enable=true
       - traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)
       - traefik.http.routers.wireguard.entrypoints=websecure
