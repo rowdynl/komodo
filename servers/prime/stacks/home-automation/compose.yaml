@@ -20,6 +20,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Home Automation
       - flame.name=ESPHome
       - flame.url=https://esphome.${DOMAIN}
       - flame.icon=memory
@@ -67,6 +68,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Home Automation
       - flame.name=Frigate
       - flame.url=https://frigate.${DOMAIN}
       - flame.icon=cctv
@@ -97,6 +99,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Home Automation
       - flame.name=Home Assistant
       - flame.url=https://has.${DOMAIN}
       - flame.icon=home-outline
@@ -148,6 +151,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Home Automation
       - flame.name=Node-RED
       - flame.url=https://nodered.${DOMAIN}
       - flame.icon=state-machine

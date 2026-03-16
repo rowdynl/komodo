@@ -36,6 +36,7 @@ services:
       - label=disable
     labels:
       - flame.type=application
+      - flame.category=Utility Belt
       - flame.name=code-server
       - flame.url=https://code-server.${DOMAIN}
       - flame.icon=code-braces
@@ -67,6 +68,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Databases
       - flame.name=DBGate
       - flame.url=https://dbgate.${DOMAIN}
       - flame.icon=database-cog-outline
@@ -88,6 +90,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Utility Belt
       - flame.name=Firefox
       - flame.url=https://firefox.${DOMAIN}
       - flame.icon=firefox
@@ -107,6 +110,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Utility Belt
       - flame.name=IT Tools
       - flame.url=https://tools.${DOMAIN}
       - flame.icon=tools
@@ -134,6 +138,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=Utility Belt
       - flame.name=Grafana
       - flame.url=https://grafana.${DOMAIN}
       - flame.icon=chart-line

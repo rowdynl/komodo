@@ -30,6 +30,7 @@ services:
       retries: 22
     labels:
       - flame.type=application
+      - flame.category=Databases
       - flame.name=InfluxDB
       - flame.url=https://influxdb.${DOMAIN}
       - flame.icon=database-outline

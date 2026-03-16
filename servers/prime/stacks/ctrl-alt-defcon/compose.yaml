@@ -32,6 +32,7 @@ services:
       - godns:/config/
     labels:
       - flame.type=application
+      - flame.category=CTRL ALT DEFCON
       - flame.name=GoDNS
       - flame.url=https://godns.${DOMAIN}
       - flame.icon=dns-outline
@@ -90,6 +91,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
+      - flame.category=CTRL ALT DEFCON
       - flame.name=Prometheus
       - flame.url=https://prometheus.${DOMAIN}
       - flame.icon=chart-line
@@ -163,6 +165,7 @@ services:
       start_period: 10s
     labels:
       - flame.type=application
+      - flame.category=CTRL ALT DEFCON
       - flame.name=Scrutiny
       - flame.url=https://scrutiny.${DOMAIN}
       - flame.icon=harddisk
@@ -190,6 +193,7 @@ services:
       - speedtest-tracker:/config
     labels:
       - flame.type=application
+      - flame.category=CTRL ALT DEFCON
       - flame.name=Speedtest Tracker
       - flame.url=https://speedtest.${DOMAIN}
       - flame.icon=speedometer
@@ -197,7 +201,7 @@ services:
       - traefik.http.routers.speedtest-tracker.rule=Host(`speedtest.${DOMAIN}`)
       - traefik.http.routers.speedtest-tracker.entrypoints=websecure
       - traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt
-      - traefik.http.routers.speedtest.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.speedtest-tracker.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.speedtest-tracker.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.speedtest-tracker.loadbalancer.server.port=80
   
