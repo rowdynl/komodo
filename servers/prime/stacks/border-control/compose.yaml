@@ -125,7 +125,7 @@ services:
       - flame.type=application
       - flame.name=Krawl
       - flame.url=https://krawl.${DOMAIN}${KRAWL_DASHBOARD_SECRET_PATH}
-      - flame.icon=spider
+      - flame.icon=spider-outline
       - traefik.enable=true
       - traefik.http.routers.krawl.rule=Host(`krawl.${DOMAIN}`)
       - traefik.http.routers.krawl.entrypoints=websecure
@@ -156,7 +156,7 @@ services:
       - flame.type=application
       - flame.name=Pi-hole
       - flame.url=https://pihole.${DOMAIN}
-      - flame.icon=security
+      - flame.icon=shield-outline
       - traefik.enable=true
       - traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)
       - traefik.http.routers.pihole.entrypoints=websecure

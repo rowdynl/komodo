@@ -32,7 +32,7 @@ services:
       - flame.type=application
       - flame.name=InfluxDB
       - flame.url=https://influxdb.${DOMAIN}
-      - flame.icon=database
+      - flame.icon=database-outline
       - traefik.enable=true
       - traefik.http.routers.influxdb.rule=Host(`influxdb.${DOMAIN}`)
       - traefik.http.routers.influxdb.entrypoints=websecure

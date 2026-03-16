@@ -22,7 +22,7 @@ services:
       - flame.type=application
       - flame.name=ESPHome
       - flame.url=https://esphome.${DOMAIN}
-      - flame.icon=chip
+      - flame.icon=memory
       - traefik.enable=true
       - traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)
       - traefik.http.routers.esphome.entrypoints=websecure
@@ -99,7 +99,7 @@ services:
       - flame.type=application
       - flame.name=Home Assistant
       - flame.url=https://has.${DOMAIN}
-      - flame.icon=home
+      - flame.icon=home-outline
       - traefik.enable=true
       - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
       - traefik.http.routers.home-assistant.entrypoints=websecure

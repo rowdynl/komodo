@@ -18,7 +18,7 @@ services:
       - flame.type=application
       - flame.name=Bazarr
       - flame.url=https://bazarr.${DOMAIN}
-      - flame.icon=film
+      - flame.icon=subtitles-outline
       - traefik.enable=true
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
       - traefik.http.routers.bazarr.entrypoints=websecure

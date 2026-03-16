@@ -69,7 +69,7 @@ services:
       - flame.type=application
       - flame.name=DBGate
       - flame.url=https://dbgate.${DOMAIN}
-      - flame.icon=database
+      - flame.icon=database-cog-outline
       - traefik.enable=true
       - traefik.http.routers.dbgate.rule=Host(`dbgate.${DOMAIN}`)
       - traefik.http.routers.dbgate.entrypoints=websecure
@@ -204,7 +204,7 @@ services:
       - flame.type=application
       - flame.name=Scanopy
       - flame.url=https://scanopy.${DOMAIN}
-      - flame.icon=server
+      - flame.icon=server-network-outline
       - traefik.enable=true
       - traefik.http.routers.scanopy.rule=Host(`scanopy.${DOMAIN}`)
       - traefik.http.routers.scanopy.entrypoints=websecure
