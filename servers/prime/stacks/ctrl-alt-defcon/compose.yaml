@@ -165,7 +165,7 @@ services:
       - flame.type=application
       - flame.name=Scrutiny
       - flame.url=https://scrutiny.${DOMAIN}
-      - flame.icon=hard-drive
+      - flame.icon=harddisk
       - traefik.enable=true
       - traefik.http.routers.scrutiny.rule=Host(`scrutiny.${DOMAIN}`)
       - traefik.http.routers.scrutiny.entrypoints=websecure
