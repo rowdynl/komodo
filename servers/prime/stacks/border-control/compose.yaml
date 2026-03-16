@@ -13,8 +13,7 @@ services:
       - cache
       - backend
       - web
-    env_file:
-      - ./env/authentik.env      
+    env_file: ./env/authentik.env      
     volumes:
       - type: volume
         source: authentik
@@ -50,8 +49,7 @@ services:
     networks:
       - cache
       - backend
-    env_file:
-      - ./env/authentik.env
+    env_file: ./env/authentik.env
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -75,8 +73,7 @@ services:
   crowdsec:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
-    env_file:
-      - ./env/crowdsec.env
+    env_file: ./env/crowdsec.env
     volumes:
       - traefik:/var/log/traefik:ro
       - crowdsec:/etc/crowdsec/
@@ -113,8 +110,7 @@ services:
   krawl:
     image: ghcr.io/blessedrebus/krawl:latest
     container_name: krawl
-    env_file:
-      - ./env/krawl.env
+    env_file: ./env/krawl.env
     networks:
       - web
     volumes:
@@ -146,8 +142,7 @@ services:
     container_name: pihole
     networks:
       - web
-    env_file:
-      - ./env/pihole.env      
+    env_file: ./env/pihole.env
     volumes:
       - pihole:/etc/pihole     
     cap_add:   
@@ -172,8 +167,7 @@ services:
     ports:
       - 80:80
       - 443:443    
-    env_file:
-      - ./env/traefik.env
+    env_file: ./env/traefik.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik:/etc/traefik   # static & dynamic config live here
@@ -183,8 +177,7 @@ services:
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
     container_name: wireguard
-    env_file:
-      - ./env/wireguard.env
+    env_file: ./env/wireguard.env
     volumes:
       - wireguard:/etc/wireguard
       - /lib/modules:/lib/modules:ro
