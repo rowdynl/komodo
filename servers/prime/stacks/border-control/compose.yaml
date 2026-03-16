@@ -95,6 +95,8 @@ services:
     image: ghcr.io/fdarveau/flame:latest
     container_name: flame
     env_file: ./env/flame.env
+    group_add:
+      - 988
     volumes:
       - flame:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
