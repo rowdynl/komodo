@@ -38,7 +38,7 @@ services:
       - flame.type=application
       - flame.name=code-server
       - flame.url=https://code-server.${DOMAIN}
-      - flame.icon=code-block-braces
+      - flame.icon=code-braces
       - traefik.enable=true
       - traefik.http.routers.code-server.rule=Host(`code-server.${DOMAIN}`)
       - traefik.http.routers.code-server.entrypoints=websecure
