@@ -32,14 +32,18 @@ services:
           subpath: custom-templates      
     restart: unless-stopped    
     labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.authentik.rule=Host(`auth.${DOMAIN}`)"
-    - "traefik.http.routers.authentik.entrypoints=websecure"
-    - "traefik.http.routers.authentik.tls=true"
-    - "traefik.http.routers.authentik.tls.certresolver=letsencrypt"
-    - "traefik.http.routers.authentik.priority=${TRAEFIK_PRIORITY}"
-    - "traefik.http.services.authentik.loadbalancer.server.port=9000"
-    - "traefik.http.services.authentik.loadbalancer.passhostheader=true"
+      - flame.type=application
+      - flame.name=Authentik
+      - flame.url=https://auth.${DOMAIN}
+      - flame.icon=key-chain
+      - traefik.enable=true"
+      - traefik.http.routers.authentik.rule=Host(`auth.${DOMAIN}`)
+      - traefik.http.routers.authentik.entrypoints=websecure
+      - traefik.http.routers.authentik.tls=true
+      - traefik.http.routers.authentik.tls.certresolver=letsencrypt
+      - traefik.http.routers.authentik.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.authentik.loadbalancer.server.port=9000
+      - traefik.http.services.authentik.loadbalancer.passhostheader=true
 
 
   authentik-worker:
