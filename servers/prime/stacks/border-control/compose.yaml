@@ -91,6 +91,7 @@ services:
   flame:
     image: pawelmalak/flame:latest
     container_name: flame
+    env_file: ./env/flame.env
     volumes:
       - flame:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
