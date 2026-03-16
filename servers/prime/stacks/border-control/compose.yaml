@@ -36,7 +36,7 @@ services:
       - flame.name=Authentik
       - flame.url=https://auth.${DOMAIN}
       - flame.icon=key-chain
-      - traefik.enable=true"
+      - traefik.enable=true
       - traefik.http.routers.authentik.rule=Host(`auth.${DOMAIN}`)
       - traefik.http.routers.authentik.entrypoints=websecure
       - traefik.http.routers.authentik.tls=true
