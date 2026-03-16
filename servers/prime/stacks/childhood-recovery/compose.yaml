@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     env_file:
       - ../../../global.env
-      - romm.env
+      - ./env/romm.env
     volumes:
       - type: volume
         source: romm
