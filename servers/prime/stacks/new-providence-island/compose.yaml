@@ -8,27 +8,31 @@ services:
     container_name: bazarr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - bazarr:/config
       - /mnt/prime-ds/movies:/movies
       - /mnt/prime-ds/series:/series
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)"
-      - "traefik.http.routers.bazarr.entrypoints=websecure"
-      - "traefik.http.routers.bazarr.tls.certresolver=letsencrypt"
-      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+      - flame.type=application
+      - flame.name=Bazarr
+      - flame.url=https://bazarr.${DOMAIN}
+      - flame.icon=film
+      - traefik.enable=true
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.bazarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.bazarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
 
   cleanuparr:
     image: ghcr.io/cleanuparr/cleanuparr:latest
     container_name: cleanuparr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - cleanuparr:/config
       - /mnt/downloads:/downloads
@@ -40,13 +44,17 @@ services:
       start_period: 30s
       retries: 3
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${DOMAIN}`)"
-      - "traefik.http.routers.cleanuparr.entrypoints=websecure"
-      - "traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.cleanuparr.middlewares=authentik@file"
-      - "traefik.http.services.cleanuparr.loadbalancer.server.port=11011"
+      - flame.type=application
+      - flame.name=CleanUpArr
+      - flame.url=https://cleanuparr.${DOMAIN}
+      - flame.icon=broom
+      - traefik.enable=true
+      - traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${DOMAIN}`)
+      - traefik.http.routers.cleanuparr.entrypoints=websecure
+      - traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt
+      - traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.cleanuparr.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.cleanuparr.loadbalancer.server.port=11011
 
   kometa:
     image: lscr.io/linuxserver/kometa:latest
@@ -64,20 +72,23 @@ services:
     container_name: lidarr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - lidarr:/config
       - /mnt/prime-ds/music:/music
       - /mnt/downloads:/downloads
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.lidarr.rule=Host(`lidarr.${DOMAIN}`)"
-      - "traefik.http.routers.lidarr.entrypoints=websecure"
-      - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.lidarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
+      - flame.type=application
+      - flame.name=Lidarr
+      - flame.url=https://lidarr.${DOMAIN}
+      - flame.icon=music-clef-treble
+      - traefik.enable=true
+      - traefik.http.routers.lidarr.rule=Host(`lidarr.${DOMAIN}`)
+      - traefik.http.routers.lidarr.entrypoints=websecure
+      - traefik.http.routers.lidarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.lidarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.lidarr.loadbalancer.server.port=8686
 
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
@@ -108,12 +119,17 @@ services:
       - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
     restart: unless-stopped 
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)"
-      - "traefik.http.routers.plex.entrypoints=websecure"
-      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.plex.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      - flame.type=application
+      - flame.name=Plex
+      - flame.url=https://plex.${DOMAIN}
+      - flame.icon=plex
+      - traefik.enable=true
+      - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
+      - traefik.http.routers.plex.entrypoints=websecure
+      - traefik.http.routers.plex.tls.certresolver=letsencrypt
+      - traefik.http.routers.plex.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.plex.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.plex.loadbalancer.server.port=32400
 
   plex-auto-languages:
     image: remirigal/plex-auto-languages:latest
@@ -138,12 +154,17 @@ services:
     volumes:
       - posterizarr:/config:rw
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.posterizarr.rule=Host(`posterizarr.${DOMAIN}`)"
-      - "traefik.http.routers.posterizarr.entrypoints=websecure"
-      - "traefik.http.routers.posterizarr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.posterizarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.posterizarr.loadbalancer.server.port=8000"
+      - flame.type=application
+      - flame.name=Posterizarr
+      - flame.url=https://posterizarr.${DOMAIN}
+      - flame.icon=image-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.posterizarr.rule=Host(`posterizarr.${DOMAIN}`)
+      - traefik.http.routers.posterizarr.entrypoints=websecure
+      - traefik.http.routers.posterizarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.posterizarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.posterizarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.posterizarr.loadbalancer.server.port=8000
 
   profilarr:
     image: santiagosayshey/profilarr:latest
@@ -152,73 +173,90 @@ services:
       - web
     volumes:
       - profilarr:/config
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.profilarr.rule=Host(`profilarr.${DOMAIN}`)"
-      - "traefik.http.routers.profilarr.entrypoints=websecure"
-      - "traefik.http.routers.profilarr.tls.certresolver=letsenencrypt"
-      - "traefik.http.routers.profilarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.profilarr.loadbalancer.server.port=6868"
+      - flame.type=application
+      - flame.name=Profilarr
+      - flame.url=https://profilarr.${DOMAIN}
+      - flame.icon=search-web
+      - traefik.enable=true
+      - traefik.http.routers.profilarr.rule=Host(`profilarr.${DOMAIN}`)
+      - traefik.http.routers.profilarr.entrypoints=websecure
+      - traefik.http.routers.profilarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.profilarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.profilarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.profilarr.loadbalancer.server.port=6868
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - prowlarr:/config
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)"
-      - "traefik.http.routers.prowlarr.entrypoints=websecure"
-      - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+      - flame.type=application
+      - flame.name=Prowlarr
+      - flame.url=https://prowlarr.${DOMAIN}
+      - flame.icon=search-web
+      - traefik.enable=true
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.prowlarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - radarr:/config
       - /mnt/prime-ds/movies:/movies
       - /mnt/downloads:/downloads
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)"
-      - "traefik.http.routers.radarr.entrypoints=websecure"
-      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.radarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - flame.type=application
+      - flame.name=Radarr
+      - flame.url=https://radarr.${DOMAIN}
+      - flame.icon=movie-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.radarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.radarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
   
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - sabnzbd:/config
       - /mnt/downloads:/downloads
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)"
-      - "traefik.http.routers.sabnzbd.entrypoints=websecure"
-      - "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.sabnzbd.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.sabnzbd.loadbalancer.server.port=3389"
+      - flame.type=application
+      - flame.name=SABnzbd
+      - flame.url=https://sabnzbd.${DOMAIN}
+      - flame.icon=cloud-download-outline
+      - traefik.enable=true
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt
+      - traefik.http.routers.sabnzbd.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.sabnzbd.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=3389
+  
   seerr:
     container_name: seerr
     image: ghcr.io/seerr-team/seerr:latest
@@ -227,8 +265,7 @@ services:
     restart: unless-stopped
     volumes:
       - seerr:/app/config
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
       start_period: 20s
@@ -236,50 +273,63 @@ services:
       interval: 15s
       retries: 3
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)"
-      - "traefik.http.routers.seerr.entrypoints=websecure"
-      - "traefik.http.routers.seerr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.seerr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.seerr.loadbalancer.server.port=5055"
+      - flame.type=application
+      - flame.name=Seerr
+      - flame.url=https://seerr.${DOMAIN}
+      - flame.icon=movie-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)
+      - traefik.http.routers.seerr.entrypoints=websecure
+      - traefik.http.routers.seerr.tls.certresolver=letsencrypt
+      - traefik.http.routers.seerr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.seerr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.seerr.loadbalancer.server.port=5055
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - sonarr:/config
       - /mnt/downloads:/downloads
       - /mnt/prime-ds/series:/tv
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)"
-      - "traefik.http.routers.sonarr.entrypoints=websecure"
-      - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.sonarr.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - flame.type=application
+      - flame.name=Sonarr
+      - flame.url=https://sonarr.${DOMAIN}
+      - flame.icon=movie-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.sonarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.sonarr.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
 
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     networks:
       - web
-    env_file:
-      - ../../../global.env
+    env_file: ../../../global.env
     volumes:
       - tautulli:/config
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tautulli.rule=Host(`tautulli.${DOMAIN}`)"
-      - "traefik.http.routers.tautulli.entrypoints=websecure"
-      - "traefik.http.routers.tautulli.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.tautulli.loadbalancer.server.port=8181"
+      - flame.type=application
+      - flame.name=Tautulli
+      - flame.url=https://tautulli.${DOMAIN}
+      - flame.icon=eye-check-outline
+      - traefik.enable=true
+      - traefik.http.routers.tautulli.rule=Host(`tautulli.${DOMAIN}`)
+      - traefik.http.routers.tautulli.entrypoints=websecure
+      - traefik.http.routers.tautulli.tls.certresolver=letsencrypt
+      - traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.tautulli.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.services.tautulli.loadbalancer.server.port=8181
 
   transmission:
     image: haugene/transmission-openvpn
@@ -304,14 +354,18 @@ services:
     healthcheck:
         disable: true
     labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)"
-      - "traefik.http.routers.transmission.entrypoints=websecure"
-      - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.routers.transmission.middlewares=authentik@file"
-      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+      - flame.type=application
+      - flame.name=Transmission
+      - flame.url=https://transmission.${DOMAIN}
+      - flame.icon=cloud-download-outline
+      - traefik.docker.network=web
+      - traefik.enable=true
+      - traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)
+      - traefik.http.routers.transmission.entrypoints=websecure
+      - traefik.http.routers.transmission.tls.certresolver=letsencrypt
+      - traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.transmission.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.transmission.loadbalancer.server.port=9091
 
 networks:
   dirty-water:

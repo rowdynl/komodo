@@ -156,7 +156,7 @@ services:
       - flame.type=application
       - flame.name=Pi-hole
       - flame.url=https://pihole.${DOMAIN}
-      - flame.icon=mdi-security
+      - flame.icon=security
       - traefik.enable=true
       - traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)
       - traefik.http.routers.pihole.entrypoints=websecure
