@@ -34,6 +34,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Authentik
+      - flame.category=Border Control
       - flame.url=https://auth.${DOMAIN}
       - flame.icon=key-chain
       - traefik.enable=true
@@ -91,7 +92,7 @@ services:
     restart: unless-stopped
 
   flame:
-    image: pawelmalak/flame:latest
+    image: ghcr.io/fdarveau/flame:latest
     container_name: flame
     env_file: ./env/flame.env
     volumes:
@@ -124,6 +125,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Krawl
+      - flame.category=Border Control
       - flame.url=https://krawl.${DOMAIN}${KRAWL_DASHBOARD_SECRET_PATH}
       - flame.icon=spider-outline
       - traefik.enable=true
@@ -155,6 +157,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Pi-hole
+      - flame.category=Border Control
       - flame.url=https://pihole.${DOMAIN}
       - flame.icon=shield-outline
       - traefik.enable=true
@@ -184,6 +187,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Traefik
+      - flame.category=Border Control
       - flame.url=https://traefik.${DOMAIN}
       - flame.icon=routes
       
@@ -214,6 +218,7 @@ services:
       - komodo.skip=true
       - flame.type=application
       - flame.name=WireGuard
+      - flame.category=Border Control
       - flame.url=https://wireguard.${DOMAIN}
       - flame.icon=vpn
       - traefik.enable=true
