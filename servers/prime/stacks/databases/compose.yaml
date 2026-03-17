@@ -8,8 +8,6 @@ services:
     networks:
       backend:
       web:
-    #volumes:
-    #  - adminneao:
     restart: unless-stopped
     labels:
       - flame.type=application
