@@ -16,14 +16,14 @@ services:
       - flame.category=Databases
       - flame.name=AdminNeo
       - flame.url=https://dba.${DOMAIN}
-      - flame.icon=database-outline
+      - flame.icon=database-cog-outline
       - traefik.enable=true
       - traefik.http.routers.adminneo.rule=Host(`dba.${DOMAIN}`)
       - traefik.http.routers.adminneo.entrypoints=websecure
       - traefik.http.routers.adminneo.tls.certresolver=letsencrypt
       - traefik.http.routers.adminneo.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.adminneo.middlewares=crowdsec@file,geoblock@file,authentik@file
-      - traefik.http.services.adminneo.loadbalancer.server.port=8086
+      - traefik.http.services.adminneo.loadbalancer.server.port=8080
 
   influxdb:
     image: docker.io/influxdb:latest
@@ -56,7 +56,7 @@ services:
       - flame.category=Databases
       - flame.name=InfluxDB
       - flame.url=https://influxdb.${DOMAIN}
-      - flame.icon=database-outline
+      - flame.icon=database-cog-outline
       - traefik.enable=true
       - traefik.http.routers.influxdb.rule=Host(`influxdb.${DOMAIN}`)
       - traefik.http.routers.influxdb.entrypoints=websecure
