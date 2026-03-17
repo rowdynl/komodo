@@ -288,6 +288,8 @@ volumes:
     external: true
   grafana:
     external: true
+  nextexplorer:
+    external: true
   pgadmin:
     external: true
   phpmyadmin:
