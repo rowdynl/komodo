@@ -161,7 +161,9 @@ services:
       - /repos:/mnt/repos
     networks:
       - web
-    env_file: ./env/nextexplorer.env
+    env_file: 
+      - ../../../env/common.env
+      - ./env/nextexplorer.env
     labels:
       - flame.type=application
       - flame.category=Utility Belt
