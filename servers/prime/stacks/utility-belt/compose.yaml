@@ -208,6 +208,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Scanopy
+      - flame.category=Utility Belt
       - flame.url=https://scanopy.${DOMAIN}
       - flame.icon=server-network-outline
       - traefik.enable=true
@@ -232,6 +233,7 @@ services:
     labels:
       - flame.type=application
       - flame.name=Termix
+      - flame.category=Utility Belt
       - flame.url=https://termix.${DOMAIN}
       - flame.icon=console
       - traefik.enable=true
