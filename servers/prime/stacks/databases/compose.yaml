@@ -2,6 +2,29 @@
 name: databases
 
 services:
+  adminneo:
+    image: adminneoorg/adminneo:latest
+    container_name: adminneo
+    networks:
+      backend:
+      web:
+    #volumes:
+    #  - adminneao:
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Databases
+      - flame.name=AdminNeo
+      - flame.url=https://dba.${DOMAIN}
+      - flame.icon=database-outline
+      - traefik.enable=true
+      - traefik.http.routers.adminneo.rule=Host(`dba.${DOMAIN}`)
+      - traefik.http.routers.adminneo.entrypoints=websecure
+      - traefik.http.routers.adminneo.tls.certresolver=letsencrypt
+      - traefik.http.routers.adminneo.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.adminneo.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.adminneo.loadbalancer.server.port=8086
+
   influxdb:
     image: docker.io/influxdb:latest
     container_name: influxdb
