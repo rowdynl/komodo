@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Bazarr
       - flame.url=https://bazarr.${DOMAIN}
       - flame.icon=subtitles-outline
@@ -46,7 +46,7 @@ services:
       retries: 3
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=CleanUpArr
       - flame.url=https://cleanuparr.${DOMAIN}
       - flame.icon=broom
@@ -82,7 +82,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Lidarr
       - flame.url=https://lidarr.${DOMAIN}
       - flame.icon=music-clef-treble
@@ -123,10 +123,11 @@ services:
     restart: unless-stopped 
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Pirate’s Tavern
       - flame.name=Plex
       - flame.url=https://plex.${DOMAIN}
       - flame.icon=plex
+      - flame.order=1
       - traefik.enable=true
       - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
       - traefik.http.routers.plex.entrypoints=websecure
@@ -159,7 +160,7 @@ services:
       - posterizarr:/config:rw
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Posterizarr
       - flame.url=https://posterizarr.${DOMAIN}
       - flame.icon=image-search-outline
@@ -182,7 +183,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Profilarr
       - flame.url=https://profilarr.${DOMAIN}
       - flame.icon=search-web
@@ -205,7 +206,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Prowlarr
       - flame.url=https://prowlarr.${DOMAIN}
       - flame.icon=search-web
@@ -230,7 +231,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Radarr
       - flame.url=https://radarr.${DOMAIN}
       - flame.icon=movie-search-outline
@@ -254,7 +255,8 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Pirate’s Tavern
+      - flame.order=4
       - flame.name=SABnzbd
       - flame.url=https://sabnzbd.${DOMAIN}
       - flame.icon=cloud-download-outline
@@ -283,7 +285,8 @@ services:
       retries: 3
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Pirate’s Tavern
+      - flame.order=2
       - flame.name=Seerr
       - flame.url=https://seerr.${DOMAIN}
       - flame.icon=movie-search-outline
@@ -308,7 +311,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Captain’s Quarters
       - flame.name=Sonarr
       - flame.url=https://sonarr.${DOMAIN}
       - flame.icon=movie-search-outline
@@ -331,7 +334,8 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Pirate’s Tavern
+      - Flame.order=3
       - flame.name=Tautulli
       - flame.url=https://tautulli.${DOMAIN}
       - flame.icon=eye-check-outline
@@ -367,7 +371,8 @@ services:
         disable: true
     labels:
       - flame.type=application
-      - flame.category=New Providence Island
+      - flame.category=Pirate’s Tavern
+      - flame.order=5
       - flame.name=Transmission
       - flame.url=https://transmission.${DOMAIN}
       - flame.icon=cloud-download-outline
