@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=Absolute nonsense
+      - flame.category=Fun and games
       - flame.name=Hypermind
       - flame.url=https://hypermind.${DOMAIN}
       - flame.icon=brain
