@@ -20,10 +20,11 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=Home Automation
+      - flame.category=1. Home Automation
       - flame.name=ESPHome
       - flame.url=https://esphome.${DOMAIN}
       - flame.icon=memory
+      - flame.order=3
       - traefik.enable=true
       - traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)
       - traefik.http.routers.esphome.entrypoints=websecure
@@ -68,10 +69,11 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=Home Automation
+      - flame.category=1. Home Automation
       - flame.name=Frigate
       - flame.url=https://frigate.${DOMAIN}
       - flame.icon=cctv
+      - flame.order=2
       - traefik.enable=true
       - traefik.http.routers.frigate-rc.rule=Host(`frigate.${DOMAIN}`)
       - traefik.http.routers.frigate-rc.entrypoints=websecure
@@ -99,10 +101,11 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=Home Automation
+      - flame.category=1. Home Automation
       - flame.name=Home Assistant
       - flame.url=https://has.${DOMAIN}
       - flame.icon=home-outline
+      - flame.order=1
       - traefik.enable=true
       - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
       - traefik.http.routers.home-assistant.entrypoints=websecure
@@ -151,10 +154,11 @@ services:
     restart: unless-stopped
     labels:
       - flame.type=application
-      - flame.category=Home Automation
+      - flame.category=1. Home Automation
       - flame.name=Node-RED
       - flame.url=https://nodered.${DOMAIN}
       - flame.icon=state-machine
+      - flame.order=4
       - traefik.enable=true
       - traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)
       - traefik.http.routers.node-red.entrypoints=websecure
