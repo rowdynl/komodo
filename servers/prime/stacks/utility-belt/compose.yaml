@@ -162,7 +162,7 @@ services:
     networks:
       - web
     env_file: 
-      - ../../../env/common.env
+      - - ../../../global.env
       - ./env/nextexplorer.env
     labels:
       - flame.type=application
