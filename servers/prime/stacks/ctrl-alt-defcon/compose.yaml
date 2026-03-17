@@ -205,6 +205,31 @@ services:
       - traefik.http.routers.speedtest-tracker.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.speedtest-tracker.loadbalancer.server.port=80
   
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    networks:
+      - backend
+      - cache
+      - monitoring
+      - web
+    volumes:
+      - uptime-kuma:/app/data
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=CTRL ALT DEFCON
+      - flame.name=Uptime Kuma
+      - flame.url=https://uptime-kuma.${DOMAIN}
+      - flame.icon=clock-outline
+      - traefik.enable=true
+      - traefik.http.routers.uptime-kuma.rule=Host(`uptime-kuma.${DOMAIN}`)
+      - traefik.http.routers.uptime-kuma.entrypoints=websecure
+      - traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt
+      - traefik.http.routers.uptime-kuma.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.uptime-kuma.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
+
   zfs-exporter:
     image: matusnovak/prometheus-zfs:latest
     container_name: zfs-exporter
@@ -233,4 +258,6 @@ volumes:
   scrutiny:
     external: true
   speedtest-tracker:
+    external: true
+  uptime-kuma:
     external: true
