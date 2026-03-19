@@ -29,7 +29,7 @@ services:
       - flame.category=BACKUPS
       - flame.name=Duplicati
       - flame.url=https://duplicati.${DOMAIN}
-      - flame.icon=backup-outline
+      - flame.icon=cloud-upload-outline
       - traefik.enable=true
       - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
       - traefik.http.routers.duplicati.entrypoints=websecure
