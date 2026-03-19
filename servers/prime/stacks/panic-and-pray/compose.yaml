@@ -1,0 +1,48 @@
+# A stack dedicated to surviving data loss by threatening your data back into existence.
+
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    env_file:
+      - ../../../global.env
+      - ./env/duplicati.env    
+    volumes:
+      - type: volume
+        source: duplicati
+        target: /config
+        volume:
+          subpath: config
+      - type: volume
+        source: duplicati
+        target: /backups
+        volume:
+          subpath: backups
+      - type: volume
+        source: duplicati
+        target: /source
+        volume:
+          subpath: source
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=BACKUPS
+      - flame.name=Duplicati
+      - flame.url=https://duplicati.${DOMAIN}
+      - flame.icon=backup-outline
+      - traefik.enable=true
+      - traefik.http.routers.duplicati.rule=Host(`duplicati.${DOMAIN}`)
+      - traefik.http.routers.duplicati.entrypoints=websecure
+      - traefik.http.routers.duplicati.tls.certresolver=letsencrypt
+      - traefik.http.routers.duplicati.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.duplicati.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.duplicati.loadbalancer.server.port=8200
+
+
+networks:
+  web:
+    external: true
+
+volumes:
+  duplicati:
+    external: true
