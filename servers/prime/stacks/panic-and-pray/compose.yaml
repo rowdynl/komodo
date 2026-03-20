@@ -6,7 +6,9 @@ services:
     container_name: duplicati
     env_file:
       - ../../../global.env
-      - ./env/duplicati.env    
+      - ./env/duplicati.env 
+    networks:
+      web:   
     volumes:
       - type: volume
         source: duplicati
