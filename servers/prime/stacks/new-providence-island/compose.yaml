@@ -11,8 +11,8 @@ services:
     env_file: ../../../global.env
     volumes:
       - bazarr:/config
-      - /mnt/prime-ds/movies:/movies
-      - /mnt/prime-ds/series:/series
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -36,7 +36,7 @@ services:
     env_file: ../../../global.env
     volumes:
       - cleanuparr:/config
-      - /mnt/downloads:/downloads
+      - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://cleanuparr:11011/health"]
@@ -77,8 +77,8 @@ services:
     env_file: ../../../global.env
     volumes:
       - lidarr:/config
-      - /mnt/prime-ds/music:/music
-      - /mnt/downloads:/downloads
+      - ${VOLUME_PATH_MUSIC_HOST}:${VOLUME_PATH_MUSIC_CONTAINER}
+      - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -116,9 +116,9 @@ services:
       - '/mnt/prime-ds/movies:/volume1/movies'
       - '/mnt/prime-ds/music:/volume1/music'
       - '/mnt/prime-ds/series:/volume1/series'
-      - '/mnt/prime-ds/movies:/movies'
-      - '/mnt/prime-ds/music:/music'
-      - '/mnt/prime-ds/series:/series'
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
+      - ${VOLUME_PATH_MUSIC_HOST}:${VOLUME_PATH_MUSIC_CONTAINER}
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
       - '/usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro'
     restart: unless-stopped 
     labels:
@@ -226,8 +226,8 @@ services:
     env_file: ../../../global.env
     volumes:
       - radarr:/config
-      - /mnt/prime-ds/movies:/movies
-      - /mnt/downloads:/downloads
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
+      - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -251,7 +251,7 @@ services:
     env_file: ../../../global.env
     volumes:
       - sabnzbd:/config
-      - /mnt/downloads:/downloads
+      - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -306,8 +306,8 @@ services:
     env_file: ../../../global.env
     volumes:
       - sonarr:/config
-      - /mnt/downloads:/downloads
-      - /mnt/prime-ds/series:/tv
+      - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -346,6 +346,30 @@ services:
       - traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.tautulli.middlewares=authentik@file
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
+
+  trailarr:
+    image: nandyalu/trailarr:latest
+    container_name: trailarr
+    env_file: ../../../global.env
+    volumes:
+      - trailarr:/config
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Captain’s Quarters
+      - flame.name=Trailarr
+      - flame.url=https://trailarr.${DOMAIN}
+      - flame.icon=movie-roll
+      - traefik.docker.network=web
+      - traefik.enable=true
+      - traefik.http.routers.trailarr.rule=Host(`trailarr.${DOMAIN}`)
+      - traefik.http.routers.trailarr.entrypoints=websecure
+      - traefik.http.routers.trailarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.trailarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.trailarr.middlewares=authentik@file
+      - traefik.http.services.trailarr.loadbalancer.server.port=7889
 
   transmission:
     image: haugene/transmission-openvpn
