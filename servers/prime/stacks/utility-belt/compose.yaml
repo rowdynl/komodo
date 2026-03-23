@@ -5,6 +5,27 @@
 name: utility-belt
 
 services:
+  bentopdf:
+    # simple mode - ghcr.io/alam00000/bentopdf-simple:latest
+    # default mode - ghcr.io/alam00000/bentopdf:latest
+    image: ghcr.io/alam00000/bentopdf-simple:latest
+    container_name: bentopdf
+    networks: web
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Utility Belt
+      - flame.name=BentoPDF
+      - flame.url=https://bentopdf.${DOMAIN}
+      - flame.icon=file-pdf
+      - traefik.enable=true
+      - traefik.http.routers.bentopdf.rule=Host(`bentopdf.${DOMAIN}`)
+      - traefik.http.routers.bentopdf.entrypoints=websecure
+      - traefik.http.routers.bentopdf.tls.certresolver=letsencrypt
+      - traefik.http.routers.bentopdf.priority=${TRAEFIK_PRIORITY}
+      #- traefik.http.routers.bentopdf.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.services.bentopdf.loadbalancer.server.port=8080
+
   code-server:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
