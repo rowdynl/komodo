@@ -291,7 +291,7 @@ services:
       - traefik.http.routers.sprout-track.entrypoints=websecure
       - traefik.http.routers.sprout-track.tls.certresolver=letsencrypt
       - traefik.http.routers.sprout-track.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.sprout-track.loadbalancer.server.port=60072
+      - traefik.http.services.sprout-track.loadbalancer.server.port=3000
 
   termix:
     image: ghcr.io/lukegus/termix:latest
