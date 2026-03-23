@@ -347,7 +347,9 @@ services:
   trailarr:
     image: nandyalu/trailarr:latest
     container_name: trailarr
-    env_file: ../../../global.env
+    env_file: 
+      - ../../../global.env
+      - ./env/trailarr.env
     networks:
       - web
     volumes:
