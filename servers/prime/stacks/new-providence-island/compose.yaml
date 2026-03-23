@@ -352,6 +352,8 @@ services:
       - ./env/trailarr.env
     networks:
       - web
+    devices:
+      - /dev/dri:/dev/dri
     volumes:
       - trailarr:/config
       - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
