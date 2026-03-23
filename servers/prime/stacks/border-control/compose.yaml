@@ -15,21 +15,9 @@ services:
       - web
     env_file: ./env/authentik.env      
     volumes:
-      - type: volume
-        source: authentik
-        target: /certs
-        volume:
-          subpath: certs
-      - type: volume
-        source: authentik
-        target: /data
-        volume:
-          subpath: data
-      - type: volume
-        source: authentik
-        target: /templates
-        volume:
-          subpath: custom-templates      
+      - authentik-certs:/certs
+      - authentik-data:/data
+      - authentik-templates:/templates
     restart: unless-stopped    
     labels:
       - flame.type=application
@@ -58,22 +46,10 @@ services:
     env_file: ./env/authentik.env
     user: root
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - type: volume
-        source: authentik
-        target: /certs
-        volume:
-          subpath: certs
-      - type: volume
-        source: authentik
-        target: /data
-        volume:
-          subpath: data
-      - type: volume
-        source: authentik
-        target: /templates
-        volume:
-          subpath: custom-templates      
+      - /var/run/docker.sock:/var/run/docker.sock     
+      - authentik-certs:/certs
+      - authentik-data:/data
+      - authentik-templates:/templates    
     restart: unless-stopped
     
   crowdsec:
@@ -241,7 +217,11 @@ networks:
     external: true
 
 volumes:
-  authentik:
+  authentik-certs:
+    external: true
+  authentik-data:
+    external: true
+  authentik-templates:
     external: true
   crowdsec:
     external: true
