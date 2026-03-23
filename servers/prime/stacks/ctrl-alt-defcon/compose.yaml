@@ -45,7 +45,7 @@ services:
       - traefik.http.routers.godns.entrypoints=websecure
       - traefik.http.routers.godns.tls.certresolver=letsencrypt
       - traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.godns.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.routers.godns.middlewares=authentik@file
       - traefik.http.services.godns.loadbalancer.server.port=9099
 
   mysqld-exporter:
@@ -104,7 +104,7 @@ services:
       - traefik.http.routers.prometheus.entrypoints=websecure
       - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
       - traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.prometheus.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.prometheus.middlewares=authentik@file
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
 
   redis-exporter:
@@ -178,7 +178,7 @@ services:
       - traefik.http.routers.scrutiny.entrypoints=websecure
       - traefik.http.routers.scrutiny.tls.certresolver=letsencrypt
       - traefik.http.routers.scrutiny.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.scrutiny.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.scrutiny.middlewares=authentik@file
       - traefik.http.services.scrutiny.loadbalancer.server.port=8080
 
   speedtest-tracker:
@@ -206,7 +206,7 @@ services:
       - traefik.http.routers.speedtest-tracker.entrypoints=websecure
       - traefik.http.routers.speedtest-tracker.tls.certresolver=letsencrypt
       - traefik.http.routers.speedtest-tracker.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.speedtest-tracker.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.routers.speedtest-tracker.middlewares=authentik@file
       - traefik.http.services.speedtest-tracker.loadbalancer.server.port=80
   
   uptime-kuma:
@@ -231,7 +231,7 @@ services:
       - traefik.http.routers.uptime-kuma.entrypoints=websecure
       - traefik.http.routers.uptime-kuma.tls.certresolver=letsencrypt
       - traefik.http.routers.uptime-kuma.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.uptime-kuma.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.uptime-kuma.middlewares=authentik@file
       - traefik.http.services.uptime-kuma.loadbalancer.server.port=3001
 
   zfs-exporter:

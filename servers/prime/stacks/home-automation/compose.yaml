@@ -29,7 +29,7 @@ services:
       - traefik.http.routers.esphome.rule=Host(`esphome.${DOMAIN}`)
       - traefik.http.routers.esphome.entrypoints=websecure
       - traefik.http.routers.esphome.tls.certresolver=letsencrypt
-      - traefik.http.routers.esphome.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.esphome.middlewares=authentik@file
       - traefik.http.services.esphome.loadbalancer.server.port=6052
 
   frigate:
@@ -78,7 +78,7 @@ services:
       - traefik.http.routers.frigate-rc.rule=Host(`frigate.${DOMAIN}`)
       - traefik.http.routers.frigate-rc.entrypoints=websecure
       - traefik.http.routers.frigate-rc.tls.certresolver=letsencrypt
-      - traefik.http.routers.frigate-rc.middlewares=crowdsec@file,geoblock@file
+      #- traefik.http.routers.frigate-rc.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.frigate-rc.loadbalancer.server.port=8971
 
   home-assistant:
@@ -110,7 +110,7 @@ services:
       - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
       - traefik.http.routers.home-assistant.entrypoints=websecure
       - traefik.http.routers.home-assistant.tls.certresolver=letsencrypt
-      - traefik.http.routers.home-assistant.middlewares=crowdsec@file,geoblock@file
+      #- traefik.http.routers.home-assistant.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.home-assistant.loadbalancer.server.port=8123
 
   mosquitto:
@@ -163,7 +163,7 @@ services:
       - traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)
       - traefik.http.routers.node-red.entrypoints=websecure
       - traefik.http.routers.node-red.tls.certresolver=letsencrypt
-      - traefik.http.routers.node-red.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.node-red.middlewares=authentik@file
       - traefik.http.services.node-red.loadbalancer.server.port=1880
 
 networks:

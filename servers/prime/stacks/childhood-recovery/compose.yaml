@@ -45,7 +45,6 @@ services:
       - traefik.http.routers.romm.entrypoints=websecure
       - traefik.http.routers.romm.tls.certresolver=letsencrypt
       - traefik.http.routers.romm.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.romm.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.romm.loadbalancer.server.port=8080
 
 networks:

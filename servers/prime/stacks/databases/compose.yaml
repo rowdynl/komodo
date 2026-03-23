@@ -20,7 +20,7 @@ services:
       - traefik.http.routers.adminneo.entrypoints=websecure
       - traefik.http.routers.adminneo.tls.certresolver=letsencrypt
       - traefik.http.routers.adminneo.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.adminneo.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.adminneo.middlewares=authentik@file
       - traefik.http.services.adminneo.loadbalancer.server.port=8080
 
   influxdb:
@@ -60,7 +60,7 @@ services:
       - traefik.http.routers.influxdb.entrypoints=websecure
       - traefik.http.routers.influxdb.tls.certresolver=letsencrypt
       - traefik.http.routers.influxdb.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.influxdb.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.influxdb.middlewares=authentik@file
       - traefik.http.services.influxdb.loadbalancer.server.port=8086
       
   mariadb:

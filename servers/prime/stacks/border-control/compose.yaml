@@ -87,7 +87,7 @@ services:
     - traefik.http.routers.flame.tls=true
     - traefik.http.routers.flame.tls.certresolver=letsencrypt
     - traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}
-    - traefik.http.routers.flame.middlewares=crowdsec@file,geoblock@file,authentik@file
+    - traefik.http.routers.flame.middlewares=authentik@file
     - traefik.http.services.flame.loadbalancer.server.port=5005
 
   krawl:
@@ -142,7 +142,7 @@ services:
       - traefik.http.routers.pihole.entrypoints=websecure
       - traefik.http.routers.pihole.tls.certresolver=letsencrypt
       - traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.pihole.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.pihole.middlewares=authentik@file
       - traefik.http.services.pihole.loadbalancer.server.port=80
       
   traefik:
@@ -203,7 +203,7 @@ services:
       - traefik.http.routers.wireguard.entrypoints=websecure
       - traefik.http.routers.wireguard.tls.certresolver=letsencrypt
       - traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.wireguard.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.wireguard.middlewares=authentik@file
       - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
 

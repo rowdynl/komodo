@@ -45,7 +45,7 @@ services:
       - traefik.http.routers.code-server.entrypoints=websecure
       - traefik.http.routers.code-server.tls.certresolver=letsencrypt
       - traefik.http.routers.code-server.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.code-server.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.code-server.middlewares=authentik@file
       - traefik.http.services.code-server.loadbalancer.server.port=8443
   
   dbgate:
@@ -77,7 +77,7 @@ services:
       - traefik.http.routers.dbgate.entrypoints=websecure
       - traefik.http.routers.dbgate.tls.certresolver=letsencrypt
       - traefik.http.routers.dbgate.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.dbgate.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.routers.dbgate.middlewares=authentik@file
       - traefik.http.services.dbgate.loadbalancer.server.port=3000
 
   firefox:
@@ -99,7 +99,7 @@ services:
       - traefik.http.routers.firefox.entrypoints=websecure
       - traefik.http.routers.firefox.tls.certresolver=letsencrypt
       - traefik.http.routers.firefox.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.firefox.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.firefox.middlewares=authentik@file
       - traefik.http.services.firefox.loadbalancer.server.port=5800
 
   it-tools: # https://github.com/CorentinTh/it-tools
@@ -119,7 +119,7 @@ services:
       - traefik.http.routers.it-tools.entrypoints=websecure
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt
       - traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.it-tools.middlewares=crowdsec@file,geoblock@file
+      #- traefik.http.routers.it-tools.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
   grafana:
@@ -147,7 +147,7 @@ services:
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.routers.grafana.tls.certresolver=letsencrypt
       - traefik.http.routers.grafana.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.grafana.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.grafana.middlewares=authentik@file
       - traefik.http.services.grafana.loadbalancer.server.port=3000
 
   nextexplorer:
@@ -175,7 +175,7 @@ services:
       - traefik.http.routers.nextexplorer.entrypoints=websecure
       - traefik.http.routers.nextexplorer.tls.certresolver=letsencrypt
       - traefik.http.routers.nextexplorer.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.nextexplorer.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.nextexplorer.middlewares=authentik@file
       - traefik.http.services.nextexplorer.loadbalancer.server.port=3000
       
 
@@ -245,7 +245,7 @@ services:
       - traefik.http.routers.scanopy.entrypoints=websecure
       - traefik.http.routers.scanopy.tls.certresolver=letsencrypt
       - traefik.http.routers.scanopy.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.scanopy.middlewares=crowdsec@file,geoblock@file,authentik@file
+      - traefik.http.routers.scanopy.middlewares=authentik@file
       - traefik.http.services.scanopy.loadbalancer.server.port=60072
 
   termix:
@@ -270,7 +270,7 @@ services:
       - traefik.http.routers.termix.entrypoints=websecure
       - traefik.http.routers.termix.tls.certresolver=letsencrypt
       - traefik.http.routers.termix.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.termix.middlewares=crowdsec@file,geoblock@file
+      - traefik.http.routers.termix.middlewares=authentik@file
       - traefik.http.services.termix.loadbalancer.server.port=8080
 
 networks:
