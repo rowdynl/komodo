@@ -344,40 +344,6 @@ services:
       - traefik.http.routers.tautulli.middlewares=authentik@file
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
 
-  trailarr:
-    image: nandyalu/trailarr:latest
-    container_name: trailarr
-    env_file: 
-      - ../../../global.env
-      - ./env/trailarr.env
-    networks:
-      - web
-    device_cgroup_rules:
-      - 'c 226:* rmw'    
-    group_add:
-      - 'video'  # "44"
-      - 'render' # "993"
-    devices:
-      - /dev/dri:/dev/dri
-    volumes:
-      - trailarr:/config
-      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
-      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
-    restart: unless-stopped
-    labels:
-      - flame.type=application
-      - flame.category=Captain’s Quarters
-      - flame.name=Trailarr
-      - flame.url=https://trailarr.${DOMAIN}
-      - flame.icon=movie-roll
-      - traefik.docker.network=web
-      - traefik.enable=true
-      - traefik.http.routers.trailarr.rule=Host(`trailarr.${DOMAIN}`)
-      - traefik.http.routers.trailarr.entrypoints=websecure
-      - traefik.http.routers.trailarr.tls.certresolver=letsencrypt
-      - traefik.http.routers.trailarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.trailarr.middlewares=authentik@file
-      - traefik.http.services.trailarr.loadbalancer.server.port=7889
 
   transmission:
     image: haugene/transmission-openvpn
@@ -457,8 +423,6 @@ volumes:
   sonarr:
     external: true
   tautulli:
-    external: true
-  trailarr:
     external: true
   transmission:
     external: true
