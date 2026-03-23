@@ -352,6 +352,11 @@ services:
       - ./env/trailarr.env
     networks:
       - web
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
     devices:
       - /dev/dri:/dev/dri
     volumes:
