@@ -270,29 +270,7 @@ services:
       - traefik.http.routers.scanopy.middlewares=authentik@file
       - traefik.http.services.scanopy.loadbalancer.server.port=60072
 
-  sprout-track:
-    image: sprouttrack/sprout-track:latest
-    container_name: sprout-track
-    env_file:
-      - ../../../global.env
-    networks:
-      - web
-    volumes:
-      - sprout-track:/app
-      - sprout-track-db:/db
-    labels:
-      - flame.type=application
-      - flame.name=Sprout Track
-      - flame.category=Utility Belt
-      - flame.url=https://kiddo.${DOMAIN}
-      - flame.icon=baby-face-outline
-      - traefik.enable=true
-      - traefik.http.routers.sprout-track.rule=Host(`kiddo.${DOMAIN}`)
-      - traefik.http.routers.sprout-track.entrypoints=websecure
-      - traefik.http.routers.sprout-track.tls.certresolver=letsencrypt
-      - traefik.http.routers.sprout-track.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.sprout-track.loadbalancer.server.port=3000
-
+  
   termix:
     image: ghcr.io/lukegus/termix:latest
     container_name: termix
@@ -342,10 +320,6 @@ volumes:
   phpmyadmin:
     external: true
   scanopy:
-    external: true
-  sprout-track:
-    external: true
-  sprout-track-db:
     external: true
   termix:
     external: true
