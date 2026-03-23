@@ -18,7 +18,7 @@ services:
       - flame.category=Utility Belt
       - flame.name=BentoPDF
       - flame.url=https://bentopdf.${DOMAIN}
-      - flame.icon=file-pdf
+      - flame.icon=file-pdf-box
       - traefik.enable=true
       - traefik.http.routers.bentopdf.rule=Host(`bentopdf.${DOMAIN}`)
       - traefik.http.routers.bentopdf.entrypoints=websecure
