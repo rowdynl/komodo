@@ -10,7 +10,8 @@ services:
     # default mode - ghcr.io/alam00000/bentopdf:latest
     image: ghcr.io/alam00000/bentopdf-simple:latest
     container_name: bentopdf
-    networks: web
+    networks: 
+      - web
     restart: unless-stopped
     labels:
       - flame.type=application
