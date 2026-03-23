@@ -351,7 +351,6 @@ services:
       - ../../../global.env
       - ./env/trailarr.env
     networks:
-      - backend
       - web
     volumes:
       - trailarr:/config
