@@ -450,5 +450,7 @@ volumes:
     external: true
   tautulli:
     external: true
+  trailarr:
+    external: true
   transmission:
     external: true
