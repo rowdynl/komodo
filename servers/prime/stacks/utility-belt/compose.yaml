@@ -42,7 +42,7 @@ services:
       - flame.category=Utility Belt
       - flame.name=ByteStash
       - flame.url=https://bytestash.${DOMAIN}
-      - flame.icon=content-save-edit-outline
+      - flame.icon=code-block-braces
       - traefik.enable=true
       - traefik.http.routers.bytestash.rule=Host(`bytestash.${DOMAIN}`)
       - traefik.http.routers.bytestash.entrypoints=websecure
