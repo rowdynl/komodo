@@ -135,7 +135,7 @@ services:
       - flame.type=application
       - flame.name=Pi-hole
       - flame.category=Border Control
-      - flame.url=https://pihole.${DOMAIN}
+      - flame.url=https://pihole.${DOMAIN}/admin
       - flame.icon=shield-outline
       - traefik.enable=true
       - traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)
