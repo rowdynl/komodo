@@ -48,7 +48,7 @@ services:
       - traefik.http.routers.bytestash.entrypoints=websecure
       - traefik.http.routers.bytestash.tls.certresolver=letsencrypt
       - traefik.http.routers.bytestash.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.bytestash.loadbalancer.server.port=500
+      - traefik.http.services.bytestash.loadbalancer.server.port=5000
 
   code-server:
     image: lscr.io/linuxserver/code-server:latest
