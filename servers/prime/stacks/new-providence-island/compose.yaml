@@ -28,35 +28,16 @@ services:
       - traefik.http.routers.bazarr.middlewares=authentik@file
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
 
-  cleanuparr:
-    image: ghcr.io/cleanuparr/cleanuparr:latest
-    container_name: cleanuparr
+  decluttarr:
+    image: ghcr.io/manimatter/decluttarr:latest
+    container_name: decluttarr
     networks:
       - web
     env_file: ../../../global.env
     volumes:
-      - cleanuparr:/config
+      - decluttarr:/app/config
       - ${VOLUME_PATH_DOWNLOADS_HOST}:${VOLUME_PATH_DOWNLOADS_CONTAINER}
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://cleanuparr:11011/health"]
-      interval: 30s
-      timeout: 10s
-      start_period: 30s
-      retries: 3
-    labels:
-      - flame.type=application
-      - flame.category=Captain’s Quarters
-      - flame.name=CleanUpArr
-      - flame.url=https://cleanuparr.${DOMAIN}
-      - flame.icon=broom
-      - traefik.enable=true
-      - traefik.http.routers.cleanuparr.rule=Host(`cleanuparr.${DOMAIN}`)
-      - traefik.http.routers.cleanuparr.entrypoints=websecure
-      - traefik.http.routers.cleanuparr.tls.certresolver=letsencrypt
-      - traefik.http.routers.cleanuparr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.cleanuparr.middlewares=authentik@file
-      - traefik.http.services.cleanuparr.loadbalancer.server.port=11011
 
   kometa:
     image: lscr.io/linuxserver/kometa:latest
@@ -396,7 +377,7 @@ networks:
 volumes:
   bazarr:
     external: true
-  cleanuparr:
+  decluttarr:
     external: true
   huntarr:
     external: true
