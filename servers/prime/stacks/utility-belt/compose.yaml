@@ -27,6 +27,29 @@ services:
       #- traefik.http.routers.bentopdf.middlewares=crowdsec@file,geoblock@file,authentik@file
       - traefik.http.services.bentopdf.loadbalancer.server.port=8080
 
+  bytestash:
+    image: ghcr.io/jordan-dalby/bytestash:latest
+    container_name: bytestash
+    volumes:
+      - bytestash:/data/snippets
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    env_file: ./env/bytestash.env      
+    networks:
+      - web
+    labels:
+      - flame.type=application
+      - flame.category=Utility Belt
+      - flame.name=ByteStash
+      - flame.url=https://bytestash.${DOMAIN}
+      - flame.icon=content-save-edit-outline
+      - traefik.enable=true
+      - traefik.http.routers.bytestash.rule=Host(`bytestash.${DOMAIN}`)
+      - traefik.http.routers.bytestash.entrypoints=websecure
+      - traefik.http.routers.bytestash.tls.certresolver=letsencrypt
+      - traefik.http.routers.bytestash.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.bytestash.loadbalancer.server.port=500
+
   code-server:
     image: lscr.io/linuxserver/code-server:latest
     container_name: code-server
@@ -305,6 +328,8 @@ networks:
     external: true
 
 volumes:
+  bytestash:
+    external: true
   code-server:
     external: true
   dbgate:
