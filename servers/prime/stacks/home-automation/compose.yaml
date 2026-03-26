@@ -44,6 +44,8 @@ services:
     devices:
       - /dev/bus/usb:/dev/bus/usb
       - /dev/dri:/dev/dri
+    device_cgroup_rules:
+      - 'c 226:* rmw'   
     group_add:
       - '44'   # 'video'
       - '993'  # 'render'
@@ -61,6 +63,7 @@ services:
       - frigate:/config
       - /etc/localtime:/etc/localtime:ro
       - /mnt/prime-ds/media/frigate:/media/frigate
+      - /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro
       - type: tmpfs
         target: /tmp/cache
         tmpfs:
