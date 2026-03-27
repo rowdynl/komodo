@@ -21,6 +21,10 @@ services:
       - flame.url=https://bazarr.${DOMAIN}
       - flame.icon=subtitles-outline
       - traefik.enable=true
+      - traefik.http.routers.bazarr-api.rule=Host(`bazarr.${DOMAIN}`) && PathPrefix(`/api`)
+      - traefik.http.routers.bazarr-api.entrypoints=websecure
+      - traefik.http.routers.bazarr-api.priority=100
+      - traefik.http.routers.bazarr-api.tls=true
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${DOMAIN}`)
       - traefik.http.routers.bazarr.entrypoints=websecure
       - traefik.http.routers.bazarr.tls.certresolver=letsencrypt
@@ -75,7 +79,6 @@ services:
       - traefik.http.routers.lidarr-api.entrypoints=websecure
       - traefik.http.routers.lidarr-api.priority=100
       - traefik.http.routers.lidarr-api.tls=true
-      - traefik.http.services.lidarr-api.loadbalancer.server.port=8686
       - traefik.http.routers.lidarr.rule=Host(`lidarr.${DOMAIN}`)
       - traefik.http.routers.lidarr.entrypoints=websecure
       - traefik.http.routers.lidarr.tls.certresolver=letsencrypt
@@ -197,6 +200,10 @@ services:
       - flame.url=https://prowlarr.${DOMAIN}
       - flame.icon=search-web
       - traefik.enable=true
+      - traefik.http.routers.prowlarr-api.rule=Host(`prowlarr.${DOMAIN}`) && PathPrefix(`/api`)
+      - traefik.http.routers.prowlarr-api.entrypoints=websecure
+      - traefik.http.routers.prowlarr-api.priority=100
+      - traefik.http.routers.prowlarr-api.tls=true
       - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${DOMAIN}`)
       - traefik.http.routers.prowlarr.entrypoints=websecure
       - traefik.http.routers.prowlarr.tls.certresolver=letsencrypt
@@ -226,7 +233,6 @@ services:
       - traefik.http.routers.radarr-api.entrypoints=websecure
       - traefik.http.routers.radarr-api.priority=100
       - traefik.http.routers.radarr-api.tls=true
-      #- traefik.http.services.radarr-api.loadbalancer.server.port=7878
       - traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN}`)
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.tls.certresolver=letsencrypt
@@ -256,7 +262,6 @@ services:
       - traefik.http.routers.sabnzbd-api.entrypoints=websecure
       - traefik.http.routers.sabnzbd-api.priority=100
       - traefik.http.routers.sabnzbd-api.tls=true
-      - traefik.http.services.sabnzbd-api.loadbalancer.server.port=3389
       - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${DOMAIN}`)
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt
@@ -291,7 +296,6 @@ services:
       - traefik.http.routers.seerr-api.entrypoints=websecure
       - traefik.http.routers.seerr-api.priority=100
       - traefik.http.routers.seerr-api.tls=true
-      - traefik.http.services.seerr-api.loadbalancer.server.port=5055
       - traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)
       - traefik.http.routers.seerr.entrypoints=websecure
       - traefik.http.routers.seerr.tls.certresolver=letsencrypt
@@ -321,7 +325,6 @@ services:
       - traefik.http.routers.sonarr-api.entrypoints=websecure
       - traefik.http.routers.sonarr-api.priority=100
       - traefik.http.routers.sonarr-api.tls=true
-      - traefik.http.services.sonarr-api.loadbalancer.server.port=8989
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN}`)
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.tls.certresolver=letsencrypt
@@ -389,7 +392,6 @@ services:
       - traefik.http.routers.transmission.entrypoints=websecure
       - traefik.http.routers.transmission.priority=100
       - traefik.http.routers.transmission.tls=true
-      - traefik.http.services.transmission-api.loadbalancer.server.port=9091
       - traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)
       - traefik.http.routers.transmission.entrypoints=websecure
       - traefik.http.routers.transmission.tls.certresolver=letsencrypt
