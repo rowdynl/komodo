@@ -1,7 +1,7 @@
 name: cloud-sync
 
 services:
-  icloud: # https://github.com/mandarons/icloud-docker ALTERNATIVE: https://icps.steiler.dev/get-started/
+  icloud:
     image: mandarons/icloud-drive
     container_name: icloud
     environment:
@@ -13,6 +13,8 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - icloud:/icloud
+      - icloud-config:/config
+      - icloud-keyring:/home/abc/.local
 
     #TODO:
     # OneDrive: 
@@ -25,4 +27,8 @@ services:
 
 volumes:
   icloud:
+    external: true
+  icloud-config:
+    external: true
+  icloud-keyring:
     external: true
