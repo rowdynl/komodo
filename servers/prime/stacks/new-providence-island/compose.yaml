@@ -392,10 +392,10 @@ services:
       - flame.icon=cloud-download-outline
       - traefik.docker.network=web
       - traefik.enable=true
-      - traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`) && PathPrefix(`/transmission/rpc`)
-      - traefik.http.routers.transmission.entrypoints=websecure
-      - traefik.http.routers.transmission.priority=100
-      - traefik.http.routers.transmission.tls=true
+      - traefik.http.routers.transmission-api.rule=Host(`transmission.${DOMAIN}`) && PathPrefix(`/transmission/rpc`)
+      - traefik.http.routers.transmission-api.entrypoints=websecure
+      - traefik.http.routers.transmission-api.priority=100
+      - traefik.http.routers.transmission-api.tls=true
       - traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN}`)
       - traefik.http.routers.transmission.entrypoints=websecure
       - traefik.http.routers.transmission.tls.certresolver=letsencrypt
