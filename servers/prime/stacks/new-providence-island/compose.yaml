@@ -95,7 +95,7 @@ services:
       web:
     env_file:
       - ../../../global.env
-      - plex.env
+      - ./env/plex.env
     devices:
       - '/dev/dri:/dev/dri'    
     device_cgroup_rules:
@@ -373,7 +373,7 @@ services:
       - /mnt/downloads/transmission:/downloads/transmission
     env_file:
       - ../../../global.env
-      - transmission.env
+      - ./env/transmission.env
     ports:
       - 51820:51820
     logging:
