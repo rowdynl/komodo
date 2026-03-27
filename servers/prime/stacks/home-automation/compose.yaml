@@ -33,7 +33,7 @@ services:
       - traefik.http.services.esphome.loadbalancer.server.port=6052
 
   frigate:
-    image: ghcr.io/blakeblackshear/frigate:0.17.0
+    image: ghcr.io/blakeblackshear/frigate:latest
     container_name: frigate
     environment:
       - TZ=${TZ}
