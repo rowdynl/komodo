@@ -6,7 +6,7 @@ services:
     image: mandarons/icloud-drive
     container_name: icloud
     environment:
-      - PGUID=${PGUID}
+      - PUID=${PUID}
       - PGID=${PGID}
       - ENV_CONFIG_FILE_PATH=/config/config.yaml
     restart: unless-stopped
