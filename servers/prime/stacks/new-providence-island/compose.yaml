@@ -344,7 +344,7 @@ services:
     labels:
       - flame.type=application
       - flame.category=Pirate’s Tavern
-      - Flame.order=3
+      - flame.order=3
       - flame.name=Tautulli
       - flame.url=https://tautulli.${DOMAIN}
       - flame.icon=eye-check-outline
