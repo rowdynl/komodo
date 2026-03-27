@@ -1,4 +1,5 @@
-name: cloud-sync
+# Whispers file changes between providers and hopes nobody misses the memo.
+name: cloud-gossip
 
 services:
   icloud:
