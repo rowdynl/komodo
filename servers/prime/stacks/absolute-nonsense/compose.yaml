@@ -13,19 +13,26 @@ services:
     expose:
       - 8000
     networks:
-      - teamradio
+      - web
     restart: unless-stopped
     volumes:
       - f1replay-cache:/data/fastf1-cache
-      - f1replay-data:/data      
+      - f1replay-data:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.f1replay-backend.rule=Host(`f1replay-backend.${DOMAIN}`)
+      - traefik.http.routers.f1replay-backend.entrypoints=websecure
+      - traefik.http.routers.f1replay-backend.tls.certresolver=letsencrypt
+      - traefik.http.routers.f1replay-backend.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.f1replay-backend.middlewares=authentik@file
+      - traefik.http.services.f1replay-backend.loadbalancer.server.port=8000    
 
   f1replay-frontend:
     image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
     container_name: f1replay-frontend
     environment: 
-      - NEXT_PUBLIC_API_URL=http://f1replay-backend.teamradio:8000
+      - NEXT_PUBLIC_API_URL=http://f1replay-backend.tcit.nl
     networks:
-      - teamradio
       - web
     restart: unless-stopped
     labels:
@@ -72,8 +79,6 @@ services:
       - traefik.http.services.hypermind.loadbalancer.server.port=3000
 
 networks:
-  teamradio:
-    external: true
   web:
     external: true
 
