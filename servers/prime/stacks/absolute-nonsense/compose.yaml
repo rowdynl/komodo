@@ -9,7 +9,7 @@ services:
       - FRONTEND_URL=http://f1replay.${DOMAIN}
       - DATA_DIR=/data
     networks:
-      - fireplay
+      - f1replay
     restart: unless-stopped
     volumes:
       - f1replay-cache:/data/fastf1-cache
@@ -21,7 +21,7 @@ services:
     environment: 
       - NEXT_PUBLIC_API_URL=f1replay-backend:8000
     networks:
-      - fireplay
+      - f1replay
       - web
     restart: unless-stopped
     labels:
@@ -68,7 +68,8 @@ services:
       - traefik.http.services.hypermind.loadbalancer.server.port=3000
 
 networks:
-  fireplay:
+  f1replay:
+    external: true
   web:
     external: true
 
