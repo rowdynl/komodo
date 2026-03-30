@@ -6,8 +6,9 @@ services:
     image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
     container_name: f1replay-backend
     environment:
-      - FRONTEND_URL=http://f1replay.${DOMAIN}
       - DATA_DIR=/data
+      - FRONTEND_URL=http://f1replay.${DOMAIN}
+      - OPENROUTER_API_KEY=${F1REPLAY_OPENROUTER_API_KEY}
     networks:
       - f1replay
     restart: unless-stopped
