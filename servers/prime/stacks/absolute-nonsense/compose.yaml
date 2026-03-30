@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     volumes:
       - f1replay-cache:/data/fastf1-cache
-      - f1data:/data      
+      - f1replay-data:/data      
 
   f1replay-frontend:
     image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
