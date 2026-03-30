@@ -5,11 +5,7 @@ services:
   f1replay-backend:
     image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
     container_name: f1replay-backend
-    environment:
-      - DATA_DIR=/data
-      - FRONTEND_URL=http://f1replay.${DOMAIN}
-      - OPENROUTER_API_KEY=${F1REPLAY_OPENROUTER_API_KEY}
-      - PORT=8000
+    env_file: ./env/f1replay-backend.env
     networks:
       - web
     restart: unless-stopped
@@ -18,7 +14,7 @@ services:
       - f1replay-data:/data
     labels:
       - traefik.enable=true
-      - traefik.http.routers.f1replay-backend.rule=Host(`teamradio.${DOMAIN}`)
+      - traefik.http.routers.f1replay-backend.rule=Host(`api.f1replay.${DOMAIN}`)
       - traefik.http.routers.f1replay-backend.entrypoints=websecure
       - traefik.http.routers.f1replay-backend.tls.certresolver=letsencrypt
       - traefik.http.routers.f1replay-backend.priority=${TRAEFIK_PRIORITY}
@@ -28,7 +24,7 @@ services:
     image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
     container_name: f1replay-frontend
     environment: 
-      - NEXT_PUBLIC_API_URL=https://teamradio.${DOMAIN}
+      - NEXT_PUBLIC_API_URL=https://api.f1replay.${DOMAIN}
     networks:
       - web
     restart: unless-stopped
