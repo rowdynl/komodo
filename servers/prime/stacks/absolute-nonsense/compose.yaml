@@ -29,7 +29,7 @@ services:
     image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
     container_name: f1replay-frontend
     environment: 
-      - NEXT_PUBLIC_API_URL=http://teamradio.${DOMAIN}
+      - NEXT_PUBLIC_API_URL=https://teamradio.${DOMAIN}
     networks:
       - web
     restart: unless-stopped
