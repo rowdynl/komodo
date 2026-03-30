@@ -11,7 +11,7 @@ services:
       - FRONTEND_URL=http://f1replay.${DOMAIN}
       - OPENROUTER_API_KEY=${F1REPLAY_OPENROUTER_API_KEY}
     networks:
-      - f1replay
+      - teamradio
     restart: unless-stopped
     volumes:
       - f1replay-cache:/data/fastf1-cache
@@ -22,9 +22,9 @@ services:
     container_name: f1replay-frontend
     user: ${PUID}:${PGID}
     environment: 
-      - NEXT_PUBLIC_API_URL=f1replay-backend:8000
+      - NEXT_PUBLIC_API_URL=http://f1replay-backend.teamradio:8000
     networks:
-      - f1replay
+      - teamradio
       - web
     restart: unless-stopped
     labels:
@@ -71,7 +71,7 @@ services:
       - traefik.http.services.hypermind.loadbalancer.server.port=3000
 
 networks:
-  f1replay:
+  teamradio:
     external: true
   web:
     external: true
