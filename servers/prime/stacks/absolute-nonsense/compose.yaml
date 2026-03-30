@@ -30,6 +30,7 @@ services:
     container_name: f1replay-frontend
     environment: 
       - NEXT_PUBLIC_API_URL=http://teamradio.${DOMAIN}
+    networks:
       - web
     restart: unless-stopped
     labels:
