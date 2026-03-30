@@ -2,6 +2,43 @@
 name: absolute-nonsense
 
 services:
+  f1replay-backend:
+    image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
+    container_name: f1replay-backend
+    environment:
+      - FRONTEND_URL=http://f1replay.${DOMAIN}
+      - DATA_DIR=/data
+    networks:
+      - fireplay
+    restart: unless-stopped
+    volumes:
+      - f1data:/data
+      - f1cache:/data/fastf1-cache
+
+  f1replay-frontend:
+    image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
+    container_name: f1replay-frontend
+    environment: 
+      - NEXT_PUBLIC_API_URL=f1replay-backend:8000
+    networks:
+      - fireplay
+      - web
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Fun and games
+      - flame.name=F1 Replay Timing
+      - flame.url=https://f1replay.${DOMAIN}
+      - flame.icon=flag-checkered
+      - traefik.enable=true
+      - traefik.http.routers.f1replay.rule=Host(`f1replay.${DOMAIN}`)
+      - traefik.http.routers.f1replay.entrypoints=websecure
+      - traefik.http.routers.f1replay.tls.certresolver=letsencrypt
+      - traefik.http.routers.f1replay.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.f1replay.middlewares=authentik@file
+      - traefik.http.services.f1replay.loadbalancer.server.port=3000
+    
+
   hypermind:    
     image: 'ghcr.io/lklynet/hypermind:1.0.0'
     container_name: hypermind
@@ -28,9 +65,15 @@ services:
       - traefik.http.routers.hypermind.entrypoints=websecure
       - traefik.http.routers.hypermind.tls.certresolver=letsencrypt
       - traefik.http.routers.hypermind.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.hypermind.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.hypermind.loadbalancer.server.port=3000
 
 networks:
+  fireplay:
   web:
-    external: true    
+    external: true
+
+volumes:
+  f1replay-cache:
+    external: true
+  f1replay-data:
+    external: true 
