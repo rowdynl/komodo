@@ -5,7 +5,6 @@ services:
   f1replay-backend:
     image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
     container_name: f1replay-backend
-    user: ${PUID}:${PGID}
     environment:
       - DATA_DIR=/data
       - FRONTEND_URL=http://f1replay.${DOMAIN}
@@ -23,7 +22,6 @@ services:
   f1replay-frontend:
     image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
     container_name: f1replay-frontend
-    user: ${PUID}:${PGID}
     environment: 
       - NEXT_PUBLIC_API_URL=http://f1replay-backend.teamradio:8000
     networks:
