@@ -148,6 +148,8 @@ networks:
     external: true
 
 volumes:
+  database-backups:
+    external: true
   influxdb:
     external: true
   mariadb:

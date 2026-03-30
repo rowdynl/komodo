@@ -22,7 +22,7 @@ services:
       - traefik.http.routers.f1replay-backend.entrypoints=websecure
       - traefik.http.routers.f1replay-backend.tls.certresolver=letsencrypt
       - traefik.http.routers.f1replay-backend.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.f1replay-backend.middlewares=authentik@file
+      #- traefik.http.routers.f1replay-backend.middlewares=authentik@file
       - traefik.http.services.f1replay-backend.loadbalancer.server.port=8000    
 
   f1replay-frontend:
