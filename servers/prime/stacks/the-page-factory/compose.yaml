@@ -131,10 +131,15 @@ services:
       - flame.url=https://umami.${DOMAIN}
       - flame.icon=chart-archive-outline
       - traefik.enable=true
+      - traefik.http.routers.umami-public.rule=Host(`umami.${DOMAIN}`) && (Path(`/script.js`) || Path(`/api/send`) || PathPrefix(`/umami/`))
+      - traefik.http.routers.umami-public.entrypoints=websecure
+      - traefik.http.routers.umami-public.tls=true
+      - traefik.http.routers.umami-public.service=umami
       - traefik.http.routers.umami.rule=Host(`umami.${DOMAIN}`)
       - traefik.http.routers.umami.entrypoints=websecure
       - traefik.http.routers.umami.tls.certresolver=letsencrypt
       - traefik.http.routers.umami.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.umami.middlewares=authentik@file
       - traefik.http.services.umami.loadbalancer.server.port=3000
 
 networks:
