@@ -116,6 +116,7 @@ services:
     env_file: ./env/umami.env
     networks:
       - backend
+      - cache
       - web      
     init: true
     restart: unless-stopped
@@ -144,6 +145,8 @@ services:
 
 networks:
   backend:
+    external: true
+  cache:
     external: true
   web:
     external: true
