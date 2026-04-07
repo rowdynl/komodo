@@ -160,7 +160,7 @@ services:
       - flame.url=https://tools.${DOMAIN}
       - flame.icon=tools
       - traefik.enable=true
-      - traefik.http.middlewares.it-tools-umami.plugin.umami.umamiHost=umami.${DOMAIN}
+      - traefik.http.middlewares.it-tools-umami.plugin.umami.umamiHost=https://umami.${DOMAIN}
       - traefik.http.middlewares.it-tools-umami.plugin.umami.websiteId=${UMAMI_WEBSITE_ID_IT_TOOLS}
       - traefik.http.middlewares.it-tools-umami.plugin.umami.scriptInjection=true
       - traefik.http.routers.it-tools.entrypoints=websecure
