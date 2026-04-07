@@ -15,7 +15,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.web-festinalentebock-nl.entrypoints=websecure
       - traefik.http.routers.web-festinalentebock-nl.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`) || Host(`www.festinalentebock.nl`)
+      - traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`)
       - traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http
       - traefik.http.routers.web-festinalentebock-nl-redirect.rule=Host(`www.festinalentebock.nl`)
       - traefik.http.routers.web-festinalentebock-nl-redirect.middlewares=redirect301@file
