@@ -6,8 +6,8 @@ services:
     image: adminneoorg/adminneo:latest
     container_name: adminneo
     networks:
-      backend:
-      web:
+      - backend
+      - web
     restart: unless-stopped
     labels:
       - flame.type=application
@@ -23,12 +23,23 @@ services:
       - traefik.http.routers.adminneo.middlewares=authentik@file
       - traefik.http.services.adminneo.loadbalancer.server.port=8080
 
+  db-backup:
+    image: tiredofit/db-backup
+    container_name: db-backup    
+    env_file: ./env/db-backup.env
+    volumes:
+      - database-backups:/backups
+      - database-backups-assets:/assets
+    networks:
+      - backend
+    restart: unless-stopped
+
   influxdb:
     image: docker.io/influxdb:latest
     container_name: influxdb
     networks:
-      backend:
-      web:      
+      - backend
+      - web
     volumes:
       - type: volume
         source: influxdb
@@ -67,7 +78,7 @@ services:
     image: docker.io/mariadb:latest
     container_name: mariadb
     networks:
-      backend:
+      - backend
     env_file: ./env/mariadb.env
     volumes:
       - mariadb:/var/lib/mysql
@@ -86,7 +97,7 @@ services:
     env_file: ./env/postgresql-authentik.env
     user: ${PUID}:${PGID}
     networks:
-      backend:
+      - backend
     volumes:
     - postgresql-authentik:/var/lib/postgresql/data
     restart: unless-stopped
@@ -107,6 +118,8 @@ services:
       - postgresql-immich:/var/lib/postgresql/data
     shm_size: 128mb
     restart: always
+    networks:
+      - backend
     healthcheck:
       interval: 30s
       retries: 5
@@ -149,13 +162,6 @@ services:
       start_period: 20s
       retries: 5
 
-#  mongodb:
-#    image: mongo
-#    container_name: mongodb
-#  postgresql:
-#    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
-#    container_name: postgresql  
-
 networks:
   backend:
     external: true
@@ -164,6 +170,8 @@ networks:
 
 volumes:
   database-backups:
+    external: true
+  database-backups-assets:
     external: true
   influxdb:
     external: true
