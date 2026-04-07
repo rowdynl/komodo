@@ -117,9 +117,6 @@ services:
     networks:
       - backend
       - web      
-    depends_on:
-      db:
-        condition: service_healthy
     init: true
     restart: unless-stopped
     healthcheck:
