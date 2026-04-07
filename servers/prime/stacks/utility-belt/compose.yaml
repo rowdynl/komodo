@@ -44,10 +44,11 @@ services:
       - flame.url=https://bytestash.${DOMAIN}
       - flame.icon=code-block-braces
       - traefik.enable=true
-      - traefik.http.routers.bytestash.rule=Host(`bytestash.${DOMAIN}`)
       - traefik.http.routers.bytestash.entrypoints=websecure
-      - traefik.http.routers.bytestash.tls.certresolver=letsencrypt
+      - traefik.http.routers.bytestash.middlewares=umami@file
       - traefik.http.routers.bytestash.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.bytestash.rule=Host(`bytestash.${DOMAIN}`)
+      - traefik.http.routers.bytestash.tls.certresolver=letsencrypt
       - traefik.http.services.bytestash.loadbalancer.server.port=5000
 
   code-server:
@@ -161,7 +162,7 @@ services:
       - flame.icon=tools
       - traefik.enable=true
       - traefik.http.routers.it-tools.entrypoints=websecure
-      #- traefik.http.routers.it-tools.middlewares=tracking@file
+      - traefik.http.routers.it-tools.middlewares=umami@file
       - traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      

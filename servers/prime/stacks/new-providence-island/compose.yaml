@@ -119,6 +119,7 @@ services:
       - flame.order=1
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure
+      - traefik.http.routers.plex.middlewares=umami@file
       - traefik.http.routers.plex.priority=${TRAEFIK_PRIORITY}      
       - traefik.http.routers.plex.rule=Host(`plex.${DOMAIN}`)
       - traefik.http.routers.plex.tls.certresolver=letsencrypt
@@ -291,15 +292,11 @@ services:
       - flame.url=https://seerr.${DOMAIN}
       - flame.icon=movie-search-outline
       - traefik.enable=true
-      - traefik.http.routers.seerr-api.rule=Host(`seerr.${DOMAIN}`) && PathPrefix(`/api`)
-      - traefik.http.routers.seerr-api.entrypoints=websecure
-      - traefik.http.routers.seerr-api.priority=100
-      - traefik.http.routers.seerr-api.tls=true
-      - traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)
       - traefik.http.routers.seerr.entrypoints=websecure
-      - traefik.http.routers.seerr.tls.certresolver=letsencrypt
+      - traefik.http.routers.seerr.middlewares=umami@file
       - traefik.http.routers.seerr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.seerr.middlewares=authentik@file
+      - traefik.http.routers.seerr.rule=Host(`seerr.${DOMAIN}`)
+      - traefik.http.routers.seerr.tls.certresolver=letsencrypt
       - traefik.http.services.seerr.loadbalancer.server.port=5055
 
   sonarr:

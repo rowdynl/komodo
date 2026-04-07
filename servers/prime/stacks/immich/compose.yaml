@@ -23,12 +23,13 @@ services:
     healthcheck:
       disable: false
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)"
-      - "traefik.http.routers.immich.entrypoints=websecure"
-      - "traefik.http.routers.immich.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.immich.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.immich.loadbalancer.server.port=2283"      
+      - traefik.enable=true
+      - traefik.http.routers.immich.entrypoints=websecure
+      - traefik.http.routers.immich.middlewares=umami@file
+      - traefik.http.routers.immich.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)
+      - traefik.http.routers.immich.tls.certresolver=letsencrypt
+      - traefik.http.services.immich.loadbalancer.server.port=2283
 
   immich-machine-learning:
     container_name: immich-machine-learning
