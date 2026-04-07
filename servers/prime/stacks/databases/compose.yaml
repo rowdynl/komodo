@@ -23,10 +23,10 @@ services:
       - traefik.http.routers.adminneo.middlewares=authentik@file
       - traefik.http.services.adminneo.loadbalancer.server.port=8080
 
-  db-backup:
+  database-backups:
     image: tiredofit/db-backup
-    container_name: db-backup    
-    env_file: ./env/db-backup.env
+    container_name: database-backups    
+    env_file: ./env/database-backups.env
     volumes:
       - database-backups:/backups
       - database-backups-custom-scripts:/assets/custom-scripts
