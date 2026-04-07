@@ -111,6 +111,35 @@ services:
       - traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http      
       - traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080
 
+  umami:
+    image: ghcr.io/umami-software/umami:latest
+    env_file: ./env/umami.env
+    networks:
+      - backend
+      - web      
+    depends_on:
+      db:
+        condition: service_healthy
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    labels:
+      - flame.type=application
+      - flame.category=Analytics
+      - flame.name=Umami
+      - flame.url=https://umami.${DOMAIN}
+      - flame.icon=chart-archive-outline
+      - traefik.enable=true
+      - traefik.http.routers.umami.rule=Host(`umami.${DOMAIN}`)
+      - traefik.http.routers.umami.entrypoints=websecure
+      - traefik.http.routers.umami.tls.certresolver=letsencrypt
+      - traefik.http.routers.umami.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.umami.loadbalancer.server.port=3000
+
 networks:
   backend:
     external: true
