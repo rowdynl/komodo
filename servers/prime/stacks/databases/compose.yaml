@@ -29,7 +29,7 @@ services:
     env_file: ./env/db-backup.env
     volumes:
       - database-backups:/backups
-      - database-backups-assets:/assets
+      - database-backups-custom-scripts:/assets/custom-scripts
     networks:
       - backend
     restart: unless-stopped
@@ -171,7 +171,7 @@ networks:
 volumes:
   database-backups:
     external: true
-  database-backups-assets:
+  database-backups-custom-scripts:
     external: true
   influxdb:
     external: true
