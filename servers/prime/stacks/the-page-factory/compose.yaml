@@ -130,6 +130,7 @@ services:
 
   umami:
     image: ghcr.io/umami-software/umami:latest
+    container_name: umami
     env_file: ./env/umami.env
     networks:
       - backend
