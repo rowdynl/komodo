@@ -6,6 +6,8 @@ services:
     image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
     container_name: f1replay-backend
     env_file: ./env/f1replay-backend.env
+    mem_limit: 768m    
+    cpus: 0.88
     networks:
       - web
     restart: unless-stopped
