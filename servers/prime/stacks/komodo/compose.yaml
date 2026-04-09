@@ -7,7 +7,7 @@ services:
     networks:
       - backend
     labels:
-      - "komodo.skip=true"
+      - komodo.skip=true
     command: --quiet --wiredTigerCacheSizeGB 0.25
     restart: unless-stopped
     volumes:
@@ -18,15 +18,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${KOMODO_DB_PASSWORD}
   
   komodo-core:
-    image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ghcr.io/moghtech/komodo-core:2
     container_name: komodo-core
+    init: true
     restart: unless-stopped
-    depends_on:
-      - komodo-mongodb
     networks:
       - backend
       - web
-    env_file: .env
     environment:
       - KOMODO_DATABASE_ADDRESS=komodo-mongodb:27017
       - KOMODO_DATABASE_USERNAME=${KOMODO_DB_USERNAME}
@@ -37,28 +35,30 @@ services:
       - KOMODO_OIDC_CLIENT_SECRET=${KOMODO_OIDC_CLIENT_SECRET}
     volumes:
       - komodo-core-backups:/backups
+      - komodo-keys:/config/keys
     labels:
-      - "komodo.skip=true"
-      - "traefik.enable=true"
-      - "traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)"
-      - "traefik.http.routers.komodo.entrypoints=websecure"
-      - "traefik.http.routers.komodo.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.komodo.priority=${TRAEFIK_PRIORITY}"
-      - "traefik.http.services.komodo.loadbalancer.server.port=9120"
+      - komodo.skip=true
+      - traefik.enable=true
+      - traefik.http.routers.komodo.rule=Host(`komodo.${DOMAIN}`)
+      - traefik.http.routers.komodo.entrypoints=websecure
+      - traefik.http.routers.komodo.tls.certresolver=letsencrypt
+      - traefik.http.routers.komodo.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.komodo.loadbalancer.server.port=9120
 
   komodo-periphery:
-    image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ghcr.io/moghtech/komodo-periphery:2
     container_name: komodo-periphery
+    init: true
     networks:
       - backend    
     restart: unless-stopped
-    env_file: .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc
-      - ${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}:${PERIPHERY_ROOT_DIRECTORY:-/etc/komodo}
+      - /etc/komodo:/etc/komodo
+      - komodo-keys:/config/keys
     labels:
-      - "komodo.skip=true"
+      - komodo.skip=true
 
 networks:
   web:
@@ -68,6 +68,8 @@ networks:
 
 volumes:
   komodo-core-backups:
+    external: true
+  komodo-keys:
     external: true
   komodo-mongodb-config:
     external: true
