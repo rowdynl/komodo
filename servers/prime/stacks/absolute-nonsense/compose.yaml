@@ -39,7 +39,7 @@ services:
       - traefik.http.routers.f1replay.entrypoints=websecure
       - traefik.http.routers.f1replay.tls.certresolver=letsencrypt
       - traefik.http.routers.f1replay.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.f1replay.middlewares=authentik@file
+      - traefik.http.routers.f1replay.middlewares=authentik@file,umami@file
       - traefik.http.services.f1replay.loadbalancer.server.port=3000
     
 

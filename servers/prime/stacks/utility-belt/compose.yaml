@@ -221,7 +221,6 @@ services:
       - traefik.http.routers.nextexplorer.entrypoints=websecure
       - traefik.http.routers.nextexplorer.tls.certresolver=letsencrypt
       - traefik.http.routers.nextexplorer.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.nextexplorer.middlewares=authentik@file
       - traefik.http.services.nextexplorer.loadbalancer.server.port=3000
       
 
