@@ -149,6 +149,7 @@ services:
 
   postgresql-umami:
     image: postgres:15-alpine
+    container_name: postgresql-umami
     env_file: ./env/postgresql-umami.env
     volumes:
       - postgresql-umami:/var/lib/postgresql/data
