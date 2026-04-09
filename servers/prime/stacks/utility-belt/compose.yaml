@@ -205,6 +205,7 @@ services:
       # Each /mnt/<Label> mount becomes a top-level volume in the UI
       - /mnt/docker/volumes:/mnt/docker-volumes
       - /repos:/mnt/repos
+      - icloud:/mnt/icloud
     networks:
       - web
     env_file: 
@@ -347,4 +348,8 @@ volumes:
   scanopy:
     external: true
   termix:
+    external: true
+  
+  # Mounts from other stacks to be used with NextExplorer
+  icloud:
     external: true
