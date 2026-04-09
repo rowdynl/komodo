@@ -2,6 +2,23 @@
 name: cloud-gossip
 
 services:
+  
+  dropbox:
+    image: rbonghi/dropbox:latest
+    container_name: dropbox
+    command: ["--fromDropbox", "-i", "660"]
+    user: ${PUID}:${PGID}
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
+      - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
+      - DROPBOX_REFRESH_TOKEN=${DROPBOX_REFRESH_TOKEN}
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - dropbox:/dropbox
+
   icloud:
     image: mandarons/icloud-drive
     container_name: icloud
@@ -23,10 +40,10 @@ services:
     #   - https://forums.unraid.net/topic/132486-guide-set-up-the-onedrive-client-for-linux-abraunegg-as-docker-container/ 
     # Google Drive:
     #   - https://github.com/richardregeer/docker-google-drive-sync
-    # DropBox:
-    #   - https://github.com/rbonghi/docker-dropbox-app
 
 volumes:
+  dropbox:
+    external: true
   icloud:
     external: true
   icloud-config:
