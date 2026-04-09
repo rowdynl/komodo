@@ -25,6 +25,7 @@ services:
     networks:
       - backend
       - web
+    env_file: .env
     environment:
       - KOMODO_DATABASE_ADDRESS=komodo-mongodb:27017
       - KOMODO_DATABASE_USERNAME=${KOMODO_DB_USERNAME}
@@ -49,6 +50,7 @@ services:
     image: ghcr.io/moghtech/komodo-periphery:2
     container_name: komodo-periphery
     init: true
+    env_file: .env
     networks:
       - backend    
     restart: unless-stopped
