@@ -326,14 +326,10 @@ services:
     container_name: webhook-tester
     command:
       - serve
-      - --http-addr=0.0.0.0:8080
       - --storage-driver=fs
       - --storage-fs-dir=/data
       - --pubsub-driver=redis
-      - --storage-redis-addr=redis.cache:6379
-      - --storage-redis-password=redis
-      - --pubsub-redis-addr=redis.cache:6379
-      - --pubsub-redis-password=redis
+      - --redis-dsn=redis://redis.cache:6379
     volumes:
       - webhook-tester:/data
     networks:
