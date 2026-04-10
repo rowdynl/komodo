@@ -328,11 +328,6 @@ services:
     networks:
       - web
       - cache
-    healthcheck:
-      test: ["CMD", "webhook-tester", "healthcheck"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
     restart: unless-stopped
     labels:
       - flame.type=application
