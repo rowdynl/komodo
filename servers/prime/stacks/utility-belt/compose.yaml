@@ -327,7 +327,7 @@ services:
     command:
       - serve
       - --storage-driver=fs
-      - --storage-fs-dir=/data
+      - --fs-storage-dir=/data
       - --pubsub-driver=redis
       - --redis-dsn=redis://redis.cache:6379
     volumes:
