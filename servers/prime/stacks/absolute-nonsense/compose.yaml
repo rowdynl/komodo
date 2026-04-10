@@ -2,47 +2,32 @@
 name: absolute-nonsense
 
 services:
-  f1replay-backend:
-    image: ghcr.io/adn8naiagent/f1replaytiming-backend:latest
-    container_name: f1replay-backend
-    env_file: ./env/f1replay-backend.env
+  
+  f1timing:
+    image: ghcr.io/adn8naiagent/f1replaytiming:latest
+    container_name: f1timing
+    env_file: ./env/f1timing.env
     mem_limit: 768m    
     cpus: 0.88
     networks:
       - web
     restart: unless-stopped
     volumes:
-      - f1replay-cache:/data/fastf1-cache
+      #- f1replay-cache:/data/fastf1-cache
       - f1replay-data:/data
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.f1replay-backend.rule=Host(`api.f1replay.${DOMAIN}`)
-      - traefik.http.routers.f1replay-backend.entrypoints=websecure
-      - traefik.http.routers.f1replay-backend.tls.certresolver=letsencrypt
-      - traefik.http.routers.f1replay-backend.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.f1replay-backend.loadbalancer.server.port=8000    
-
-  f1replay-frontend:
-    image: ghcr.io/adn8naiagent/f1replaytiming-frontend:latest
-    container_name: f1replay-frontend
-    environment: 
-      - NEXT_PUBLIC_API_URL=https://api.f1replay.${DOMAIN}
-    networks:
-      - web
-    restart: unless-stopped
     labels:
       - flame.type=application
       - flame.category=Fun and games
       - flame.name=F1 Replay Timing
-      - flame.url=https://f1replay.${DOMAIN}
+      - flame.url=https://f1timing.${DOMAIN}
       - flame.icon=flag-checkered
       - traefik.enable=true
-      - traefik.http.routers.f1replay.rule=Host(`f1replay.${DOMAIN}`)
-      - traefik.http.routers.f1replay.entrypoints=websecure
-      - traefik.http.routers.f1replay.tls.certresolver=letsencrypt
-      - traefik.http.routers.f1replay.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.f1replay.middlewares=authentik@file,umami@file
-      - traefik.http.services.f1replay.loadbalancer.server.port=3000
+      - traefik.http.routers.f1timing.rule=Host(`f1timing.${DOMAIN}`)
+      - traefik.http.routers.f1timing.entrypoints=websecure
+      - traefik.http.routers.f1timing.tls.certresolver=letsencrypt
+      - traefik.http.routers.f1timing.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.f1timing.middlewares=authentik@file,umami@file
+      - traefik.http.services.f1timing.loadbalancer.server.port=3000
     
 
   hypermind:    
