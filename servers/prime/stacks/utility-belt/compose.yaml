@@ -320,6 +320,45 @@ services:
       - traefik.http.routers.termix.middlewares=authentik@file
       - traefik.http.services.termix.loadbalancer.server.port=8080
 
+  
+  webhook-tester:
+    image: ghcr.io/tarampampam/webhook-tester:2
+    container_name: webhook-tester
+    command:
+      - serve
+      - --http-addr=0.0.0.0:8080
+      - --storage-driver=fs
+      - --storage-fs-dir=/data
+      - --pubsub-driver=redis
+      - --storage-redis-addr=redis.cache:6379
+      - --storage-redis-password=redis
+      - --pubsub-redis-addr=redis.cache:6379
+      - --pubsub-redis-password=redis
+    volumes:
+      - webhook-tester:/data
+    networks:
+      - web
+      - cache
+    healthcheck:
+      test: ["CMD", "webhook-tester", "healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.name=Webhooks
+      - flame.category=Utility Belt
+      - flame.url=https://webhook.${DOMAIN}
+      - flame.icon=webhook
+      - traefik.enable=true
+      - traefik.http.routers.webhook.rule=Host(`webhook.${DOMAIN}`)
+      - traefik.http.routers.webhook.entrypoints=websecure
+      - traefik.http.routers.webhook.tls.certresolver=letsencrypt
+      - traefik.http.routers.webhook.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.webhook.middlewares=umami@file
+      - traefik.http.services.webhook.loadbalancer.server.port=8080
+
 networks:
   cache:
     external: true
@@ -348,7 +387,10 @@ volumes:
   scanopy:
     external: true
   termix:
+    external: true 
+  webhook-tester:
     external: true
+
   
   # Mounts from other stacks to be used with NextExplorer
   icloud:
