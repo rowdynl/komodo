@@ -324,14 +324,7 @@ services:
   webhook-tester:
     image: ghcr.io/tarampampam/webhook-tester:2
     container_name: webhook-tester
-    command:
-      - serve
-      - --storage-driver=fs
-      - --fs-storage-dir=/data
-      - --pubsub-driver=redis
-      - --redis-dsn=redis://redis.cache:6379
-    volumes:
-      - webhook-tester:/data
+    env_file: ./env/webhook-tester.env
     networks:
       - web
       - cache
@@ -383,10 +376,7 @@ volumes:
   scanopy:
     external: true
   termix:
-    external: true 
-  webhook-tester:
     external: true
-
   
   # Mounts from other stacks to be used with NextExplorer
   icloud:
