@@ -96,8 +96,8 @@ services:
       - web
     volumes:
       - medialyze:/config:rw
-      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}:ro
-      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}:ro
+      - ${VOLUME_PATH_MOVIES_HOST}:/media/movies:ro
+      - ${VOLUME_PATH_TV_HOST}:/media/tv:ro
     labels:
       - flame.type=application
       - flame.category=Captain’s Quarters
