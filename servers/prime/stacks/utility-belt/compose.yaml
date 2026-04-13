@@ -17,10 +17,10 @@ services:
       - flame.type=application
       - flame.category=Utility Belt
       - flame.name=BentoPDF
-      - flame.url=https://bentopdf.${DOMAIN}
+      - flame.url=https://pdf.${DOMAIN}
       - flame.icon=file-pdf-box
       - traefik.enable=true
-      - traefik.http.routers.bentopdf.rule=Host(`bentopdf.${DOMAIN}`)
+      - traefik.http.routers.bentopdf.rule=Host(`pdf.${DOMAIN}`)
       - traefik.http.routers.bentopdf.entrypoints=websecure
       - traefik.http.routers.bentopdf.tls.certresolver=letsencrypt
       - traefik.http.routers.bentopdf.priority=${TRAEFIK_PRIORITY}
