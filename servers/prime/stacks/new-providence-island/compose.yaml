@@ -110,7 +110,7 @@ services:
       - traefik.http.routers.medialyze.tls.certresolver=letsencrypt
       - traefik.http.routers.medialyze.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.medialyze.middlewares=authentik@file
-      - traefik.http.services.medialyze.loadbalancer.server.port=8000
+      - traefik.http.services.medialyze.loadbalancer.server.port=8080
 
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
