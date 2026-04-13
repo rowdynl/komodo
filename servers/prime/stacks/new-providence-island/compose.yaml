@@ -85,6 +85,33 @@ services:
       - traefik.http.routers.lidarr.priority=${TRAEFIK_PRIORITY}
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
 
+  medialyze:
+    image: ghcr.io/frederikemmer/medialyze:latest
+    container_name: medialyze
+    environment:
+      - TZ=${TZ}
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    networks:
+      - web
+    volumes:
+      - medialyze:/config:rw
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}:ro
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}:ro
+    labels:
+      - flame.type=application
+      - flame.category=Captain’s Quarters
+      - flame.name=Medialyze
+      - flame.url=https://medialyze.${DOMAIN}
+      - flame.icon=image-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.medialyze.rule=Host(`medialyze.${DOMAIN}`)
+      - traefik.http.routers.medialyze.entrypoints=websecure
+      - traefik.http.routers.medialyze.tls.certresolver=letsencrypt
+      - traefik.http.routers.medialyze.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.medialyze.middlewares=authentik@file
+      - traefik.http.services.medialyze.loadbalancer.server.port=8000
+
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
@@ -420,7 +447,7 @@ volumes:
     external: true
   lidarr:
     external: true
-  seerr:
+  medialyze:
     external: true
   plex:
     external: true
@@ -435,6 +462,8 @@ volumes:
   radarr:
     external: true
   sabnzbd:
+    external: true
+  seerr:
     external: true
   sonarr:
     external: true
