@@ -104,7 +104,7 @@ services:
       start_period: 20s
       test:
       - CMD-SHELL
-      - pg_isready -d $${AUTHENTIK_PG_DB} -U $${AUTHENTIK_PG_USER}
+      - pg_isready -d ${AUTHENTIK_PG_DB} -U ${AUTHENTIK_PG_USER}
       timeout: 5s
     restart: unless-stopped
     networks:
@@ -123,7 +123,7 @@ services:
       start_period: 20s
       test:
       - CMD-SHELL
-      - pg_isready -d $${IMMICH_PG_DB} -U $${IMMICH_PG_USER}
+      - pg_isready -d ${IMMICH_PG_DB} -U ${IMMICH_PG_USER}
       timeout: 5s
     restart: unless-stopped
     networks:
@@ -141,7 +141,7 @@ services:
       start_period: 20s
       test:
       - CMD-SHELL
-      - pg_isready -d $${PAPERLESS_PG_DB} -U $${PAPERLESS_PG_USER}
+      - pg_isready -d ${PAPERLESS_PG_DB} -U ${PAPERLESS_PG_USER}
       timeout: 5s
     restart: unless-stopped
     networks:
@@ -159,7 +159,7 @@ services:
       start_period: 20s
       test:
       - CMD-SHELL
-      - pg_isready -d $${SCANOPY_PG_DB} -U $${SCANOPY_PG_USER}
+      - pg_isready -d ${SCANOPY_PG_DB} -U ${SCANOPY_PG_USER}
       timeout: 5s
     restart: unless-stopped
     networks:
@@ -175,7 +175,7 @@ services:
     networks:
       - backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 30s
       timeout: 5s
       start_period: 20s
