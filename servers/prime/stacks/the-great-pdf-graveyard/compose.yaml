@@ -54,6 +54,7 @@ networks:
   cache:
     external: true
   dms:
+    external: true
   web:
     external: true
 
