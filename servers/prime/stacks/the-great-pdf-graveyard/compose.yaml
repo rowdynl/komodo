@@ -24,7 +24,7 @@ services:
       - cache
       - web
     volumes:
-      - paperless:/usr/src/paperless
+      - paperless:/usr/src/paperless/folders
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     labels:
