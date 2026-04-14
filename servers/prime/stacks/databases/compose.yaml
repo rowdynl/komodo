@@ -134,7 +134,7 @@ services:
     container_name: postgresql-paperless
     env_file: ./env/postgresql-paperless.env
     volumes:
-      - postgresql-paperless:/var/lib/postgresql/data
+      - postgresql-paperless:/var/lib/postgresql
     healthcheck:
       interval: 30s
       retries: 5
