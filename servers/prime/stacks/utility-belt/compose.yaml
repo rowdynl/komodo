@@ -206,6 +206,7 @@ services:
       - /mnt/docker/volumes:/mnt/docker-volumes
       - /repos:/mnt/repos
       - icloud:/mnt/icloud
+      - paperless:/mnt/paperless
     networks:
       - web
     env_file: 
@@ -375,4 +376,6 @@ volumes:
   
   # Mounts from other stacks to be used with NextExplorer
   icloud:
+    external: true
+  paperless:
     external: true
