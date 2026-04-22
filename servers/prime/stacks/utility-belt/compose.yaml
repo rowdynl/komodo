@@ -322,7 +322,7 @@ services:
       - traefik.http.services.termix.loadbalancer.server.port=8080
 
   tududi:
-    image: chrisvel/tududi:latest
+    image: chrisvel/tududi:1.1.0-dev.14
     container_name: tududi
     env_file:
       - ../../../global.env
