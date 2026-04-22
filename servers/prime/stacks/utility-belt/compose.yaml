@@ -321,6 +321,31 @@ services:
       - traefik.http.routers.termix.middlewares=authentik@file
       - traefik.http.services.termix.loadbalancer.server.port=8080
 
+  tududi:
+    image: chrisvel/tududi:latest
+    container_name: tududi
+    env_file:
+      - ../../../global.env
+      - ./env/tududi.env
+    networks:
+      - web     
+    volumes:
+      - tududi-db:/app/backend/db
+      - tududi-uploads:/app/backend/uploads
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.name=Tududi
+      - flame.category=Utility Belt
+      - flame.url=https://tududi.${DOMAIN}
+      - flame.icon=file-document-edit-outline
+      - traefik.enable=true
+      - traefik.http.routers.tududi.rule=Host(`tududi.${DOMAIN}`)
+      - traefik.http.routers.tududi.entrypoints=websecure
+      - traefik.http.routers.tududi.tls.certresolver=letsencrypt
+      - traefik.http.routers.tududi.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.tududi.middlewares=umami@file
+      - traefik.http.services.tududi.loadbalancer.server.port=3002
   
   webhook-tester:
     image: ghcr.io/tarampampam/webhook-tester:2
@@ -372,6 +397,10 @@ volumes:
   scanopy:
     external: true
   termix:
+    external: true
+  tududi-db:
+    external: true
+  tududi-uploads:
     external: true
   
   # Mounts from other stacks to be used with NextExplorer
