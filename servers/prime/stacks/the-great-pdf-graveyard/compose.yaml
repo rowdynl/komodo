@@ -32,7 +32,7 @@ services:
       - flame.category=Document Management
       - flame.name=Paperless NG
       - flame.url=https://paperless.${DOMAIN}
-      - flame.icon=file-text
+      - flame.icon=file-document-multiple-outline
       - flame.order=4
       - traefik.enable=true
       - traefik.http.routers.paperless.rule=Host(`paperless.${DOMAIN}`)

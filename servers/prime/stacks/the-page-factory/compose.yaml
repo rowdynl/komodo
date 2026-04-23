@@ -148,7 +148,7 @@ services:
       - flame.category=Analytics
       - flame.name=Umami
       - flame.url=https://umami.${DOMAIN}
-      - flame.icon=chart-archive-outline
+      - flame.icon=chart-bar
       - traefik.enable=true
       - traefik.http.routers.umami-public.rule=Host(`umami.${DOMAIN}`) && (Path(`/script.js`) || Path(`/api/send`) || PathPrefix(`/umami/`))
       - traefik.http.routers.umami-public.entrypoints=websecure
