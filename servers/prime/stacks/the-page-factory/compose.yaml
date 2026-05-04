@@ -2,132 +2,6 @@
 name: the-page-factory
 
 services:
-
-  web-festinalentebock-nl:
-    image: trafex/php-nginx:latest
-    container_name: web-festinalentebock-nl
-    volumes:
-      - web-festinalentebock.nl:/var/www/html
-    networks:
-      - backend
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-festinalentebock-nl.entrypoints=websecure
-      - traefik.http.routers.web-festinalentebock-nl.middlewares=umami@file
-      - traefik.http.routers.web-festinalentebock-nl.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`)
-      - traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-festinalentebock-nl-redirect.entrypoints=websecure
-      - traefik.http.routers.web-festinalentebock-nl-redirect.middlewares=redirect301@file
-      - traefik.http.routers.web-festinalentebock-nl-redirect.priority=301
-      - traefik.http.routers.web-festinalentebock-nl-redirect.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-festinalentebock-nl-redirect.rule=Host(`www.festinalentebock.nl`)
-      - traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080
-
-  web-tcit-nl-dump:
-    image: trafex/php-nginx:latest
-    container_name: web-tcit-nl-dump
-    volumes:
-      - web-tcit.nl-dump:/var/www/
-    networks:
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-tcit-nl-dump.entrypoints=websecure
-      - traefik.http.routers.web-tcit-nl-dump.middlewares=umami@file
-      - traefik.http.routers.web-tcit-nl-dump.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-tcit-nl-dump.rule=Host(`dump.${DOMAIN}`)
-      - traefik.http.routers.web-tcit-nl-dump.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-tcit-nl-dump.loadbalancer.server.port=8080
-
-  web-tcit-nl-photo:
-    image: trafex/php-nginx:latest
-    container_name: web-tcit-nl-photo
-    volumes:
-      - ./nginx-server-web-tcit-nl-photo.conf:/etc/nginx/conf.d/server.conf:ro
-      - web-tcit.nl-photo:/var/www/html
-    networks:
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-tcit-nl-photo.entrypoints=websecure
-      - traefik.http.routers.web-tcit-nl-photo.middlewares=umami@file
-      - traefik.http.routers.web-tcit-nl-photo.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-tcit-nl-photo.rule=Host(`photo.${DOMAIN}`)
-      - traefik.http.routers.web-tcit-nl-photo.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-tcit-nl-photo.loadbalancer.server.port=8080
-
-  web-tcit-nl-tesla:
-    image: nginx:alpine
-    container_name: web-tcit-nl-tesla
-    volumes:
-      - web-tcit.nl-tesla:/usr/share/nginx/html:ro
-    networks:
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-tcit-nl-tesla.entrypoints=websecure
-      - traefik.http.routers.web-tcit-nl-tesla.middlewares=umami@file
-      - traefik.http.routers.web-tcit-nl-tesla.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-tcit-nl-tesla.rule=Host(`tesla.${DOMAIN}`)
-      - traefik.http.routers.web-tcit-nl-tesla.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-tcit-nl-tesla.loadbalancer.server.port=80      
-  
-  web-tcit-nl-tuning:
-    image: trafex/php-nginx:latest
-    container_name: web-tcit-nl-tuning
-    volumes:
-      - web-tcit.nl-tuning:/var/www/html:ro
-    networks:
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-tcit-nl-tuning.entrypoints=websecure
-      - traefik.http.routers.web-tcit-nl-tuning.middlewares=umami@file
-      - traefik.http.routers.web-tcit-nl-tuning.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-tcit-nl-tuning.rule=Host(`tuning.${DOMAIN}`)
-      - traefik.http.routers.web-tcit-nl-tuning.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-tcit-nl-tuning.loadbalancer.server.port=8080      
-  
-  web-tcit-nl-wiki:
-    image: mediawiki:1.34
-    container_name: web-tcit-nl-wiki
-    volumes:
-      - web-tcit.nl-wiki:/var/www/html
-    networks:
-      - backend
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-tcit-nl-wiki.entrypoints=websecure
-      - traefik.http.routers.web-tcit-nl-wiki.middlewares=umami@file
-      - traefik.http.routers.web-tcit-nl-wiki.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-tcit-nl-wiki.rule=Host(`wiki.${DOMAIN}`)
-      - traefik.http.routers.web-tcit-nl-wiki.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-tcit-nl-wiki.loadbalancer.server.port=443      
-  
-  web-venlosevrind-nl:
-    image: trafex/php-nginx:latest
-    container_name: web-venlosevrind-nl
-    volumes:
-      - web-venlosevrind.nl:/var/www/html
-    networks:
-      - web
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure
-      - traefik.http.routers.web-venlosevrind-nl.middlewares=umami@file
-      - traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`)
-      - traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-venlosevrind-nl-redirect.entrypoints=websecure
-      - traefik.http.routers.web-venlosevrind-nl-redirect.middlewares=redirect301@file
-      - traefik.http.routers.web-venlosevrind-nl-redirect.priority=301
-      - traefik.http.routers.web-venlosevrind-nl-redirect.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-venlosevrind-nl-redirect.rule=Host(`www.venlosevrind.nl`)
-      - traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080
-
   umami:
     image: ghcr.io/umami-software/umami:latest
     container_name: umami
@@ -160,6 +34,138 @@ services:
       - traefik.http.routers.umami.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.umami.middlewares=authentik@file
       - traefik.http.services.umami.loadbalancer.server.port=3000
+
+  web-festinalentebock-nl:
+    image: trafex/php-nginx:latest
+    container_name: web-festinalentebock-nl
+    volumes:
+      - web-festinalentebock.nl:/var/www/html
+    networks:
+      - backend
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-festinalentebock-nl.entrypoints=websecure
+      - traefik.http.routers.web-festinalentebock-nl.middlewares=umami@file
+      - traefik.http.routers.web-festinalentebock-nl.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-festinalentebock-nl.rule=Host(`festinalentebock.nl`)
+      - traefik.http.routers.web-festinalentebock-nl.tls.certresolver=letsencrypt_http
+      - traefik.http.routers.web-festinalentebock-nl-redirect.entrypoints=websecure
+      - traefik.http.routers.web-festinalentebock-nl-redirect.middlewares=redirect301@file
+      - traefik.http.routers.web-festinalentebock-nl-redirect.priority=301
+      - traefik.http.routers.web-festinalentebock-nl-redirect.tls.certresolver=letsencrypt_http
+      - traefik.http.routers.web-festinalentebock-nl-redirect.rule=Host(`www.festinalentebock.nl`)
+      - traefik.http.services.web-festinalentebock-nl.loadbalancer.server.port=8080
+
+  web-tcit-nl-dump:
+    image: trafex/php-nginx:latest
+    container_name: web-tcit-nl-dump
+    volumes:
+      - web-tcit.nl-dump:/var/www/
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-tcit-nl-dump.entrypoints=websecure
+      - traefik.http.routers.web-tcit-nl-dump.middlewares=umami@file
+      - traefik.http.routers.web-tcit-nl-dump.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-tcit-nl-dump.rule=Host(`dump.${DOMAIN}`)
+      - traefik.http.routers.web-tcit-nl-dump.tls.certresolver=letsencrypt      
+      - traefik.http.services.web-tcit-nl-dump.loadbalancer.server.port=8080
+
+  web-tcit-nl-photo:
+    image: trafex/php-nginx:latest
+    container_name: web-tcit-nl-photo
+    volumes:
+      - ./nginx-server-web-tcit-nl-photo.conf:/etc/nginx/conf.d/server.conf:ro
+      - web-tcit.nl-photo:/var/www/html
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-tcit-nl-photo.entrypoints=websecure
+      - traefik.http.routers.web-tcit-nl-photo.middlewares=umami@file
+      - traefik.http.routers.web-tcit-nl-photo.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-tcit-nl-photo.rule=Host(`photo.${DOMAIN}`)
+      - traefik.http.routers.web-tcit-nl-photo.tls.certresolver=letsencrypt      
+      - traefik.http.services.web-tcit-nl-photo.loadbalancer.server.port=8080
+
+  web-tcit-nl-tesla:
+    image: nginx:alpine
+    container_name: web-tcit-nl-tesla
+    volumes:
+      - web-tcit.nl-tesla:/usr/share/nginx/html:ro
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-tcit-nl-tesla.entrypoints=websecure
+      - traefik.http.routers.web-tcit-nl-tesla.middlewares=umami@file
+      - traefik.http.routers.web-tcit-nl-tesla.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-tcit-nl-tesla.rule=Host(`tesla.${DOMAIN}`)
+      - traefik.http.routers.web-tcit-nl-tesla.tls.certresolver=letsencrypt      
+      - traefik.http.services.web-tcit-nl-tesla.loadbalancer.server.port=80      
+  
+  web-tcit-nl-tuning:
+    image: trafex/php-nginx:latest
+    container_name: web-tcit-nl-tuning
+    volumes:
+      - web-tcit.nl-tuning:/var/www/html:ro
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-tcit-nl-tuning.entrypoints=websecure
+      - traefik.http.routers.web-tcit-nl-tuning.middlewares=umami@file
+      - traefik.http.routers.web-tcit-nl-tuning.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-tcit-nl-tuning.rule=Host(`tuning.${DOMAIN}`)
+      - traefik.http.routers.web-tcit-nl-tuning.tls.certresolver=letsencrypt      
+      - traefik.http.services.web-tcit-nl-tuning.loadbalancer.server.port=8080      
+  
+  web-tcit-nl-wiki:
+    image: mediawiki:1.34
+    container_name: web-tcit-nl-wiki
+    volumes:
+      - web-tcit.nl-wiki:/var/www/html
+    networks:
+      - backend
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-tcit-nl-wiki.entrypoints=websecure
+      - traefik.http.routers.web-tcit-nl-wiki.middlewares=umami@file
+      - traefik.http.routers.web-tcit-nl-wiki.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-tcit-nl-wiki.rule=Host(`wiki.${DOMAIN}`)
+      - traefik.http.routers.web-tcit-nl-wiki.tls.certresolver=letsencrypt      
+      - traefik.http.services.web-tcit-nl-wiki.loadbalancer.server.port=443      
+  
+  web-venlosevrind-nl:
+    image: trafex/php-nginx:latest
+    container_name: web-venlosevrind-nl
+    volumes:
+      - web-venlosevrind.nl:/var/www/html
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure
+      - traefik.http.routers.web-venlosevrind-nl.middlewares=umami@file
+      - traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`)
+      - traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http
+      - traefik.http.routers.web-venlosevrind-nl-redirect.entrypoints=websecure
+      - traefik.http.routers.web-venlosevrind-nl-redirect.middlewares=redirect301@file
+      - traefik.http.routers.web-venlosevrind-nl-redirect.priority=301
+      - traefik.http.routers.web-venlosevrind-nl-redirect.tls.certresolver=letsencrypt_http
+      - traefik.http.routers.web-venlosevrind-nl-redirect.rule=Host(`www.venlosevrind.nl`)
+      - traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080
 
 networks:
   backend:
