@@ -196,6 +196,14 @@ services:
       - traefik.http.routers.grafana.middlewares=authentik@file
       - traefik.http.services.grafana.loadbalancer.server.port=3000
 
+  isponsorblocktv:
+    image: ghcr.io/dmunozv04/isponsorblocktv
+    container_name: isponsorblocktv
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - isponsorblocktv:/app/data #enter the same pathway as you used for your configurator in step 1
+
   nextexplorer:
     image: nxzai/explorer:latest
     container_name: nextexplorer
@@ -387,6 +395,8 @@ volumes:
   firefox:
     external: true
   grafana:
+    external: true
+  isponsorblocktv:
     external: true
   nextexplorer:
     external: true
