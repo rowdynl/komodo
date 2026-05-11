@@ -21,17 +21,20 @@ services:
       - 8080:8080
   
   komodo-periphery:
-    image: ghcr.io/moghtech/komodo-periphery:latest
+    image: ghcr.io/moghtech/komodo-periphery:2
     container_name: komodo-periphery
+    init: true
     labels:
-      komodo.skip:
+      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
     restart: unless-stopped
+    env_file: ./compose.env
     ports:
       - 8120:8120
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/proc
       - /etc/komodo:/etc/komodo
+      - /volume1/docker/komodo/keys:/config/keys
   
   node-exporter:
     image: prom/node-exporter:latest
