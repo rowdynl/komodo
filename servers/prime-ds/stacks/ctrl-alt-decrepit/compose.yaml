@@ -25,9 +25,8 @@ services:
     container_name: komodo-periphery
     init: true
     labels:
-      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+      - komodo.skip
     restart: unless-stopped
-    env_file: ./compose.env
     ports:
       - 8120:8120
     volumes:
