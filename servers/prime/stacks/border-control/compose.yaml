@@ -6,7 +6,7 @@ name: border-control
 
 services:
   authentik-server:
-    image: ghcr.io/goauthentik/server:2025.12.4
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
     container_name: authentik-server
     command: server
     networks:
@@ -36,7 +36,7 @@ services:
 
 
   authentik-worker:
-    image: ghcr.io/goauthentik/server:2025.12.4
+    image: ghcr.io/goauthentik/server:2026.2.2
     container_name: authentik-worker
     command: worker
     networks:
