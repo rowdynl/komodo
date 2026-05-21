@@ -142,7 +142,7 @@ services:
     networks:
       - monitoring
     environment:
-      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.scrutiny:8080'
+      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.monitoring:8080'
       COLLECTOR_HOST_ID: 'prime'
       COLLECTOR_RUN_STARTUP: true
     restart: unless-stopped    
@@ -165,6 +165,8 @@ services:
   scrutiny-web:
     image: 'ghcr.io/analogj/scrutiny:master-web'
     container_name: scrutiny-web
+    ports:
+      - 8582:8080
     volumes:
       - scrutiny:/opt/scrutiny/config
     networks:
