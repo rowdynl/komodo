@@ -167,7 +167,30 @@ services:
       - flame.category=Border Control
       - flame.url=https://traefik.${DOMAIN}
       - flame.icon=routes
-      
+
+
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vault.${DOMAIN}"
+    volumes:
+      - vaultwarden:/data/
+    networks:
+      - web
+    labels:
+      - flame.type=application
+      - flame.name=Vaultwarden
+      - flame.category=Border Control
+      - flame.url=https://vault.${DOMAIN}
+      - flame.icon=shield-lock-outline
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden.rule=Host(`vault.${DOMAIN}`)
+      - traefik.http.routers.vaultwarden.entrypoints=websecure
+      - traefik.http.routers.vaultwarden.tls.certresolver=letsencrypt
+      - traefik.http.routers.vaultwarden.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.vaultwarden.loadbalancer.server.port=80
       
   wireguard:
     image: ghcr.io/wg-easy/wg-easy:latest
@@ -206,7 +229,6 @@ services:
       - traefik.http.routers.wireguard.middlewares=authentik@file
       - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
-
 networks:
   cache:
     external: true
@@ -231,6 +253,8 @@ volumes:
   pihole:
     external: true
   traefik:
+    external: true
+  vaultwarden:
     external: true
   wireguard:
     external: true
