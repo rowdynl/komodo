@@ -61,9 +61,9 @@ services:
       - '/run/udev:/run/udev:ro'
       - /volume1/docker/scrutiny-collector:/opt/scrutiny/config
     environment:
-      - SCRUTINY_COLLECTOR_API_ENDPOINT=${SCRUTINY_COLLECTOR_API_ENDPOINT}
-      - SCRUTINY_COLLECTOR_HOST_ID=prime-ds
-      - SCRUTINY_COLLECTOR_RUN_STARTUP=true
+      - COLLECTOR_API_ENDPOINT=${SCRUTINY_COLLECTOR_API_ENDPOINT}
+      - COLLECTOR_HOST_ID=prime-ds
+      - COLLECTOR_RUN_STARTUP=true
     restart: unless-stopped
     devices:
       - "/dev/sda"
