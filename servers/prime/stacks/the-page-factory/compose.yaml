@@ -145,27 +145,27 @@ services:
       - traefik.http.routers.web-tcit-nl-wiki.tls.certresolver=letsencrypt      
       - traefik.http.services.web-tcit-nl-wiki.loadbalancer.server.port=443      
   
-  web-venlosevrind-nl:
-    image: trafex/php-nginx:latest
-    container_name: web-venlosevrind-nl
-    volumes:
-      - web-venlosevrind.nl:/var/www/html
-    networks:
-      - web
-    restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure
-      - traefik.http.routers.web-venlosevrind-nl.middlewares=umami@file
-      - traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`)
-      - traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-venlosevrind-nl-redirect.entrypoints=websecure
-      - traefik.http.routers.web-venlosevrind-nl-redirect.middlewares=redirect301@file
-      - traefik.http.routers.web-venlosevrind-nl-redirect.priority=301
-      - traefik.http.routers.web-venlosevrind-nl-redirect.tls.certresolver=letsencrypt_http
-      - traefik.http.routers.web-venlosevrind-nl-redirect.rule=Host(`www.venlosevrind.nl`)
-      - traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080
+#  web-venlosevrind-nl:
+#    image: trafex/php-nginx:latest
+#    container_name: web-venlosevrind-nl
+#    volumes:
+#      - web-venlosevrind.nl:/var/www/html
+#    networks:
+#      - web
+#    restart: unless-stopped
+#    labels:
+#      - traefik.enable=true
+#      - traefik.http.routers.web-venlosevrind-nl.entrypoints=websecure
+#      - traefik.http.routers.web-venlosevrind-nl.middlewares=umami@file
+#      - traefik.http.routers.web-venlosevrind-nl.priority=${TRAEFIK_PRIORITY}
+#      - traefik.http.routers.web-venlosevrind-nl.rule=Host(`venlosevrind.nl`)
+#      - traefik.http.routers.web-venlosevrind-nl.tls.certresolver=letsencrypt_http
+#      - traefik.http.routers.web-venlosevrind-nl-redirect.entrypoints=websecure
+#      - traefik.http.routers.web-venlosevrind-nl-redirect.middlewares=redirect301@file
+#      - traefik.http.routers.web-venlosevrind-nl-redirect.priority=301
+#      - traefik.http.routers.web-venlosevrind-nl-redirect.tls.certresolver=letsencrypt_http
+#      - traefik.http.routers.web-venlosevrind-nl-redirect.rule=Host(`www.venlosevrind.nl`)
+#      - traefik.http.services.web-venlosevrind-nl.loadbalancer.server.port=8080
 
 networks:
   backend:
