@@ -92,7 +92,7 @@ services:
       - traefik.http.routers.web-struthofer-nl.entrypoints=websecure
       - traefik.http.routers.web-struthofer-nl.middlewares=umami@file
       - traefik.http.routers.web-struthofer-nl.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.web-struthofer-nl.rule=Host(`struthofer.${DOMAIN}`)
+      - traefik.http.routers.web-struthofer-nl.rule=Host(`struthofer.nl`)
       - traefik.http.routers.web-struthofer-nl.tls.certresolver=letsencrypt      
       - traefik.http.services.web-struthofer-nl.loadbalancer.server.port=8080 
 
