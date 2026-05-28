@@ -62,7 +62,6 @@ services:
   web-rowdy-nl-dev:
     image: trafex/php-nginx:latest
     container_name: web-rowdy-nl-dev
-    user: ${PUID}:${PGID}
     volumes:
       - web-rowdy.nl-dev:/var/www/html
     networks:
