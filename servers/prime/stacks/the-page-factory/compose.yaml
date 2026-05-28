@@ -62,7 +62,6 @@ services:
   web-rowdy-nl-dev:
     image: wordpress:php8.3-fpm-alpine
     container_name: web-rowdy-nl-dev
-    restart: unless-stopped
     env_file: ./env/dev.rowdy.nl.env
     volumes:
       - web-rowdy.nl-dev:/var/www/html
