@@ -60,7 +60,7 @@ services:
 
   
   web-rowdy-nl-dev:
-    image: wordpress:php8.3-fpm-alpine
+    image: trafex/php-nginx:latest
     container_name: web-rowdy-nl-dev
     env_file: ./env/dev.rowdy.nl.env
     volumes:
@@ -80,10 +80,10 @@ services:
 
 
   web-struthofer-nl:
-    image: trafex/php-nginx:latest
+    image: nginx:alpine
     container_name: web-struthofer-nl
     volumes:
-      - web-struthofer.nl:/var/www/html:ro
+      - web-struthofer.nl:/usr/share/nginx/html:ro
     networks:
       - web
     restart: unless-stopped
