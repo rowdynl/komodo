@@ -76,7 +76,7 @@ services:
       - traefik.http.routers.web-rowdy-nl-dev.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.web-rowdy-nl-dev.rule=Host(`dev.rowdy.nl`)
       - traefik.http.routers.web-rowdy-nl-dev.tls.certresolver=letsencrypt_http      
-      - traefik.http.services.web-rowdy-nl-dev.loadbalancer.server.port=80
+      - traefik.http.services.web-rowdy-nl-dev.loadbalancer.server.port=8080
 
 
   web-struthofer-nl:
@@ -94,7 +94,7 @@ services:
       - traefik.http.routers.web-struthofer-nl.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.web-struthofer-nl.rule=Host(`struthofer.nl`)
       - traefik.http.routers.web-struthofer-nl.tls.certresolver=letsencrypt      
-      - traefik.http.services.web-struthofer-nl.loadbalancer.server.port=8080 
+      - traefik.http.services.web-struthofer-nl.loadbalancer.server.port=80
 
 
   web-tcit-nl-dump:
