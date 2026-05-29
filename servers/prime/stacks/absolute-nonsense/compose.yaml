@@ -38,8 +38,6 @@ services:
       - ENABLE_MAP=true
       - ENABLE_CHAT=true
       - PORT=3000
-    ports:
-      - 3000:3000
     networks:
       web:
     mem_limit: 330m    
@@ -57,6 +55,33 @@ services:
       - traefik.http.routers.hypermind.tls.certresolver=letsencrypt
       - traefik.http.routers.hypermind.priority=${TRAEFIK_PRIORITY}
       - traefik.http.services.hypermind.loadbalancer.server.port=3000
+
+  hypermind-swarm:
+    image: ghcr.io/lklynet/hypermind-swarm:latest
+    container_name: hypermind-swarm
+    environment:
+      - WEB_AUTH=${HYPERMIND_SWARM_AUTH}
+      - PORT=3000
+    networks:
+      web:
+    mem_limit: 330m    
+    cpus: 0.33
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Fun and games
+      - flame.name=Hypermind Swarm
+      - flame.url=https://rmind-swarm.${DOMAIN}
+      - flame.icon=brain
+      - traefik.enable=true
+      - traefik.http.routers.hypermind-swarm.rule=Host(`hypermind-swarm.${DOMAIN}`)
+      - traefik.http.routers.hypermind-swarm.entrypoints=websecure
+      - traefik.http.routers.hypermind-swarm.tls.certresolver=letsencrypt
+      - traefik.http.routers.hypermind-swarm.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.hypermind-swarm.loadbalancer.server.port=3000
+
+      
+        
 
 networks:
   web:
