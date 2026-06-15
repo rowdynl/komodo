@@ -128,16 +128,16 @@ services:
   music-assistant:
     image: ghcr.io/music-assistant/server:latest
     container_name: music-assistant
-    env_file: ../../../global.env
+    env_file: ../../../global.env    
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
     networks:
-      backend:
       macvlan:
         ipv4_address: ${MACVLAN_STATIC_IP_MUSIC_ASSISTANT}
     volumes:
-      - music-assistant:/config
+      - music-assistant:/data
       - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 8095:8095
     restart: unless-stopped
 
   node-red:
