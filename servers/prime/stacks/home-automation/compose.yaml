@@ -116,6 +116,9 @@ services:
       - TZ=${TZ}
     networks:
       - backend
+    ports:
+      - 1883:1883
+      - 9001:9001
     volumes:
       - mosquitto:/mosquitto
     restart: unless-stopped
