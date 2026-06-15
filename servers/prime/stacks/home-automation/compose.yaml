@@ -109,7 +109,7 @@ services:
       - traefik.http.services.home-assistant.loadbalancer.server.url=http://${GLOBAL_SERVER_URL}:8123
 
   mosquitto:
-    image: eclipse-mosquitto:latest
+    image: eclipse-mosquitto:2
     container_name: mosquitto
     environment:
       - TZ=${TZ}
