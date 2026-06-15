@@ -110,7 +110,6 @@ services:
       - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
       - traefik.http.routers.home-assistant.entrypoints=websecure
       - traefik.http.routers.home-assistant.tls.certresolver=letsencrypt
-      #- traefik.http.routers.home-assistant.middlewares=crowdsec@file,geoblock@file
       - traefik.http.services.home-assistant.loadbalancer.server.port=8123
 
   mosquitto:
@@ -132,9 +131,9 @@ services:
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
-    networks:
-      macvlan:
-        ipv4_address: ${MACVLAN_STATIC_IP_MUSIC_ASSISTANT}
+    security_opt:
+      - apparmor:unconfined
+    network_mode: host
     volumes:
       - music-assistant:/data
       - /etc/localtime:/etc/localtime:ro
