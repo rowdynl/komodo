@@ -87,11 +87,7 @@ services:
     env_file: ../../../global.env
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0     
-    networks:
-      backend:
-      macvlan:
-        ipv4_address: ${MACVLAN_STATIC_IP_HOME_ASSISTANT}
-      web:
+    network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - home-assistant:/config
@@ -110,7 +106,7 @@ services:
       - traefik.http.routers.home-assistant.rule=Host(`has.${DOMAIN}`)
       - traefik.http.routers.home-assistant.entrypoints=websecure
       - traefik.http.routers.home-assistant.tls.certresolver=letsencrypt
-      - traefik.http.services.home-assistant.loadbalancer.server.port=8123
+      - traefik.http.services.home-assistant.loadbalancer.server.url=http://127.0.0.1:8123
 
   mosquitto:
     image: eclipse-mosquitto:latest

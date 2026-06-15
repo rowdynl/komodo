@@ -80,6 +80,8 @@ services:
     networks:
       - backend
     env_file: ./env/mariadb.env
+    ports:
+      - 3306:3306
     volumes:
       - mariadb:/var/lib/mysql
     restart: unless-stopped
