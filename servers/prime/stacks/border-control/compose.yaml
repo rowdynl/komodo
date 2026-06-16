@@ -87,7 +87,7 @@ services:
     - traefik.http.routers.flame.tls=true
     - traefik.http.routers.flame.tls.certresolver=letsencrypt
     - traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}
-    - traefik.http.routers.flame.middlewares=authentik@file
+    - traefik.http.routers.flame.middlewares=oidc-auth@file
     - traefik.http.services.flame.loadbalancer.server.port=5005
 
   krawl:
