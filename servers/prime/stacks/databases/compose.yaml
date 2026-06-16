@@ -148,6 +148,24 @@ services:
     restart: unless-stopped
     networks:
       - backend
+  
+  postgresql-pocket-id:
+    image: docker.io/library/postgres:18
+    container_name: postgresql-pocket-id
+    env_file: ./env/postgresql-pocket-id.env
+    volumes:
+      - postgresql-pocket-id:/var/lib/postgresql
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d ${POCKET_ID_PG_DB} -U ${POCKET_ID_PG_USER}
+      timeout: 5s
+    restart: unless-stopped
+    networks:
+      - backend
 
   postgresql-scanopy:
     image: postgres:17-alpine
@@ -205,6 +223,8 @@ volumes:
   postgresql-immich:
     external: true
   postgresql-paperless:
+    external: true
+  postgresql-pocket-id:
     external: true
   postgresql-scanopy:
     external: true
