@@ -155,6 +155,7 @@ services:
     ports:
       - 1411:1411
     networks:
+      - backend
       - web
     volumes:
       - pocket-id:/app/data
