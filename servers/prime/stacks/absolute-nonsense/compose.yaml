@@ -26,7 +26,7 @@ services:
       - traefik.http.routers.f1timing.entrypoints=websecure
       - traefik.http.routers.f1timing.tls.certresolver=letsencrypt
       - traefik.http.routers.f1timing.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.f1timing.middlewares=authentik@file,umami@file
+      - traefik.http.routers.f1timing.middlewares=oidc-auth@file,umami@file
       - traefik.http.services.f1timing.loadbalancer.server.port=8000
     
 

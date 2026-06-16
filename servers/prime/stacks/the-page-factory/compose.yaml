@@ -32,7 +32,7 @@ services:
       - traefik.http.routers.umami.entrypoints=websecure
       - traefik.http.routers.umami.tls.certresolver=letsencrypt
       - traefik.http.routers.umami.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.umami.middlewares=authentik@file
+      - traefik.http.routers.umami.middlewares=oidc-auth@file
       - traefik.http.services.umami.loadbalancer.server.port=3000
 
   web-festinalentebock-nl:

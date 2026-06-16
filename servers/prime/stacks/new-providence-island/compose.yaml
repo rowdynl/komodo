@@ -29,7 +29,7 @@ services:
       - traefik.http.routers.bazarr.entrypoints=websecure
       - traefik.http.routers.bazarr.tls.certresolver=letsencrypt
       - traefik.http.routers.bazarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.bazarr.middlewares=authentik@file
+      - traefik.http.routers.bazarr.middlewares=oidc-auth@file
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
 
   decluttarr:
@@ -109,7 +109,7 @@ services:
       - traefik.http.routers.medialyze.entrypoints=websecure
       - traefik.http.routers.medialyze.tls.certresolver=letsencrypt
       - traefik.http.routers.medialyze.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.medialyze.middlewares=authentik@file
+      - traefik.http.routers.medialyze.middlewares=oidc-auth@file
       - traefik.http.services.medialyze.loadbalancer.server.port=8080
 
   plex:
@@ -185,7 +185,7 @@ services:
       - traefik.http.routers.posterizarr.entrypoints=websecure
       - traefik.http.routers.posterizarr.tls.certresolver=letsencrypt
       - traefik.http.routers.posterizarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.posterizarr.middlewares=authentik@file
+      - traefik.http.routers.posterizarr.middlewares=oidc-auth@file
       - traefik.http.services.posterizarr.loadbalancer.server.port=8000
 
   profilarr:
@@ -208,7 +208,7 @@ services:
       - traefik.http.routers.profilarr.entrypoints=websecure
       - traefik.http.routers.profilarr.tls.certresolver=letsencrypt
       - traefik.http.routers.profilarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.profilarr.middlewares=authentik@file
+      - traefik.http.routers.profilarr.middlewares=oidc-auth@file
       - traefik.http.services.profilarr.loadbalancer.server.port=6868
 
   prowlarr:
@@ -235,7 +235,7 @@ services:
       - traefik.http.routers.prowlarr.entrypoints=websecure
       - traefik.http.routers.prowlarr.tls.certresolver=letsencrypt
       - traefik.http.routers.prowlarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.prowlarr.middlewares=authentik@file
+      - traefik.http.routers.prowlarr.middlewares=oidc-auth@file
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
 
   radarr:
@@ -264,7 +264,7 @@ services:
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.tls.certresolver=letsencrypt
       - traefik.http.routers.radarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.radarr.middlewares=authentik@file
+      - traefik.http.routers.radarr.middlewares=oidc-auth@file
       - traefik.http.services.radarr.loadbalancer.server.port=7878
   
   sabnzbd:
@@ -293,7 +293,7 @@ services:
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt
       - traefik.http.routers.sabnzbd.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.sabnzbd.middlewares=authentik@file
+      - traefik.http.routers.sabnzbd.middlewares=oidc-auth@file
       - traefik.http.services.sabnzbd.loadbalancer.server.port=3389
   
   seerr:
@@ -352,7 +352,7 @@ services:
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.tls.certresolver=letsencrypt
       - traefik.http.routers.sonarr.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.sonarr.middlewares=authentik@file
+      - traefik.http.routers.sonarr.middlewares=oidc-auth@file
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
 
   tautulli:
@@ -380,7 +380,7 @@ services:
       - traefik.http.routers.tautulli.entrypoints=websecure
       - traefik.http.routers.tautulli.tls.certresolver=letsencrypt
       - traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.tautulli.middlewares=authentik@file
+      - traefik.http.routers.tautulli.middlewares=oidc-auth@file
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
 
 
@@ -423,7 +423,7 @@ services:
       - traefik.http.routers.transmission.entrypoints=websecure
       - traefik.http.routers.transmission.tls.certresolver=letsencrypt
       - traefik.http.routers.transmission.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.transmission.middlewares=authentik@file
+      - traefik.http.routers.transmission.middlewares=oidc-auth@file
       - traefik.http.services.transmission.loadbalancer.server.port=9091
 
 networks:

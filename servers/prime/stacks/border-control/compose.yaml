@@ -142,7 +142,7 @@ services:
       - traefik.http.routers.pihole.entrypoints=websecure
       - traefik.http.routers.pihole.tls.certresolver=letsencrypt
       - traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.pihole.middlewares=authentik@file
+      - traefik.http.routers.pihole.middlewares=oidc-auth@file
       - traefik.http.services.pihole.loadbalancer.server.port=80
   
   pocket-id:
@@ -258,7 +258,7 @@ services:
       - traefik.http.routers.wireguard.entrypoints=websecure
       - traefik.http.routers.wireguard.tls.certresolver=letsencrypt
       - traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.wireguard.middlewares=authentik@file
+      - traefik.http.routers.wireguard.middlewares=oidc-auth@file
       - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
 networks:

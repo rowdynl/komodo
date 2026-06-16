@@ -37,7 +37,7 @@ services:
       - traefik.http.routers.duplicati.entrypoints=websecure
       - traefik.http.routers.duplicati.tls.certresolver=letsencrypt
       - traefik.http.routers.duplicati.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.duplicati.middlewares=authentik@file
+      - traefik.http.routers.duplicati.middlewares=oidc-auth@file
       - traefik.http.services.duplicati.loadbalancer.server.port=8200
 
 
