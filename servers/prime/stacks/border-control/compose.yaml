@@ -5,52 +5,6 @@
 name: border-control
 
 services:
-  authentik-server:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
-    container_name: authentik-server
-    command: server
-    networks:
-      - cache
-      - backend
-      - web
-    env_file: ./env/authentik.env      
-    volumes:
-      - authentik-certs:/certs
-      - authentik-data:/data
-      - authentik-templates:/templates
-    restart: unless-stopped    
-    labels:
-      - flame.type=application
-      - flame.name=Authentik
-      - flame.category=Border Control
-      - flame.url=https://auth.${DOMAIN}
-      - flame.icon=key-chain
-      - traefik.enable=true
-      - traefik.http.routers.authentik.rule=Host(`auth.${DOMAIN}`)
-      - traefik.http.routers.authentik.entrypoints=websecure
-      - traefik.http.routers.authentik.tls=true
-      - traefik.http.routers.authentik.tls.certresolver=letsencrypt
-      - traefik.http.routers.authentik.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.authentik.loadbalancer.server.port=9000
-      - traefik.http.services.authentik.loadbalancer.passhostheader=true
-
-
-  authentik-worker:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
-    container_name: authentik-worker
-    command: worker
-    networks:
-      - cache
-      - backend
-    env_file: ./env/authentik.env
-    user: root
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock     
-      - authentik-certs:/certs
-      - authentik-data:/data
-      - authentik-templates:/templates    
-    restart: unless-stopped
-    
   crowdsec:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
