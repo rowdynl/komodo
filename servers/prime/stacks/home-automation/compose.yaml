@@ -160,7 +160,6 @@ services:
       - traefik.http.routers.node-red.rule=Host(`nodered.${DOMAIN}`)
       - traefik.http.routers.node-red.entrypoints=websecure
       - traefik.http.routers.node-red.tls.certresolver=letsencrypt
-      - traefik.http.routers.node-red.middlewares=oidc-auth@file
       - traefik.http.services.node-red.loadbalancer.server.port=1880
 
 networks:
