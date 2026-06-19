@@ -148,6 +148,24 @@ services:
     networks:
       - backend
 
+  postgresql-spottarr:
+    image: docker.io/library/postgres:18
+    container_name: postgresql-spottarr
+    env_file: ./env/postgresql-spottarr.env
+    volumes:
+      - postgresql-spottarr:/var/lib/postgresql
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d ${SPOTTARR_PG_DB} -U ${SPOTTARR_PG_USER}
+      timeout: 5s
+    restart: unless-stopped
+    networks:
+      - backend
+  
   postgresql-scanopy:
     image: postgres:17-alpine
     container_name: postgresql-scanopy
@@ -208,6 +226,8 @@ volumes:
   postgresql-pocket-id:
     external: true
   postgresql-scanopy:
+    external: true
+  postgresql-spottarr:
     external: true
   postgresql-umami:
     external: true

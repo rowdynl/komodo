@@ -61,6 +61,7 @@ services:
     image: lscr.io/linuxserver/lidarr:latest
     container_name: lidarr
     networks:
+      - dirty-water
       - web
     env_file: ../../../global.env
     volumes:
@@ -215,6 +216,7 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     networks:
+      - dirty-water
       - web
     env_file: ../../../global.env
     volumes:
@@ -242,6 +244,7 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     networks:
+      - dirty-water
       - web
     env_file: ../../../global.env
     volumes:
@@ -271,6 +274,7 @@ services:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     networks:
+      - dirty-water
       - web
     env_file: ../../../global.env
     volumes:
@@ -330,6 +334,7 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     networks:
+      - dirty-water
       - web
     env_file: ../../../global.env
     volumes:
@@ -354,6 +359,18 @@ services:
       - traefik.http.routers.sonarr.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.sonarr.middlewares=oidc-auth@file
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
+
+  spottarr:
+    image: ghcr.io/fscorrupt/spottarr:latest
+    container_name: spottarr
+    env_file: ./env/postgresql-spottarr.env
+    user: ${PUID}:${PGID}
+    networks:
+      - backend
+      - dirty-water
+    volumes:
+      - spottarr:/data
+    restart: unless-stopped
 
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
@@ -466,6 +483,8 @@ volumes:
   seerr:
     external: true
   sonarr:
+    external: true
+  spottarr:
     external: true
   tautulli:
     external: true
