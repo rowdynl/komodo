@@ -363,7 +363,7 @@ services:
   spottarr:
     image: ghcr.io/spottarr/spottarr:latest
     container_name: spottarr
-    env_file: ./env/postgresql-spottarr.env
+    env_file: ./env/spottarr.env
     user: ${PUID}:${PGID}
     networks:
       - backend
