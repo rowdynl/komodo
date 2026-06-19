@@ -361,7 +361,7 @@ services:
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
 
   spottarr:
-    image: ghcr.io/fscorrupt/spottarr:latest
+    image: ghcr.io/spottarr/spottarr:latest
     container_name: spottarr
     env_file: ./env/postgresql-spottarr.env
     user: ${PUID}:${PGID}
