@@ -70,7 +70,12 @@ services:
       - traefik.http.routers.glances.entrypoints=websecure
       - traefik.http.routers.glances.tls=true
       - traefik.http.routers.glances.middlewares=oidc-auth@file
-      - traefik.http.routers.glances.service=glances
+      - traefik.http.routers.glances.service=glances      
+      - traefik.http.routers.glances-oidc.rule=Host(`glances.${DOMAIN}`) && PathPrefix(`/oidc`)
+      - traefik.http.routers.glances-oidc.entrypoints=websecure
+      - traefik.http.routers.glances-oidc.middlewares=oidc-auth@file
+      - traefik.http.routers.glances-oidc.service=glances
+
       - traefik.http.services.glances.loadbalancer.server.port=61208
 
   godns:
