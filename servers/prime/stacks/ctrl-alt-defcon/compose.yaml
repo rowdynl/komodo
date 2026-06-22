@@ -43,11 +43,7 @@ services:
     pid: host
     privileged: true
     environment:
-      GLANCES_OPT: >-
-        -w
-        --enable-mcp
-        --export prometheus
-        -C /etc/glances/glances.conf
+      GLANCES_OPT: -w --enable-mcp -C /etc/glances/glances.conf
     volumes:
       - glances:/etc/glances
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -75,7 +71,6 @@ services:
       - traefik.http.routers.glances-oidc.entrypoints=websecure
       - traefik.http.routers.glances-oidc.middlewares=oidc-auth@file
       - traefik.http.routers.glances-oidc.service=glances
-
       - traefik.http.services.glances.loadbalancer.server.port=61208
 
   godns:
