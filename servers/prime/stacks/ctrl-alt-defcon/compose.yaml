@@ -35,6 +35,44 @@ services:
       retries: 3
       start_period: 20s
 
+  glances:
+    image: nicolargo/glances:ubuntu-latest-full
+    container_name: glances
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    privileged: true
+    environment:
+      GLANCES_OPT: >-
+        -w
+        --enable-mcp
+        --export prometheus
+        -C /etc/glances/glances.conf
+    volumes:
+      - glances:/etc/glances
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/os-release:/etc/os-release:ro
+      - /etc/hostname:/etc/hostname:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /sys:/sys:ro
+      - /proc:/proc:ro
+      - /dev:/dev:ro
+      - /run/udev:/run/udev:ro
+      - /:/rootfs:ro
+    labels:
+      - flame.type=application
+      - flame.name=Glances
+      - flame.url=https://glances.${DOMAIN}
+      - flame.icon=chart-line
+      - flame.category=CTRL ALT DEFCON
+      - traefik.enable=true
+      - traefik.http.routers.glances.rule=Host(`glances.${DOMAIN}`)
+      - traefik.http.routers.glances.entrypoints=websecure
+      - traefik.http.routers.glances.tls=true
+      - traefik.http.routers.glances.middlewares=oidc-auth@file
+      - traefik.http.routers.glances.service=glances
+      - traefik.http.services.glances.loadbalancer.server.port=61208
+
   godns:
     container_name: godns
     image: timothyye/godns:latest
@@ -268,6 +306,8 @@ networks:
     external: true
 
 volumes:
+  glances:
+    external: true
   godns:
     external: true
   prometheus:
