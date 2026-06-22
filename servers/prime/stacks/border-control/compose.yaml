@@ -227,6 +227,8 @@ services:
       - /dev/net/tun:/dev/net/tun
     networks:
       - web
+    volumes:
+      - wg-access-server:/data
     restart: unless-stopped
     labels:
       - traefik.enable=true
