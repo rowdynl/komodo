@@ -142,11 +142,13 @@ services:
     ports:
       - 80:80
       - 443:443    
-    env_file: ./env/traefik.env
+    env_file: ./env/traefik.env    
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik:/etc/traefik   # static & dynamic config live here
-      - traefik:/data          # acme.json will be created/managed here
+      - traefik:/etc/traefik
+      - traefik:/data
     restart: unless-stopped
     labels:
       - flame.type=application
