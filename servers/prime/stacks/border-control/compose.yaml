@@ -216,26 +216,6 @@ services:
       - traefik.http.routers.wireguard.middlewares=oidc-auth@file
       - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
-  wg-access-server:
-    image: place1/wg-access-server
-    container_name: wg-access-server
-    env_file: ./env/wg-access-server.env
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    networks:
-      - web
-    volumes:
-      - wg-access-server:/data
-    restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.wg-access-server.rule=Host(`wg.${DOMAIN}`)
-      - traefik.http.routers.wg-access-server.entrypoints=websecure
-      - traefik.http.routers.wg-access-server.tls.certresolver=letsencrypt
-      - traefik.http.routers.wg-access-server.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.wg-access-server.loadbalancer.server.port=8000
 
 networks:
   cache:
@@ -267,6 +247,4 @@ volumes:
   vaultwarden:
     external: true
   wireguard:
-    external: true
-  wg-access-server:
     external: true
