@@ -183,24 +183,6 @@ services:
     restart: unless-stopped
     networks:
       - backend
-  
-  postgresql-scanopy:
-    image: postgres:17-alpine
-    container_name: postgresql-scanopy
-    env_file: ./env/postgresql-scanopy.env
-    volumes:
-      - postgresql-scanopy:/var/lib/postgresql/data
-    healthcheck:
-      interval: 30s
-      retries: 5
-      start_period: 20s
-      test:
-      - CMD-SHELL
-      - pg_isready -d ${SCANOPY_PG_DB} -U ${SCANOPY_PG_USER}
-      timeout: 5s
-    restart: unless-stopped
-    networks:
-      - backend
 
   postgresql-umami:
     image: postgres:15-alpine
