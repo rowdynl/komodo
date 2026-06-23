@@ -308,6 +308,7 @@ services:
   termix:
     image: ghcr.io/lukegus/termix:latest
     container_name: termix
+    env_file: ./env/termix.env
     volumes:
       - termix:/app/data
     environment:
