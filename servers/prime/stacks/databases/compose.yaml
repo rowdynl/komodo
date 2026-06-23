@@ -129,7 +129,25 @@ services:
     restart: unless-stopped
     networks:
       - backend
-  
+
+  postgresql-odoo:
+    image: docker.io/library/postgres:18
+    container_name: postgresql-odoo
+    env_file: ./env/postgresql-odoo.env
+    volumes:
+      - postgresql-odoo:/var/lib/postgresql
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d ${ODOO_PG_DB} -U ${ODOO_PG_USER}
+      timeout: 5s
+    restart: unless-stopped
+    networks:
+      - backend
+
   postgresql-pocket-id:
     image: docker.io/library/postgres:18
     container_name: postgresql-pocket-id
@@ -220,6 +238,8 @@ volumes:
   postgresql-authentik:
     external: true
   postgresql-immich:
+    external: true
+  postgresql-odoo:
     external: true
   postgresql-paperless:
     external: true

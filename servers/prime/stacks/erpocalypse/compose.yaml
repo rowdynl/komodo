@@ -1,0 +1,44 @@
+# An enterprise resource planning system so powerful it reorganizes your entire business… and occasionally your sanity.
+name: erpocalypse
+
+services:
+  odoo:
+    image: docker.io/odoo:latest
+    container_name: odoo
+    env_file: ./env/odoo.env
+    networks:
+      - backend
+      - web
+    volumes:
+      - odoo-addons:/mnt/extra-addons
+      - odoo-config:/etc/odoo
+      - odoo-data:/var/lib/odoo
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Enterprise Resource Planning
+      - flame.name=Odoo
+      - flame.url=https://odoo.${DOMAIN}
+      - flame.icon=office-building-outline
+      - flame.order=5
+      - traefik.enable=true
+      - traefik.http.routers.odoo.rule=Host(`odoo.${DOMAIN}`)
+      - traefik.http.routers.odoo.entrypoints=websecure
+      - traefik.http.routers.odoo.tls.certresolver=letsencrypt
+      - traefik.http.routers.odoo.middlewares=umami@file
+      - traefik.http.services.odoo.loadbalancer.server.port=8069
+
+networks:
+  backend:
+    external: true
+  web:
+    external: true
+
+volumes:
+  odoo-addons:
+    external: true
+  odoo-config:
+    external: true
+  odoo-data:
+    external: true
