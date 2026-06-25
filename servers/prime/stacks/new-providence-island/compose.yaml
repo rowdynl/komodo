@@ -46,6 +46,62 @@ services:
       - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
     restart: unless-stopped
 
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: ${PUID}:${PGID}
+    ports:
+      - 7359:7359/udp
+    devices:
+      - '/dev/dri:/dev/dri'    
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
+    group_add:
+      - 'video'  # "44"
+      - 'render' # "993"
+    networks:
+      - web
+    volumes:
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
+      - /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro
+      - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
+      - ${VOLUME_PATH_MUSIC_HOST}:${VOLUME_PATH_MUSIC_CONTAINER}
+      - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
+    restart: 'unless-stopped'
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://jellyfin.${DOMAIN}
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    labels:
+      - flame.type=application
+      - flame.category=Pirate’s Tavern
+      - flame.name=Jellyfin
+      - flame.url=https://jellyfin.${DOMAIN}
+      - flame.icon=plex
+      - flame.order=1      
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.entrypoints=websecure
+      - traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOMAIN}`)
+      - traefik.http.routers.jellyfin.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.jellyfin.tls=true
+      - traefik.http.routers.jellyfin.tls.certresolver=letsencrypt
+      - traefik.http.routers.jellyfin.middlewares=umami@file,jellyfin-mw
+      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
+      - traefik.http.services.jellyfin.loadbalancer.passhostheader=true
+      - traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow,nosnippet,noarchive,notranslate,noimageindex
+      - traefik.http.middlewares.jellyfin-mw.headers.sslRedirect=true
+      - traefik.http.middlewares.jellyfin-mw.headers.sslHost=jellyfin.${DOMAIN}
+      - traefik.http.middlewares.jellyfin-mw.headers.sslForceHost=true
+      - traefik.http.middlewares.jellyfin-mw.headers.stsSeconds=315360000
+      - traefik.http.middlewares.jellyfin-mw.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.jellyfin-mw.headers.stsPreload=true
+      - traefik.http.middlewares.jellyfin-mw.headers.forceSTSHeader=true
+      - traefik.http.middlewares.jellyfin-mw.headers.frameDeny=true
+      - traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-XSS-Protection=1
+
+
   kometa:
     image: lscr.io/linuxserver/kometa:latest
     container_name: kometa
@@ -458,7 +514,9 @@ volumes:
     external: true
   decluttarr:
     external: true
-  huntarr:
+  jellyfin-cache:
+    external: true
+  jellyfin-config:
     external: true
   kometa:
     external: true
