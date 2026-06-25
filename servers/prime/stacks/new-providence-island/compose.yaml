@@ -55,6 +55,7 @@ services:
     devices:
       - '/dev/dri:/dev/dri'    
     networks:
+      - dirty-water
       - web
     volumes:
       - jellyfin-config:/config
