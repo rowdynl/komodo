@@ -54,11 +54,6 @@ services:
       - 7359:7359/udp
     devices:
       - '/dev/dri:/dev/dri'    
-    device_cgroup_rules:
-      - 'c 226:* rmw'    
-    group_add:
-      - 'video'  # "44"
-      - 'render' # "993"
     networks:
       - web
     volumes:
