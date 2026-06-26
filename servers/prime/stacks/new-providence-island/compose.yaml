@@ -54,6 +54,11 @@ services:
       - 7359:7359/udp
     devices:
       - '/dev/dri:/dev/dri'    
+    device_cgroup_rules:
+      - 'c 226:* rmw'    
+    group_add:
+      - "44" # 'video' 
+      - "993" # 'render'
     networks:
       - dirty-water
       - web
@@ -97,6 +102,9 @@ services:
       - traefik.http.middlewares.jellyfin-mw.headers.contentTypeNosniff=true
       - traefik.http.middlewares.jellyfin-mw.headers.customResponseHeaders.X-XSS-Protection=1
 
+  jellyfin-collection:
+    image: ghcr.io/4lx69/jellyfin-collection:latest
+    container_name: jellyfin-collection
 
   kometa:
     image: lscr.io/linuxserver/kometa:latest
@@ -511,6 +519,8 @@ volumes:
   decluttarr:
     external: true
   jellyfin-cache:
+    external: true
+  jellyfin-collection:
     external: true
   jellyfin-config:
     external: true
