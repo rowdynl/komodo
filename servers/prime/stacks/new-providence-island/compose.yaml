@@ -54,18 +54,12 @@ services:
       - 7359:7359/udp
     devices:
       - '/dev/dri:/dev/dri'    
-    device_cgroup_rules:
-      - 'c 226:* rmw'    
-    group_add:
-      - "44" # 'video' 
-      - "993" # 'render'
     networks:
       - dirty-water
       - web
     volumes:
       - jellyfin-config:/config
       - jellyfin-cache:/cache
-      - /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro
       - ${VOLUME_PATH_MOVIES_HOST}:${VOLUME_PATH_MOVIES_CONTAINER}
       - ${VOLUME_PATH_MUSIC_HOST}:${VOLUME_PATH_MUSIC_CONTAINER}
       - ${VOLUME_PATH_TV_HOST}:${VOLUME_PATH_TV_CONTAINER}
