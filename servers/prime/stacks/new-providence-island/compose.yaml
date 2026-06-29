@@ -140,6 +140,7 @@ services:
     volumes:
       - medialyze:/config:rw
       - ${VOLUME_PATH_MOVIES_HOST}:/media/movies:ro
+      - ${VOLUME_PATH_MUSIC_HOST}:/media/music:ro
       - ${VOLUME_PATH_TV_HOST}:/media/tv:ro
     labels:
       - flame.type=application
