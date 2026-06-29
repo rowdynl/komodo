@@ -81,6 +81,7 @@ services:
     environment:
       - CONFIG=/config/config.json
     restart: unless-stopped
+    user: ${PUID}:${PGID}
     volumes:
       - godns:/config/
     labels:
