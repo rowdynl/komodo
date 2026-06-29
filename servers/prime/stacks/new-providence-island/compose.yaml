@@ -346,7 +346,7 @@ services:
   
   seerr:
     container_name: seerr
-    image: ghcr.io/seerr-team/seerr:latest
+    image: ghcr.io/seerr-team/seerr:preview-new-oidc
     networks:
       - web
     restart: unless-stopped
