@@ -82,6 +82,7 @@ services:
     env_file: ./env/pihole.env
     volumes:
       - pihole:/etc/pihole
+      - /etc/hostname:/etc/hostname:ro
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
