@@ -215,7 +215,7 @@ services:
       - traefik.http.routers.wireguard.entrypoints=websecure
       - traefik.http.routers.wireguard.tls.certresolver=letsencrypt
       - traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.wireguard.middlewares=oidc-auth@file
+      - traefik.http.routers.wireguard.middlewares=oidc-auth-wireguard@file
       - traefik.http.services.wireguard.loadbalancer.server.port=51821
 
 
