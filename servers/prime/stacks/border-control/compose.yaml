@@ -83,6 +83,10 @@ services:
       - 53:53/udp     
     networks:
       - web
+    cap_add:
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - SYS_NICE
     env_file: ./env/pihole.env
     volumes:
       - pihole:/etc/pihole
