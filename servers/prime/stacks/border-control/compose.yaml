@@ -78,14 +78,15 @@ services:
     image: pihole/pihole:latest
     container_name: pihole
     hostname: pihole.${DOMAIN}
+    ports:
+      - 53:53/tcp
+      - 53:53/udp     
     networks:
       - web
     env_file: ./env/pihole.env
     volumes:
       - pihole:/etc/pihole
       - /etc/hostname:/etc/hostname:ro
-    cap_add:
-      - NET_ADMIN
     restart: unless-stopped
     labels:
       - flame.type=application
