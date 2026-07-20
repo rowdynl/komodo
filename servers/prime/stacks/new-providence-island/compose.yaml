@@ -157,6 +157,31 @@ services:
       - traefik.http.routers.medialyze.middlewares=oidc-auth@file
       - traefik.http.services.medialyze.loadbalancer.server.port=8080
 
+  pelagica:
+    image: kartoffelchipss/pelagica:latest
+    container_name: pelagica
+    networks:
+      - web
+    environment:
+      - SERVER_ADDRESS=https://jellyfin.${DOMAIN}
+    volumes:
+      - pelagica:/config
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Pirate’s Tavern
+      - flame.name=Pelagica
+      - flame.url=https://pelagica.${DOMAIN}
+      - flame.icon=jellyfin
+      - flame.order=1
+      - traefik.enable=true
+      - traefik.http.routers.pelagica.entrypoints=websecure
+      - traefik.http.routers.pelagica.middlewares=umami@file
+      - traefik.http.routers.pelagica.priority=${TRAEFIK_PRIORITY}      
+      - traefik.http.routers.pelagica.rule=Host(`pelagica.${DOMAIN}`)
+      - traefik.http.routers.pelagica.tls.certresolver=letsencrypt
+      - traefik.http.services.pelagica.loadbalancer.server.port=80
+
   plex:
     image: 'lscr.io/linuxserver/plex:latest'
     container_name: plex
@@ -513,6 +538,8 @@ volumes:
   lidarr:
     external: true
   medialyze:
+    external: true
+  pelagica:
     external: true
   plex:
     external: true
