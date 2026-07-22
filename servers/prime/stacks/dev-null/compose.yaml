@@ -117,6 +117,8 @@ services:
     networks:
       - web
     restart: unless-stopped
+    volumes:
+      - yaade:/app/data
     labels:
       - flame.type=application
       - flame.name=Yaade
