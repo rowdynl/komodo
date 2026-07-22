@@ -117,6 +117,8 @@ services:
     networks:
       - web
     restart: unless-stopped
+    environment:
+      - YAADE_ADMIN_USERNAME=admin
     volumes:
       - yaade:/app/data
     labels:
