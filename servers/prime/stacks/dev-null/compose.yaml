@@ -1,0 +1,148 @@
+# Requests go in. Time disappears. Progress allegedly comes out.
+name: dev-null
+
+services:
+  bytestash:
+    image: ghcr.io/jordan-dalby/bytestash:latest
+    container_name: bytestash
+    volumes:
+      - bytestash:/data/snippets
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    env_file: ./env/bytestash.env      
+    networks:
+      - web
+    labels:
+      - flame.type=application
+      - flame.category=dev-null
+      - flame.name=ByteStash
+      - flame.url=https://bytestash.${DOMAIN}
+      - flame.icon=code-block-braces
+      - traefik.enable=true
+      - traefik.http.routers.bytestash.entrypoints=websecure
+      - traefik.http.routers.bytestash.middlewares=umami@file
+      - traefik.http.routers.bytestash.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.bytestash.rule=Host(`bytestash.${DOMAIN}`)
+      - traefik.http.routers.bytestash.tls.certresolver=letsencrypt
+      - traefik.http.services.bytestash.loadbalancer.server.port=5000 
+
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    networks:
+      - backend
+      - web
+    environment:
+      - DEFAULT_WORKSPACE=/config/workspace
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+      - S6_VERBOSITY=1
+      - S6_STAGE2_HOOK=/docker-mods
+      - TZ=${TZ}
+      - EXTENSIONS_GALLERY={"serviceUrl":"https://marketplace.visualstudio.com/_apis/public/gallery","cacheUrl":"https://vscode.blob.core.windows.net/gallery/index","itemUrl":"https://marketplace.visualstudio.com/items"}
+    volumes:
+      - code-server:/config
+      - /repos/komodo:/config/workspace/repos/komodo
+      - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant-prime-ds
+      - /mnt/docker/volumes/esphome:/config/workspace/repos/esphome
+      - /mnt/docker/volumes/home-assistant:/config/workspace/home-assistant
+      - /mnt/docker/volumes/traefik:/config/workspace/traefik
+    restart: unless-stopped
+    mem_limit: 1152m    
+    cpus: 1
+    security_opt:
+      - label=disable
+    labels:
+      - flame.type=application
+      - flame.category=dev-null
+      - flame.name=code-server
+      - flame.url=https://code-server.${DOMAIN}
+      - flame.icon=code-braces
+      - traefik.enable=true
+      - traefik.http.routers.code-server.rule=Host(`code-server.${DOMAIN}`)
+      - traefik.http.routers.code-server.entrypoints=websecure
+      - traefik.http.routers.code-server.tls.certresolver=letsencrypt
+      - traefik.http.routers.code-server.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.code-server.middlewares=oidc-auth@file
+      - traefik.http.services.code-server.loadbalancer.server.port=8443
+
+  it-tools: # https://github.com/CorentinTh/it-tools
+    container_name: it-tools
+    image: ghcr.io/corentinth/it-tools:latest
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=dev-null
+      - flame.name=IT Tools
+      - flame.url=https://tools.${DOMAIN}
+      - flame.icon=tools
+      - traefik.enable=true
+      - traefik.http.routers.it-tools.entrypoints=websecure
+      - traefik.http.routers.it-tools.middlewares=umami@file
+      - traefik.http.routers.it-tools.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.it-tools.rule=Host(`tools.${DOMAIN}`)
+      - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      
+      - traefik.http.services.it-tools.loadbalancer.server.port=80 
+
+  webhook-tester:
+    image: ghcr.io/tarampampam/webhook-tester:2
+    container_name: webhook-tester
+    env_file: ./env/webhook-tester.env
+    networks:
+      - web
+      - cache
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.name=Webhooks
+      - flame.category=dev-null
+      - flame.url=https://webhook.${DOMAIN}
+      - flame.icon=webhook
+      - traefik.enable=true
+      - traefik.http.routers.webhook.rule=Host(`webhook.${DOMAIN}`)
+      - traefik.http.routers.webhook.entrypoints=websecure
+      - traefik.http.routers.webhook.tls.certresolver=letsencrypt
+      - traefik.http.routers.webhook.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.webhook.middlewares=umami@file
+      - traefik.http.services.webhook.loadbalancer.server.port=8080
+
+  yaade:
+    image: esperotech/yaade:latest
+    container_name: yaade
+    networks:
+      - web
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.name=Yaade
+      - flame.category=dev-null
+      - flame.url=https://yaade.${DOMAIN}
+      - flame.icon=webhook
+      - traefik.enable=true
+      - traefik.http.routers.yaade.rule=Host(`yaade.${DOMAIN}`)
+      - traefik.http.routers.yaade.entrypoints=websecure
+      - traefik.http.routers.yaade.tls.certresolver=letsencrypt
+      - traefik.http.routers.yaade.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.yaade.middlewares=umami@file
+      - traefik.http.services.yaade.loadbalancer.server.port=8080
+
+networks:
+  cache:
+    external: true
+  web:
+    external: true
+  backend:
+    external: true
+
+volumes:
+  bytestash:
+    external: true
+  code-server:
+    external: true
+  yaade:
+    external: true
