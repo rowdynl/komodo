@@ -129,7 +129,7 @@ services:
       - traefik.http.routers.yaade.tls.certresolver=letsencrypt
       - traefik.http.routers.yaade.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.yaade.middlewares=umami@file
-      - traefik.http.services.yaade.loadbalancer.server.port=8080
+      - traefik.http.services.yaade.loadbalancer.server.port=9339
 
 networks:
   cache:
