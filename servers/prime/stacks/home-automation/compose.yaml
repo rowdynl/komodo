@@ -60,6 +60,7 @@ services:
     volumes:
       - frigate:/config
       - /etc/localtime:/etc/localtime:ro
+      - /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro
       - /mnt/prime-ds/media/frigate:/media/frigate
       - type: tmpfs
         target: /tmp/cache
