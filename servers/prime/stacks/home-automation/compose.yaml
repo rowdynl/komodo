@@ -33,7 +33,7 @@ services:
       - traefik.http.services.esphome.loadbalancer.server.port=6052
 
   frigate:
-    image: ghcr.io/blakeblackshear/frigate:stable
+    image: ghcr.io/blakeblackshear/frigate:0.18.0-beta3
     container_name: frigate
     environment:
       - TZ=${TZ}
@@ -60,7 +60,6 @@ services:
     volumes:
       - frigate:/config
       - /etc/localtime:/etc/localtime:ro
-      - /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri:ro
       - /mnt/prime-ds/media/frigate:/media/frigate
       - type: tmpfs
         target: /tmp/cache
