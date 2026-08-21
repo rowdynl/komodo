@@ -57,6 +57,7 @@ services:
     networks:
       - backend
       - web
+    env_file: ./env/frigate.env
     volumes:
       - frigate:/config
       - /etc/localtime:/etc/localtime:ro
