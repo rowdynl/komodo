@@ -5,14 +5,13 @@ services:
   airtrail:
     image: johly/airtrail:latest
     container_name: airtrail
+    user: ${PUID}:${PGID}
     networks:
       - backend
       - web
     volumes:
       - airtrail:/app/uploads
-
-    env_file:
-      - ./env/airtrail.env
+    env_file: ./env/airtrail.env
     restart: unless-stopped
     labels:
       - flame.type=application
