@@ -1,0 +1,39 @@
+# Mildly obsessed with knowing where things are and where they've been.
+name: geo-curious
+
+services:
+  airtrail:
+    image: johly/airtrail:latest
+    container_name: airtrail
+    networks:
+      - backend
+      - web
+    volumes:
+      - airtrail:/app/uploads
+
+    env_file:
+      - ./env/airtrail.env
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Geo-Curious
+      - flame.name=AirTrail
+      - flame.url=https://airtrail.${DOMAIN}
+      - flame.icon=map-marker-path
+      - traefik.enable=true
+      - traefik.http.routers.airtrail.rule=Host(`airtrail.${DOMAIN}`)
+      - traefik.http.routers.airtrail.entrypoints=websecure
+      - traefik.http.routers.airtrail.tls.certresolver=letsencrypt
+      - traefik.http.routers.airtrail.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.airtrail.middlewares=oidc-auth@file
+      - traefik.http.services.airtrail.loadbalancer.server.port=3000
+
+networks:
+  backend:
+    external: true
+  web:
+    external: true      
+
+volumes:
+  airtrail:
+    external: true
