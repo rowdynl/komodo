@@ -462,7 +462,7 @@ services:
       - flame.icon=movie-search-outline
       - traefik.enable=true
       - traefik.http.routers.swiparr.entrypoints=websecure
-      - traefik.http.routers.swiparr.middlewares=oidc-auth@file
+      - traefik.http.routers.swiparr.middlewares=umami@file
       - traefik.http.routers.swiparr.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.swiparr.rule=Host(`swiparr.${DOMAIN}`)
       - traefik.http.routers.swiparr.tls.certresolver=letsencrypt
