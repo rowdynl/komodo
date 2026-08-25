@@ -94,10 +94,10 @@ services:
       - flame.type=application
       - flame.category=Fun and games
       - flame.name=Your Spotify
-      - flame.url=https://spotify.${DOMAIN}
+      - flame.url=https://ys.${DOMAIN}
       - flame.icon=spotify
       - traefik.enable=true
-      - traefik.http.routers.your-spotify.rule=Host(`spotify.${DOMAIN}`)
+      - traefik.http.routers.your-spotify.rule=Host(`ys.${DOMAIN}`)
       - traefik.http.routers.your-spotify.entrypoints=websecure
       - traefik.http.routers.your-spotify.tls.certresolver=letsencrypt
       - traefik.http.routers.your-spotify.priority=${TRAEFIK_PRIORITY}
