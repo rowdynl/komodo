@@ -445,6 +445,29 @@ services:
       - spottarr:/data
     restart: unless-stopped
 
+  swiparr:
+    image: ghcr.io/m3sserstudi0s/swiparr:latest
+    container_name: swiparr
+    restart: unless-stopped
+    env_file: ./env/swiparr.env
+    volumes:
+      - swiparr:/app/data
+    networks:
+      - web
+    labels:
+      - flame.type=application
+      - flame.category=Captain’s Quarters
+      - flame.name=Swiparr
+      - flame.url=https://swiparr.${DOMAIN}
+      - flame.icon=movie-search-outline
+      - traefik.enable=true
+      - traefik.http.routers.swiparr.entrypoints=websecure
+      - traefik.http.routers.swiparr.middlewares=oidc-auth@file
+      - traefik.http.routers.swiparr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.swiparr.rule=Host(`swiparr.${DOMAIN}`)
+      - traefik.http.routers.swiparr.tls.certresolver=letsencrypt
+      - traefik.http.services.swiparr.loadbalancer.server.port=4321
+
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
@@ -472,7 +495,6 @@ services:
       - traefik.http.routers.tautulli.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.tautulli.middlewares=oidc-auth@file
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
-
 
   transmission:
     image: haugene/transmission-openvpn
@@ -564,6 +586,8 @@ volumes:
   sonarr:
     external: true
   spottarr:
+    external: true
+  swiparr:
     external: true
   tautulli:
     external: true
