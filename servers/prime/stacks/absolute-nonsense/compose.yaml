@@ -101,9 +101,7 @@ services:
       - traefik.http.routers.your-spotify.entrypoints=websecure
       - traefik.http.routers.your-spotify.tls.certresolver=letsencrypt
       - traefik.http.routers.your-spotify.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.your-spotify.loadbalancer.server.port=80
-      
-        
+      - traefik.http.services.your-spotify.loadbalancer.server.port=80        
 
 networks:
   backend:
