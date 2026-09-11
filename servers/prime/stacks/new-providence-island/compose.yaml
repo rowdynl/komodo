@@ -403,6 +403,30 @@ services:
       - traefik.http.routers.seerr.tls.certresolver=letsencrypt
       - traefik.http.services.seerr.loadbalancer.server.port=5055
 
+  seerr-oidc:
+    container_name: seerr-oidc
+    image: ghcr.io/seerr-team/seerr:preview-new-oidc
+    networks:
+      - web
+    restart: unless-stopped
+    volumes:
+      - seerr-oidc:/app/config
+    env_file: ../../../global.env
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.seerr-oidc.entrypoints=websecure
+      - traefik.http.routers.seerr-oidc.middlewares=umami@file
+      - traefik.http.routers.seerr-oidc.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.seerr-oidc.rule=Host(`seerr-oidc.${DOMAIN}`)
+      - traefik.http.routers.seerr-oidc.tls.certresolver=letsencrypt
+      - traefik.http.services.seerr-oidc.loadbalancer.server.port=5055
+
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
@@ -582,6 +606,8 @@ volumes:
   sabnzbd:
     external: true
   seerr:
+    external: true
+  seerr-oidc:
     external: true
   sonarr:
     external: true
