@@ -22,6 +22,7 @@ services:
     networks:
       - backend
       - cache
+      - dms
       - web
     volumes:
       - paperless:/usr/src/paperless/folders
