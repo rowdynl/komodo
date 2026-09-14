@@ -3,7 +3,7 @@ name: the-great-pdf-graveyard
 
 services:
   gotenberg:
-    image: docker.io/gotenberg/gotenberg:8.27
+    image: docker.io/gotenberg/gotenberg:8.36
     container_name: gotenberg
     restart: unless-stopped
     # The gotenberg chromium route is used to convert .eml files. We do not
@@ -43,7 +43,7 @@ services:
       - traefik.http.services.paperless.loadbalancer.server.port=8000
 
   tika:
-    image: docker.io/apache/tika:latest
+    image: docker.io/apache/tika:3.3.1.0
     container_name: tika
     networks:
     - dms
