@@ -12,8 +12,7 @@ services:
     - dms
     command:
       - "gotenberg"
-      - "--chromium-disable-javascript=true"
-      - "--chromium-allow-list=file:///tmp/.*"
+      - "--chromium-disable-javascript=false"
   
   paperless:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
