@@ -114,23 +114,7 @@ services:
       - traefik.http.routers.nextexplorer.tls.certresolver=letsencrypt
       - traefik.http.routers.nextexplorer.priority=${TRAEFIK_PRIORITY}
       - traefik.http.services.nextexplorer.loadbalancer.server.port=3000     
-
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    networks:
-      - cache
-    command: >
-      redis-server
-      --save ""
-      --appendonly no
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-  
+ 
   termix:
     image: ghcr.io/lukegus/termix:latest
     container_name: termix
@@ -187,8 +171,6 @@ services:
 
 
 networks:
-  cache:
-    external: true
   web:
     external: true
   backend:

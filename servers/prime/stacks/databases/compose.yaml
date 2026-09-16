@@ -227,7 +227,25 @@ services:
       start_period: 20s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    networks:
+      - cache
+    command: >
+      redis-server
+      --save ""
+      --appendonly no
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
 networks:
+  cache:
+    external: true
   backend:
     external: true
   web:
