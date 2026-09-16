@@ -27,38 +27,6 @@ services:
       - traefik.http.routers.bentopdf.middlewares=umami@file
       - traefik.http.services.bentopdf.loadbalancer.server.port=8080
 
-  dbgate:
-    container_name: dbgate
-    image: dbgate/dbgate
-    networks:
-      - backend
-      - cache
-      - web
-    volumes:
-      - dbgate:/root/.dbgate
-    environment:
-      - OAUTH_AUTH=https://auth.${DOMAIN}/application/o/authorize/
-      - OAUTH_TOKEN=https://auth.${DOMAIN}/application/o/token/
-      - OAUTH_LOGOUT=https://auth.${DOMAIN}/application/o/dbgate/end-session/
-      - OAUTH_CLIENT_ID=${DBGATE_OAUTH_CLIENT_ID}
-      - OAUTH_CLIENT_SECRET=${DBGATE_OAUTH_CLIENT_SECRET}
-      - OAUTH_LOGIN_FIELD=email
-      - OAUTH_SCOPE=openid email profile
-    restart: unless-stopped
-    labels:
-      - flame.type=application
-      - flame.category=Databases
-      - flame.name=DBGate
-      - flame.url=https://dbgate.${DOMAIN}
-      - flame.icon=database-cog-outline
-      - traefik.enable=true
-      - traefik.http.routers.dbgate.rule=Host(`dbgate.${DOMAIN}`)
-      - traefik.http.routers.dbgate.entrypoints=websecure
-      - traefik.http.routers.dbgate.tls.certresolver=letsencrypt
-      - traefik.http.routers.dbgate.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.dbgate.middlewares=oidc-auth@file
-      - traefik.http.services.dbgate.loadbalancer.server.port=3000
-
   firefox:
     container_name: firefox
     image: jlesage/firefox
@@ -227,8 +195,6 @@ networks:
     external: true
 
 volumes:
-  dbgate:
-    external: true
   firefox:
     external: true
   grafana:
