@@ -116,10 +116,10 @@ services:
       - traefik.http.services.nextexplorer.loadbalancer.server.port=3000     
 
   reclip:
-    image: reclip:latest
     container_name: reclip
     build:
       context: https://github.com/averygan/reclip.git
+      dockerfile: Dockerfile
     volumes:
       - reclip:/app/downloads
     restart: unless-stopped
