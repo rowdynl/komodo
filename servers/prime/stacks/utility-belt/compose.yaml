@@ -118,7 +118,8 @@ services:
   reclip:
     image: reclip:latest
     container_name: reclip
-    build: .
+    build:
+      context: https://github.com/averygan/reclip.git
     volumes:
       - reclip:/app/downloads
     restart: unless-stopped
