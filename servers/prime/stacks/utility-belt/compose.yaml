@@ -114,7 +114,30 @@ services:
       - traefik.http.routers.nextexplorer.tls.certresolver=letsencrypt
       - traefik.http.routers.nextexplorer.priority=${TRAEFIK_PRIORITY}
       - traefik.http.services.nextexplorer.loadbalancer.server.port=3000     
- 
+
+  reclip:
+    image: reclip:latest
+    container_name: reclip
+    build: .
+    volumes:
+      - reclip:/app/downloads
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - flame.type=application
+      - flame.category=Utility Belt
+      - flame.name=Reclip
+      - flame.url=https://reclip.${DOMAIN}
+      - flame.icon=download
+      - traefik.enable=true
+      - traefik.http.routers.reclip.rule=Host(`reclip.${DOMAIN}`)
+      - traefik.http.routers.reclip.entrypoints=websecure
+      - traefik.http.routers.reclip.tls.certresolver=letsencrypt
+      - traefik.http.routers.reclip.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.reclip.middlewares=umami@file
+      - traefik.http.services.reclip.loadbalancer.server.port=8899
+
   termix:
     image: ghcr.io/lukegus/termix:latest
     container_name: termix
@@ -167,8 +190,6 @@ services:
       - traefik.http.routers.tududi.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.tududi.middlewares=umami@file
       - traefik.http.services.tududi.loadbalancer.server.port=3002
-  
-
 
 networks:
   web:
@@ -188,6 +209,8 @@ volumes:
   pgadmin:
     external: true
   phpmyadmin:
+    external: true
+  reclip:
     external: true
   termix:
     external: true
