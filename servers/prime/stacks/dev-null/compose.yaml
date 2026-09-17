@@ -89,17 +89,6 @@ services:
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      
       - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
-
-  paperless-ngx-mcp:
-    image: ghcr.io/freeformz/paperless-ngx-mcp:latest
-    container_name: paperless-ngx-mcp
-    env_file: ./env/paperless-ngx-mcp.env
-    command: ["mcp"]
-    networks:
-      - backend
-    restart: unless-stopped
-
-
   webhook-tester:
     image: ghcr.io/tarampampam/webhook-tester:2
     container_name: webhook-tester
