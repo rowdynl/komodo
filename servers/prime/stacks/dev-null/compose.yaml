@@ -94,6 +94,7 @@ services:
     image: ghcr.io/freeformz/paperless-ngx-mcp:latest
     container_name: paperless-ngx-mcp
     env_file: ./env/paperless-ngx-mcp.env
+    command: ["mcp"]
     networks:
       - backend
     restart: unless-stopped
