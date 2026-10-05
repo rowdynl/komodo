@@ -146,6 +146,7 @@ services:
       - flame.name=Linearr
       - flame.url=https://linearr.${DOMAIN}
       - flame.icon=image-search-outline
+      - traefik.enable=true
       - traefik.http.routers.linearr.rule=Host(`linearr.${DOMAIN}`)
       - traefik.http.routers.linearr.entrypoints=websecure
       - traefik.http.routers.linearr.tls.certresolver=letsencrypt
