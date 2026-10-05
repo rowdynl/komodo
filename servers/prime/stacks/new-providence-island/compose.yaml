@@ -138,7 +138,7 @@ services:
       - web
     env_file: ./env/linearr.env
     volumes:
-      linearr:/data
+      - linearr:/data
     restart: unless-stopped
     labels:
       - flame.type=application
