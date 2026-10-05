@@ -128,6 +128,30 @@ services:
       - traefik.http.routers.lidarr.tls.certresolver=letsencrypt
       - traefik.http.routers.lidarr.priority=${TRAEFIK_PRIORITY}
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
+  
+  
+  linearr:
+    image: ghcr.io/gillberg1111/linearr:latest
+    container_name: linearr
+    networks:
+      - dirty-water
+      - web
+    env_file: ./env/linearr.env
+    volumes:
+      linearr:/data
+    restart: unless-stopped
+    labels:
+      - flame.type=application
+      - flame.category=Captain’s Quarters
+      - flame.name=Linearr
+      - flame.url=https://linearr.${DOMAIN}
+      - flame.icon=image-search-outline
+      - traefik.http.routers.linearr.rule=Host(`linearr.${DOMAIN}`)
+      - traefik.http.routers.linearr.entrypoints=websecure
+      - traefik.http.routers.linearr.tls.certresolver=letsencrypt
+      - traefik.http.routers.linearr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.linearr.middlewares=oidc-auth-linearr@file
+      - traefik.http.services.linearr.loadbalancer.server.port=5005
 
   medialyze:
     image: ghcr.io/frederikemmer/medialyze:latest
@@ -586,6 +610,8 @@ volumes:
   kometa:
     external: true
   lidarr:
+    external: true
+  linearr:
     external: true
   medialyze:
     external: true
