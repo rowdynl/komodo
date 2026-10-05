@@ -2,7 +2,7 @@ name: komodo
 
 services:
   komodo-mongodb:
-    image: mongo:8
+    image: mongo
     container_name: komodo-mongodb
     networks:
       - backend
