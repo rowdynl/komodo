@@ -10,10 +10,7 @@ services:
       - TZ=${TZ}
       - PUID=${PUID}
       - PGID=${PGID}
-    networks:
-      macvlan:
-        ipv4_address: ${MACVLAN_STATIC_IP_ESPHOME}
-      web:
+    network_mode: host
     volumes:
       - esphome:/config
       - /etc/localtime:/etc/localtime:ro
@@ -165,8 +162,6 @@ services:
 
 networks:
   backend:
-    external: true
-  macvlan:
     external: true
   web:
     external: true
