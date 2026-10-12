@@ -188,8 +188,6 @@ services:
     container_name: plex
     networks:
       dirty-water:
-      macvlan:
-        ipv4_address: ${MACVLAN_STATIC_IP_PLEX}
       web:
     env_file:
       - ../../../global.env
@@ -567,8 +565,6 @@ networks:
   dirty-water:
     external: true
   web:
-    external: true
-  macvlan:
     external: true
   backend:
     external: true
