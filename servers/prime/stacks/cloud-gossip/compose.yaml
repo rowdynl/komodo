@@ -3,22 +3,6 @@ name: cloud-gossip
 
 services:
   
-  dropbox:
-    image: rbonghi/dropbox:latest
-    container_name: dropbox
-    command: ["--fromDropbox", "-i", "660"]
-    user: ${PUID}:${PGID}
-    environment:
-      - PYTHONUNBUFFERED=1
-      - DROPBOX_APP_KEY=${DROPBOX_APP_KEY}
-      - DROPBOX_APP_SECRET=${DROPBOX_APP_SECRET}
-      - DROPBOX_REFRESH_TOKEN=${DROPBOX_REFRESH_TOKEN}
-    restart: unless-stopped
-    volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      - dropbox:/dropbox
-
   icloud:
     image: mandarons/icloud-drive
     container_name: icloud
@@ -42,8 +26,6 @@ services:
     #   - https://github.com/richardregeer/docker-google-drive-sync
 
 volumes:
-  dropbox:
-    external: true
   icloud:
     external: true
   icloud-config:
