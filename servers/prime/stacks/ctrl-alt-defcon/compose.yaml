@@ -3,38 +3,6 @@ name: ctrl-alt-defcon
 
 services:
   
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.49.1
-    container_name: cadvisor
-    restart: unless-stopped
-    privileged: true  
-    mem_limit: 512m    
-    cpus: 0.5
-    security_opt:
-      - apparmor:unconfined
-      - label=disable   
-    command:
-      - "--disable_metrics=perf_event,disk,diskIO,process"
-      - "--docker_only=true"
-      - "--housekeeping_interval=15s"
-      - "--max_housekeeping_interval=1m"
-      - "--storage_duration=0"
-      - "--store_container_labels=false"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - /var/lib/docker:/var/lib/docker:ro
-    networks:
-      - monitoring    
-    healthcheck:
-      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:8080/healthz || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
-
   glances:
     image: nicolargo/glances:ubuntu-latest-full
     container_name: glances
@@ -97,110 +65,7 @@ services:
       - traefik.http.routers.godns.priority=${TRAEFIK_PRIORITY}
       - traefik.http.routers.godns.middlewares=oidc-auth@file
       - traefik.http.services.godns.loadbalancer.server.port=9099
-
-  mysqld-exporter:
-    image: prom/mysqld-exporter:latest
-    container_name: mysqld-exporter
-    restart: unless-stopped
-    expose:
-      - 9104 
-    environment:
-      - MYSQLD_EXPORTER_PASSWORD=${PROMETHEUS_MARIADB_PASSWORD}
-    command:
-      - "--mysqld.address=mariadb.backend:3306"
-      - "--mysqld.username=${PROMETHEUS_MARIADB_USER}"
-    networks:
-      - backend
-      - monitoring
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
-    restart: unless-stopped
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - "--path.procfs=/host/proc"
-      - "--path.rootfs=/rootfs"
-      - "--path.sysfs=/host/sys"
-      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
-    expose:
-      - 9100
-    networks:
-      - monitoring
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    command:
-      - "--storage.tsdb.retention.time=30d"
-    networks:
-      - backend
-      - monitoring
-      - web
-    volumes:
-      - prometheus:/prometheus
-    restart: unless-stopped
-    labels:
-      - flame.type=application
-      - flame.category=CTRL ALT DEFCON
-      - flame.name=Prometheus
-      - flame.url=https://prometheus.${DOMAIN}
-      - flame.icon=chart-line
-      - traefik.enable=true
-      - traefik.http.routers.prometheus.rule=Host(`prometheus.${DOMAIN}`)
-      - traefik.http.routers.prometheus.entrypoints=websecure
-      - traefik.http.routers.prometheus.tls.certresolver=letsencrypt
-      - traefik.http.routers.prometheus.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.prometheus.middlewares=oidc-auth@file
-      - traefik.http.services.prometheus.loadbalancer.server.port=9090
-
-  redis-exporter:
-    image: oliver006/redis_exporter:latest
-    container_name: redis-exporter
-    restart: unless-stopped
-    expose:
-      - 9121
-    environment:
-      - REDIS_ADDR="redis://redis.cache:6379"
-    networks:
-      - cache
-      - monitoring
-
-  scrutiny-collector:
-    image: 'ghcr.io/analogj/scrutiny:master-collector'
-    container_name: scrutiny-collector
-    cap_add:
-      - SYS_RAWIO
-      - SYS_ADMIN
-    volumes:
-      - '/run/udev:/run/udev:ro'
-      - scrutiny:/opt/scrutiny/config      
-    networks:
-      - monitoring
-    environment:
-      COLLECTOR_API_ENDPOINT: 'http://scrutiny-web.monitoring:8080'
-      COLLECTOR_HOST_ID: 'prime'
-      COLLECTOR_RUN_STARTUP: true
-    restart: unless-stopped    
-    devices:
-      - "/dev/nvme0"
   
-  scrutiny-exporter:
-    image: jianyun8023/scrutiny-exporter:latest
-    container_name: scrutiny-exporter
-    restart: unless-stopped
-    environment:
-      - SCRUTINY_API_URL=http://scrutiny-web.monitoring:8080
-      - EXPORTER_PORT=9900
-      - CACHE_DURATION=60
-    networks:
-      - monitoring
-    expose:
-      - 9900
-
   scrutiny-web:
     image: 'ghcr.io/analogj/scrutiny:master-web'
     container_name: scrutiny-web
@@ -267,7 +132,6 @@ services:
     networks:
       - backend
       - cache
-      - monitoring
       - web
     volumes:
       - uptime-kuma:/app/data
@@ -286,22 +150,10 @@ services:
       - traefik.http.routers.kuma.middlewares=oidc-auth@file
       - traefik.http.services.kuma.loadbalancer.server.port=3001
 
-  zfs-exporter:
-    image: matusnovak/prometheus-zfs:latest
-    container_name: zfs-exporter
-    restart: unless-stopped
-    privileged: true
-    expose:
-      - 9901
-    networks:
-      - monitoring
-
 networks:
   backend:
     external: true
   cache:
-    external: true
-  monitoring:
     external: true
   web:
     external: true
@@ -310,8 +162,6 @@ volumes:
   glances:
     external: true
   godns:
-    external: true
-  prometheus:
     external: true
   scrutiny:
     external: true
