@@ -75,7 +75,6 @@ services:
       - scrutiny:/opt/scrutiny/config
     networks:
       - backend
-      - monitoring
       - web
     restart: unless-stopped    
     healthcheck:
