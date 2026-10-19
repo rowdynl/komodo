@@ -233,11 +233,7 @@ networks:
     external: true
 
 volumes:
-  authentik-certs:
-    external: true
-  authentik-data:
-    external: true
-  authentik-templates:
+  adguard:
     external: true
   crowdsec:
     external: true

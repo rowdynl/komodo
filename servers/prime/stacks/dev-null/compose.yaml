@@ -31,6 +31,7 @@ services:
     container_name: code-server
     networks:
       - backend
+      - mcp
       - web
     environment:
       - DEFAULT_WORKSPACE=/config/workspace
@@ -89,6 +90,14 @@ services:
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      
       - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
+  unifi-mcp:
+    container_name: unifi-mcp
+    image: ghcr.io/enuno/unifi-mcp-server:latest
+    env_file: ./env/unify-mcp.env
+    networks:
+      - mcp
+    restart: unless-stopped
+
   webhook-tester:
     image: ghcr.io/tarampampam/webhook-tester:2
     container_name: webhook-tester
@@ -136,11 +145,13 @@ services:
       - traefik.http.services.yaade.loadbalancer.server.port=9339
 
 networks:
+  backend:
+    external: true
   cache:
     external: true
-  web:
+  mcp:
     external: true
-  backend:
+  web:
     external: true
 
 volumes:
