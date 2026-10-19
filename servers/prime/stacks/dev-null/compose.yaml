@@ -70,6 +70,14 @@ services:
       - traefik.http.routers.code-server.middlewares=oidc-auth@file
       - traefik.http.services.code-server.loadbalancer.server.port=8443
 
+  komodo-mcp:
+    image: ghcr.io/mp-tool/komodo-mcp-server:latest
+    container_name: komodo
+    env_file: ./env/komodo-mcp.env
+    networks:
+      - mcp
+    restart: unless-stopped
+
   it-tools: # https://github.com/CorentinTh/it-tools
     container_name: it-tools
     image: ghcr.io/corentinth/it-tools:latest
