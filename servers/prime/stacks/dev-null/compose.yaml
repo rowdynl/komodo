@@ -47,10 +47,9 @@ services:
     volumes:
       - code-server:/config
       - /repos/komodo:/config/workspace/repos/komodo
-      - /mnt/prime-ds/docker/hass/config:/config/workspace/home-assistant-prime-ds
-      - /mnt/docker/volumes/esphome:/config/workspace/repos/esphome
-      - /mnt/docker/volumes/home-assistant:/config/workspace/home-assistant
-      - /mnt/docker/volumes/traefik:/config/workspace/traefik
+      - esphome:/config/workspace/repos/esphome
+      - home-assistant:/config/workspace/home-assistant
+      - traefik:/config/workspace/traefik
     restart: unless-stopped
     mem_limit: 1152m    
     cpus: 1
@@ -168,4 +167,12 @@ volumes:
   code-server:
     external: true
   yaade:
+    external: true
+
+  # Additional mounts for code-server workspace
+  esphome:
+    external: true
+  home-assistant:
+    external: true
+  traefik:
     external: true
