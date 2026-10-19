@@ -33,14 +33,18 @@ services:
       - web
     restart: unless-stopped
     labels:
+      - flame.type=application
+      - flame.name=AdGuard
+      - flame.category=Border Control
+      - flame.url=https://adguard.${DOMAIN}
+      - flame.icon=shield-outline
       - traefik.enable=true
-      - traefik.http.routers.flame.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.flame.entrypoints=websecure
-      - traefik.http.routers.flame.tls=true
-      - traefik.http.routers.flame.tls.certresolver=letsencrypt
-      - traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.flame.middlewares=oidc-auth@file
-      - traefik.http.services.flame.loadbalancer.server.port=5005
+      - traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)
+      - traefik.http.routers.adguard.entrypoints=websecure
+      - traefik.http.routers.adguard.tls.certresolver=letsencrypt
+      - traefik.http.routers.adguard.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.adguard.middlewares=oidc-auth-adguard@file, adguard-login-injection@file
+      - traefik.http.services.adguard.loadbalancer.server.port=3000
 
   crowdsec:
     image: crowdsecurity/crowdsec
@@ -73,18 +77,14 @@ services:
     networks:
       - web
     labels:
-      - flame.type=application
-      - flame.name=AdGuard
-      - flame.category=Border Control
-      - flame.url=https://adguard.${DOMAIN}
-      - flame.icon=shield-outline
       - traefik.enable=true
-      - traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)
-      - traefik.http.routers.adguard.entrypoints=websecure
-      - traefik.http.routers.adguard.tls.certresolver=letsencrypt
-      - traefik.http.routers.adguard.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.adguard.middlewares=oidc-auth-adguard@file, adguard-login-injection@file
-      - traefik.http.services.adguard.loadbalancer.server.port=3000
+      - traefik.http.routers.flame.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.flame.entrypoints=websecure
+      - traefik.http.routers.flame.tls=true
+      - traefik.http.routers.flame.tls.certresolver=letsencrypt
+      - traefik.http.routers.flame.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.flame.middlewares=oidc-auth@file
+      - traefik.http.services.flame.loadbalancer.server.port=5005
 
   krawl:
     image: ghcr.io/blessedrebus/krawl:latest
