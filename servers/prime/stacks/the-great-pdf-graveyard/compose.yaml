@@ -14,9 +14,9 @@ services:
       - "gotenberg"
       - "--chromium-disable-javascript=false"
   
-  paperless:
+  paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
-    container_name: paperless
+    container_name: paperless-ngx
     env_file: ./env/paperless.env
     networks:
       - backend

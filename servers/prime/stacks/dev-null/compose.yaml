@@ -97,8 +97,8 @@ services:
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      
       - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
-  paperless-mcp:
-    container_name: paperless
+  paperless-ngx-mcp:
+    container_name: paperless-ngx
     image: ghcr.io/barryw/paperlessmcp:latest
     env_file: ./env/paperless-mcp.env
     networks:
