@@ -93,7 +93,7 @@ services:
   unifi-mcp:
     container_name: unifi-mcp
     image: ghcr.io/enuno/unifi-mcp-server:latest
-    env_file: ./env/unify-mcp.env
+    env_file: ./env/unifi-mcp.env
     networks:
       - mcp
     restart: unless-stopped
