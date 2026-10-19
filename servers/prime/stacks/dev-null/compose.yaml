@@ -97,6 +97,17 @@ services:
       - traefik.http.routers.it-tools.tls.certresolver=letsencrypt      
       - traefik.http.services.it-tools.loadbalancer.server.port=80 
 
+  paperless-mcp:
+    container_name: paperless
+    image: ghcr.io/barryw/paperlessmcp:latest
+    env_file: ./env/paperless-mcp.env
+    networks:
+      - mcp
+    volumes:
+      - paperless-outbox:/home/mcp/outbox
+    restart: unless-stopped
+    
+
   unifi-mcp:
     container_name: unifi
     image: ghcr.io/enuno/unifi-mcp-server:latest
@@ -165,6 +176,8 @@ volumes:
   bytestash:
     external: true
   code-server:
+    external: true
+  paperless-outbox:
     external: true
   yaade:
     external: true
