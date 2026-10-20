@@ -255,10 +255,10 @@ services:
       - flame.type=application
       - flame.name=WireGuard
       - flame.category=Border Control
-      - flame.url=https://wireguard.${DOMAIN}
+      - flame.url=https://vpn.${DOMAIN}
       - flame.icon=vpn
       - traefik.enable=true
-      - traefik.http.routers.wireguard.rule=Host(`wireguard.${DOMAIN}`)
+      - traefik.http.routers.wireguard.rule=Host(`vpn.${DOMAIN}`)
       - traefik.http.routers.wireguard.entrypoints=websecure
       - traefik.http.routers.wireguard.tls.certresolver=letsencrypt
       - traefik.http.routers.wireguard.priority=${TRAEFIK_PRIORITY}
