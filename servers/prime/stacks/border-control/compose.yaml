@@ -237,6 +237,7 @@ services:
       - wireguard-data:/app/data
     ports:
       - 51820:51820/udp
+    env_file: ./env/wireguard.env
     cap_add:
       - NET_ADMIN
     networks:
