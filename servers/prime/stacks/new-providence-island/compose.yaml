@@ -565,6 +565,7 @@ services:
     image: dialmaster/youtarr:latest
     container_name: youtarr
     user: "${PUID}:${PGID}"
+    env_file: ./env/youtarr.env
     networks:
       - backend
       - web
