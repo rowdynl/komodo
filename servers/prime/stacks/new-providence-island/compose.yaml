@@ -561,6 +561,41 @@ services:
       - traefik.http.routers.transmission.middlewares=oidc-auth@file
       - traefik.http.services.transmission.loadbalancer.server.port=9091
 
+  youtarr:
+    image: dialmaster/youtarr:latest
+    container_name: youtarr
+    user: "${PUID}:${PGID}"
+    networks:
+      - backend
+      - web
+    volumes:
+      - /mnt/downloads/youtarr:/usr/src/app/data
+      - youtarr-images:/app/server/images
+      - youtarr-config:/app/config
+      - youtarr-jobs:/app/jobs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "--output", "/dev/null", "http://localhost:3011/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - flame.type=application
+      - flame.category=Pirate’s Tavern
+      - flame.order=6
+      - flame.name=Youtarr
+      - flame.url=https://youtarr.${DOMAIN}
+      - flame.icon=film-outline
+      - traefik.docker.network=web
+      - traefik.enable=true
+      - traefik.http.routers.youtarr.rule=Host(`youtarr.${DOMAIN}`)
+      - traefik.http.routers.youtarr.entrypoints=websecure
+      - traefik.http.routers.youtarr.tls.certresolver=letsencrypt
+      - traefik.http.routers.youtarr.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.routers.youtarr.middlewares=oidc-auth@file
+      - traefik.http.services.youtarr.loadbalancer.server.port=3011
+    
 networks:
   dirty-water:
     external: true
@@ -616,3 +651,10 @@ volumes:
     external: true
   transmission:
     external: true
+  youtarr-config:
+    external: true
+  youtarr-images:
+    external: true
+  youtarr-jobs:
+    external: true
+  
