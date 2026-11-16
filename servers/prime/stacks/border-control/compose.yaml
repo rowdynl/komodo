@@ -186,8 +186,9 @@ services:
     container_name: telltale
     restart: unless-stopped
     env_file: ./env/telltale.env
+    user: ${PUID}:${PGID}
     volumes:
-      - telltale-config:/etc/telltale/:ro
+      - telltale-config:/etc/telltale
       - telltale-data:/var/lib/telltale
     ports:       
       - 53:53/tcp
@@ -209,7 +210,7 @@ services:
       - traefik.http.routers.telltale.entrypoints=websecure
       - traefik.http.routers.telltale.tls.certresolver=letsencrypt
       - traefik.http.routers.telltale.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.telltale.loadbalancer.server.port=9153
+      - traefik.http.services.telltale.loadbalancer.server.port=8053
 
   traefik:
     image: traefik:latest
