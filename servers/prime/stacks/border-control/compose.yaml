@@ -190,27 +190,16 @@ services:
     volumes:
       - telltale-config:/etc/telltale
       - telltale-data:/var/lib/telltale
-    ports:       
-      - 53:53/tcp
-      - 53:53/udp
+    network_mode: host
     cap_drop:
       - ALL
     read_only: true
-    networks:
-      - mcp
-      - web
     labels:
       - flame.type=application
       - flame.name=Telltale
       - flame.category=Border Control
-      - flame.url=https://telltale.${DOMAIN}
+      - flame.url=https://dns.${DOMAIN}
       - flame.icon=shield-outline
-      - traefik.enable=true
-      - traefik.http.routers.telltale.rule=Host(`dns.${DOMAIN}`)
-      - traefik.http.routers.telltale.entrypoints=websecure
-      - traefik.http.routers.telltale.tls.certresolver=letsencrypt
-      - traefik.http.routers.telltale.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.services.telltale.loadbalancer.server.port=8053
 
   traefik:
     image: traefik:latest
