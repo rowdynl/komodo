@@ -13,8 +13,8 @@ services:
       - adguard-work:/opt/adguardhome/work
     ports:
       # Standard DNS
-      - "53:53/tcp"
-      - "53:53/udp"
+      #- "53:53/tcp"
+      #- "53:53/udp"
       # DHCP Server
       # - "67:67/udp"
       # - "68:68/udp"
@@ -181,6 +181,36 @@ services:
       - traefik.http.services.pocket-id.loadbalancer.server.port=1411
       - traefik.http.services.pocket-id.loadbalancer.passhostheader=true
 
+  telltale:  
+    image: ghcr.io/paimonsoror/telltale:latest
+    container_name: telltale
+    restart: unless-stopped
+    env_file: ./env/telltale.env
+    volumes:
+      - telltale-config:/etc/telltale/:ro
+      - telltale-data:/var/lib/telltale
+    ports:       
+      - 53:53/tcp
+      - 53:53/udp
+    cap_drop:
+      - ALL
+    read_only: true
+    networks:
+      - mcp
+      - web
+    labels:
+      - flame.type=application
+      - flame.name=Telltale
+      - flame.category=Border Control
+      - flame.url=https://telltale.${DOMAIN}
+      - flame.icon=shield-outline
+      - traefik.enable=true
+      - traefik.http.routers.telltale.rule=Host(`telltale.${DOMAIN}`)
+      - traefik.http.routers.telltale.entrypoints=websecure
+      - traefik.http.routers.telltale.tls.certresolver=letsencrypt
+      - traefik.http.routers.telltale.priority=${TRAEFIK_PRIORITY}
+      - traefik.http.services.telltale.loadbalancer.server.port=9153
+
   traefik:
     image: traefik:latest
     container_name: traefik
@@ -205,7 +235,6 @@ services:
       - flame.category=Border Control
       - flame.url=https://traefik.${DOMAIN}
       - flame.icon=routes
-
 
   vaultwarden:
     image: vaultwarden/server:latest
@@ -269,6 +298,8 @@ networks:
     external: true
   backend:
     external: true
+  mcp:
+    external: true
   web:
     external: true
 
@@ -286,6 +317,10 @@ volumes:
   pihole:
     external: true
   pocket-id:
+    external: true
+  telltale-config:
+    external: true
+  telltale-data:
     external: true
   traefik:
     external: true
