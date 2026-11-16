@@ -68,6 +68,7 @@ services:
       - /repos:/mnt/repos
       - icloud:/mnt/icloud
       - paperless:/mnt/paperless
+      - firefox:/mnt/firefox
       - web-venlosevrind.nl:/mnt/web-venlosevrind
     networks:
       - web
