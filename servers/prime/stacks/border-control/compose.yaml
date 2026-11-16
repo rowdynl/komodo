@@ -206,7 +206,7 @@ services:
       - flame.url=https://telltale.${DOMAIN}
       - flame.icon=shield-outline
       - traefik.enable=true
-      - traefik.http.routers.telltale.rule=Host(`telltale.${DOMAIN}`)
+      - traefik.http.routers.telltale.rule=Host(`dns.${DOMAIN}`)
       - traefik.http.routers.telltale.entrypoints=websecure
       - traefik.http.routers.telltale.tls.certresolver=letsencrypt
       - traefik.http.routers.telltale.priority=${TRAEFIK_PRIORITY}
