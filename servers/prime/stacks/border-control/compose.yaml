@@ -5,47 +5,7 @@
 name: border-control
 
 services:
-  adguard:
-    image: adguard/adguardhome:latest
-    container_name: adguard
-    volumes:
-      - adguard-conf:/opt/adguardhome/conf
-      - adguard-work:/opt/adguardhome/work
-    ports:
-      # Standard DNS
-      #- "53:53/tcp"
-      #- "53:53/udp"
-      # DHCP Server
-      # - "67:67/udp"
-      # - "68:68/udp"
-      # DNS over TLS & DNS over QUIC
-      - "853:853/tcp"
-      - "853:853/udp"
-      - "784:784/udp"
-      - "8853:8853/udp"
-      # Additional management/encryption ports
-      - "5443:5443/tcp"
-      - "5443:5443/udp"
-      # Note: We omit 80, 443, and 3000 from host mapping if Traefik handles them over the network.
-      # If you still need direct IP access to the setup wizard, uncomment the line below:
-      # - "3000:3000/tcp"
-    networks:
-      - web
-    restart: unless-stopped
-    labels:
-      - flame.type=application
-      - flame.name=AdGuard
-      - flame.category=Border Control
-      - flame.url=https://adguard.${DOMAIN}
-      - flame.icon=shield-outline
-      - traefik.enable=true
-      - traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN}`)
-      - traefik.http.routers.adguard.entrypoints=websecure
-      - traefik.http.routers.adguard.tls.certresolver=letsencrypt
-      - traefik.http.routers.adguard.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.adguard.middlewares=oidc-auth-adguard@file, adguard-login-injection@file
-      - traefik.http.services.adguard.loadbalancer.server.port=3000
-
+  
   crowdsec:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
@@ -115,39 +75,6 @@ services:
       - traefik.http.routers.krawl-fallback.priority=1
       - traefik.http.routers.krawl-fallback.service=krawl
 
-
-  pihole:
-    image: pihole/pihole:latest
-    container_name: pihole
-    hostname: pihole.${DOMAIN}
-    #ports:
-    #  - 53:53/tcp
-    #  - 53:53/udp     
-    networks:
-      - web
-    cap_add:
-      - NET_ADMIN
-      - NET_BIND_SERVICE
-      - SYS_NICE
-    env_file: ./env/pihole.env
-    volumes:
-      - pihole:/etc/pihole
-      - /etc/hostname:/etc/hostname:ro
-    restart: unless-stopped
-    labels:
-      - flame.type=application
-      - flame.name=Pi-hole
-      - flame.category=Border Control
-      - flame.url=https://pihole.${DOMAIN}/admin
-      - flame.icon=shield-outline
-      - traefik.enable=true
-      - traefik.http.routers.pihole.rule=Host(`pihole.${DOMAIN}`)
-      - traefik.http.routers.pihole.entrypoints=websecure
-      - traefik.http.routers.pihole.tls.certresolver=letsencrypt
-      - traefik.http.routers.pihole.priority=${TRAEFIK_PRIORITY}
-      - traefik.http.routers.pihole.middlewares=oidc-auth-pihole@file
-      - traefik.http.services.pihole.loadbalancer.server.port=80
-  
   pocket-id:
     image: ghcr.io/pocket-id/pocket-id:v2
     container_name: pocket-id
