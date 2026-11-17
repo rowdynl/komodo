@@ -4,14 +4,15 @@ name: artificial-middle-management
 
 services:
   ha-mcp-screenshot:
-    build:
-      context: ./home-assistant-addons/puppet
-      dockerfile: Dockerfile
     image: ha-mcp-screenshot:latest
     container_name: ha-mcp-screenshot
+    pull_policy: build
+    build:
+      context: ./home-assistant-addons/puppet
+      dockerfile: Dockerfile    
+    env_file: ./env/ha-mcp-screenshot.env
     networks:
       - mcp
-    env_file: ./env/ha-mcp-screenshot.env
     restart: unless-stopped
 
 networks:
