@@ -1,0 +1,19 @@
+# Giving AI access to tools so it can delegate even harder.
+
+name: artificial-middle-management
+
+services:
+  ha-mcp-screenshot:
+    build:
+      context: ./home-assistant-addons/puppet
+      dockerfile: Dockerfile
+    image: ha-mcp-screenshot:latest
+    container_name: ha-mcp-screenshot
+    networks:
+      - mcp
+    env_file: ./env/ha-mcp-screenshot.env
+    restart: unless-stopped
+
+networks:
+  mcp:
+    external: true

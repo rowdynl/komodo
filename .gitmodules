@@ -1,0 +1,3 @@
+[submodule "servers/prime/stacks/artificial-middle-management/home-assistant-addons"]
+	path = servers/prime/stacks/artificial-middle-management/home-assistant-addons
+	url = https://github.com/balloob/home-assistant-addons.git
